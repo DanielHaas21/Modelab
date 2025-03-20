@@ -38,26 +38,26 @@ Modelab project comprises of two main components, that are their own repositorie
 
 App folder structure
 
-src
-├───frontend
-│   ├───hooks
-│   ├───pages
-│   ├───styles
-│   └───types
-├───libs
-│   ├───auth *- contains auth helpers*
-│   ├───ui
-│   │   ├───assets
-│   │   ├───components
-│   │   └───layouts  *- contains various page layouts*
-│   └───utils  - helpers etc.
-├───middleware
-│   ├───api  *-contains modelab-api calls*
-│   ├───auth  *- contains app modules*
-│   └───types
-└───store  *- redux store for global state management*
-    ├───reducers
-    └───slices
+src  <br>
+├───frontend  <br>
+│   ├───hooks   <br>
+│   ├───pages  <br>
+│   ├───styles  <br>
+│   └───types  <br>
+├───libs  <br>
+│   ├───auth *- contains auth helpers*  <br>
+│   ├───ui  <br>
+│   │   ├───assets   <br>
+│   │   ├───components  <br>
+│   │   └───layouts  *- contains various page layouts*  <br>
+│   └───utils  - helpers etc.  <br>
+├───middleware  <br>
+│   ├───api  *-contains modelab-api calls*  <br>
+│   ├───auth  *- contains app modules*   <br>
+│   └───types  <br>
+└───store  *- redux store for global state management*   <br>
+    ├───reducers   <br>
+    └───slices   <br>
 
 ### api
 
