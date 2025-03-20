@@ -32,20 +32,41 @@ npm build
 
 ## Project Structure
 
-ModelViewer comprises two main components of the project. The **app** section includes the React web application and documentation. The other section is **api**, which contains the PHP api connected to the React app.
+Modelab project comprises of two main components, that are their own repositories. The **Modelab** repo includes the React web application and documentation. The other repo is **Modelab-api**, which contains the PHP api connected to the React app.
 
 ### app
 
-App folder structure 
-TBD
+App folder structure  <br>
+src <br>
+    ├───frontend  <br>
+    │   ├───hooks  <br>
+    │   ├───pages <br>
+    │   ├───styles <br>
+    │   └───types <br>
+    ├───libs <br>
+    │   ├───auth *- contains auth helpers* <br>
+    │   ├───ui  <br>
+    │   │   ├───assets  <br>
+    │   │   ├───components  <br>
+    │   │   └───layouts  *- contains various page layouts* <br>
+    │   └───utils  - helpers etc. <br>
+    ├───middleware  <br>
+    │   ├───api  *-contains modelab-api calls* <br>
+    │   ├───auth  *- contains app modules* <br>
+    │   └───types  <br>
+    └───store  *- redux store for global state management* <br>
+        ├───reducers  <br> 
+        └───slices  <br>
 
 ### api
 
-api folder structure 
-TBD
+To learn more about the structure about the api see: <br>
+[Modelab-api](https://github.com/DanielHaas21/Modelab-api)
 
 ### Utilities
 
 This project has some additional tools already setup for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [Redux Toolkit](https://redux-toolkit.js.org/) for complex state management
+- [Prettier](https://prettier.io/) for better code formatting 
