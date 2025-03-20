@@ -37,7 +37,7 @@ Modelab project comprises of two main components, that are their own repositorie
 ### app
 
 App folder structure
-```
+
 src
 ├───frontend
 │   ├───hooks
@@ -58,7 +58,6 @@ src
 └───store  *- redux store for global state management*
     ├───reducers
     └───slices
-```
 
 ### api
 
