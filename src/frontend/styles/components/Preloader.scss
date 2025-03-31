@@ -1,0 +1,25 @@
+$s : 0.3;
+.preloader{
+    text-align: center;
+    @for $i from 1 through 6{
+        .spinner-grow:nth-child(#{$i}){
+            margin: 10px;
+            animation-delay: #{$s * $i}s;
+        }
+    }
+}
+
+@keyframes fade-in{
+    0%{
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(00px);
+    }
+}
+
+.fade-in{
+    animation: fade-in 1s ease-in-out !important;
+}

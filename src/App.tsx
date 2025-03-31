@@ -1,11 +1,13 @@
 import * as React from 'react';
+import './frontend/styles/export.scss';
+import LandingPage from './frontend/pages/LandingPage';
 
-function App() {
+function App() : React.ReactElement{
   return (
     <>
-      <h1>test</h1>
+      <LandingPage></LandingPage>
     </>
   )
 }
 
-export default App
+export default App;

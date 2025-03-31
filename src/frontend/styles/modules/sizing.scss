@@ -1,0 +1,27 @@
+$w : "w-"; $h: "h-";
+
+$sizes: 50, 75, 90 ,100, 150, 200, 250, 300, 400, 500; 
+
+@each $size in $sizes {
+  .#{$h}#{$size}-px {
+    height: #{$size}px;
+  }
+  .#{$w}#{$size}-px {
+    width: #{$size}px;
+  }
+}
+
+@for $i from 1 through 100 {
+  .w-#{$i} {
+    width: percentage($i)/100; 
+  }
+  .h-#{$i} {
+    height: percentage($i)/100; 
+  }
+  .#{$w}#{$i}-vw{
+    width: #{$i}vw;
+  }
+  .#{$h}#{$i}-vh{
+    height: #{$i}vh;
+  }
+}

@@ -1,0 +1,32 @@
+// CORE functions
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+@import "../../../node_modules/bootstrap/scss/mixins";
+@import "../../../node_modules/bootstrap/scss/variables-dark";
+@import "../../../node_modules/bootstrap/scss/maps";
+@import "../../../node_modules/bootstrap/scss/root";
+// CORE styles
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+// Optional Bootstrap components 
+@import "../../../node_modules/bootstrap/scss/reboot";
+@import "../../../node_modules/bootstrap/scss/type";
+//font
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+//modules
+@import './modules/sizing.scss';
+@import './modules/zoom.scss';
+//utils
+@import './utils//font/font-size.scss';
+@import './utils/font/font.scss';
+
+$color-scheme:(
+
+);
+$headings-font-weight: normal !default; 
+
+$theme-colors: map-merge($theme-colors, $color-scheme );
+
+*{
+    font-family: "Kanit", sans-serif !important;
+}

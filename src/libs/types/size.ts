@@ -1,0 +1,1 @@
+export type img = "fullhd" | "wqhd" | "uhd";

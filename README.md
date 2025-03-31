@@ -32,20 +32,43 @@ npm build
 
 ## Project Structure
 
-ModelViewer comprises two main components of the project. The **app** section includes the React web application and documentation. The other section is **api**, which contains the PHP api connected to the React app.
+Modelab project comprises of two main components, that are their own repositories. The **Modelab** repo includes the React web application and documentation. The other repo is **Modelab-api**, which contains the PHP api connected to the React app.
 
 ### app
 
-App folder structure 
-TBD
-
+App folder structure
+```
+docs - Contains documentation for various directories
+src 
+├───frontend 
+│   ├───hooks  
+│   ├───pages 
+│   ├───styles 
+│   └───types 
+├───libs 
+│   ├───auth - contains auth helpers
+│   ├───ui 
+│   │   ├───assets  
+│   │   ├───components 
+│   │   └───layouts - contains various page layouts 
+│   └───utils - helpers etc.
+├───middleware  <br>
+│   ├───api - contains modelab-api calls
+│   ├───auth - contains app modules
+│   └───types  
+└───store - redux store for global state management
+│   ├───reducers   
+│   └───slices   
+```
 ### api
 
-api folder structure 
-TBD
+To learn more about the structure about the api see: <br>
+[Modelab-api](https://github.com/DanielHaas21/Modelab-api)
 
 ### Utilities
 
 This project has some additional tools already setup for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [Redux Toolkit](https://redux-toolkit.js.org/) for complex state management
+- [Prettier](https://prettier.io/) for better code formatting 

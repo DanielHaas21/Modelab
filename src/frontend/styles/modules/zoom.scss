@@ -1,0 +1,6 @@
+$sizes:80,90,100,110,120,130;
+@each $size in $sizes{
+    .zoom-#{$size}{
+        zoom: percentage($size)/100;
+    }
+}
