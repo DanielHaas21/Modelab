@@ -33,32 +33,8 @@ npm build
 ## Project Structure
 
 Modelab project comprises of two main components, that are their own repositories. The **Modelab** repo includes the React web application and documentation. The other repo is **Modelab-api**, which contains the PHP api connected to the React app.
-Modelab project comprises of two main components, that are their own repositories. The **Modelab** repo includes the React web application and documentation. The other repo is **Modelab-api**, which contains the PHP api connected to the React app.
 
 ### app
-
-App folder structure
-
-src  <br>
-├───frontend  <br>
-│   ├───hooks   <br>
-│   ├───pages  <br>
-│   ├───styles  <br>
-│   └───types  <br>
-├───libs  <br>
-│   ├───auth *- contains auth helpers*  <br>
-│   ├───ui  <br>
-│   │   ├───assets   <br>
-│   │   ├───components  <br>
-│   │   └───layouts  *- contains various page layouts*  <br>
-│   └───utils  - helpers etc.  <br>
-├───middleware  <br>
-│   ├───api  *-contains modelab-api calls*  <br>
-│   ├───auth  *- contains app modules*   <br>
-│   └───types  <br>
-└───store  *- redux store for global state management*   <br>
-    ├───reducers   <br>
-    └───slices   <br>
 
 App folder structure
 ```
@@ -76,7 +52,7 @@ src
 │   │   ├───components 
 │   │   └───layouts - contains various page layouts 
 │   └───utils - helpers etc.
-├───middleware  <br>
+├───middleware 
 │   ├───api - contains modelab-api calls
 │   ├───auth - contains app modules
 │   └───types  
