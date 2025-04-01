@@ -74,5 +74,3 @@ This project has some additional tools already setup for you:
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [Redux Toolkit](https://redux-toolkit.js.org/) for complex state management
 - [Prettier](https://prettier.io/) for better code formatting 
-- [Redux Toolkit](https://redux-toolkit.js.org/) for complex state management
-- [Prettier](https://prettier.io/) for better code formatting 

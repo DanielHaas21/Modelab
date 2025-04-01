@@ -25,3 +25,9 @@ $sizes: 50, 75, 90 ,100, 150, 200, 250, 300, 400, 500;
     height: #{$i}vh;
   }
 }
+
+@for $i from 6 through 30 {
+ .ms-#{$i}{
+  margin-left: #{$i}rem;
+ }
+}

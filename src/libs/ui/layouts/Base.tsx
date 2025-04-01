@@ -7,10 +7,11 @@ interface BaseProps{
 }
 
 export const BaseLayout : React.FC<BaseProps> = ({children}) => {
-    return(<>
-        <Header></Header>
-        {children}
-        <Footer></Footer>
-    </>
+    return(
+        <>
+            <Header></Header>
+            {children}
+            <Footer></Footer>
+        </>
     );
 }
