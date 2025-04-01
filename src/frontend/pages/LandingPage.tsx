@@ -15,10 +15,12 @@ const LandingPage : React.FC = () => {
 
     return( 
         <BaseLayout>
-            <div className="d-flex flex-row bg-black h-80-vh">
-                <div className="d-flex flex-column justify-content-end align-items-center overflow-hidden h-80-vh">
+            <div className="d-flex flex-row bg-black h-86-vh">
+                <div className="d-flex flex-column justify-content-end align-items-center overflow-hidden">
                     <h2 className="text-white kanit-light text-left w-100 ms-5 mt-5 fs-10">Welcome to Modelab</h2>
-                    <CoverImage className="w-60 h-80-vh object-fit-contain ms-5 zoom-120 cover-image" size={size}></CoverImage>
+                    <div className="w-60 h-100 d-flex justify-content-center align-items-end">
+                        <CoverImage className="w-100 object-fit-contain ms-5 zoom-120" size={size}></CoverImage>
+                    </div>
                 </div>
             </div>
         </BaseLayout>

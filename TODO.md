@@ -1,3 +1,2 @@
-- ui components 
-- ui layouts
-- landing page
+- landing page finish
+- CONFIG cmd script
