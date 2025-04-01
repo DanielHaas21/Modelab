@@ -1,32 +1,66 @@
-// CORE functions
-@import "../../../node_modules/bootstrap/scss/functions";
-@import "../../../node_modules/bootstrap/scss/variables";
-@import "../../../node_modules/bootstrap/scss/mixins";
-@import "../../../node_modules/bootstrap/scss/variables-dark";
-@import "../../../node_modules/bootstrap/scss/maps";
-@import "../../../node_modules/bootstrap/scss/root";
-// CORE styles
-@import "../../../node_modules/bootstrap/scss/bootstrap";
-// Optional Bootstrap components 
-@import "../../../node_modules/bootstrap/scss/reboot";
-@import "../../../node_modules/bootstrap/scss/type";
-//font
+$text: #041c0b;
+$background: #f8fdf9;
+$primary: #3ed24f;
+$secondary: #91d9e5;
+$accent: #5e9cda;
+
+$success: #56c290;
+$warning: #c27f56;
+$danger: #c25656;
+$info: #5699c2;
+
+$light: #f8fdf9;
+$dark: #040b08;
+
+// Override Bootstrap variables before importing Bootstrap
+$body-bg: $background;
+$body-color: $text;
+
+// Import Bootstrap core functions first
+@import '../../../node_modules/bootstrap/scss/functions';
+
+// Import Bootstrap variables so that `$theme-colors` is defined
+@import '../../../node_modules/bootstrap/scss/variables';
+
+// Now define custom colors
+$color-scheme: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'accent': $accent,
+  'success': $success,
+  'warning': $warning,
+  'danger': $danger,
+  'info': $info,
+  'light': $light,
+  'dark': $dark,
+);
+
+// Merge custom colors with Bootstrap’s `$theme-colors`
+$theme-colors: map-merge($theme-colors, $color-scheme);
+
+// Continue importing Bootstrap styles
+@import '../../../node_modules/bootstrap/scss/mixins';
+@import '../../../node_modules/bootstrap/scss/variables-dark';
+@import '../../../node_modules/bootstrap/scss/maps';
+@import '../../../node_modules/bootstrap/scss/root';
+@import '../../../node_modules/bootstrap/scss/bootstrap';
+
+// Import optional Bootstrap components
+@import '../../../node_modules/bootstrap/scss/reboot';
+@import '../../../node_modules/bootstrap/scss/type';
+
+// Import Google Fonts
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-//modules
+// Import custom modules
 @import './modules/sizing.scss';
 @import './modules/zoom.scss';
-//utils
-@import './utils//font/font-size.scss';
+
+// Import utilities
+@import './utils/font/font-size.scss';
 @import './utils/font/font.scss';
 
-$color-scheme:(
-
-);
-$headings-font-weight: normal !default; 
-
-$theme-colors: map-merge($theme-colors, $color-scheme );
-
-*{
-    font-family: "Kanit", sans-serif !important;
+// Global styles
+* {
+  font-family: 'Kanit', sans-serif !important;
 }

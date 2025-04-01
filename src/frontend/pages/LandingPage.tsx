@@ -5,14 +5,14 @@ import { img } from "../../libs/types/size";
 import { BaseLayout } from "../../libs/ui/layouts";
 import { Link } from "react-router-dom";
 
-const LandingPage : React.FC = () => {
-    const [size, setSize] = React.useState<img | null>(null);
+const LandingPage: React.FC = () => {
+  const [size, setSize] = React.useState<img | null>(null);
 
-    React.useEffect(() => {
-        setSize(DecideImageSize());
-    }, []);
+  React.useEffect(() => {
+    setSize(DecideImageSize());
+  }, []);
 
-    if (!size) return <Preloader></Preloader>; 
+  if (!size) return <Preloader></Preloader>;
 
     return( 
         <BaseLayout>
