@@ -1,0 +1,21 @@
+@import '../bootstrap';
+.bg-grid {
+  background-image: url('src/libs/ui/assets/grid.svg');
+  background-size: 140px 140px;
+  box-shadow: 0px 0px 200px 10px inset map-get($theme-colors, 'dark');
+}
+.glowing {
+  text-shadow: 0px 0px 100px rgba(255, 255, 255, 0.8);
+}
+.sep{
+  gap: 10px;
+  >span:nth-last-of-type(2){
+    margin-right: -2px; 
+  }
+}
+.line{
+  flex-grow: 1;
+  width: 120px;
+  height: 1px;
+  background-color: black;
+}

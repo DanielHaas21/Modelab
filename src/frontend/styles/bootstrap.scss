@@ -1,10 +1,11 @@
 $text: #041c0b;
 $background: #f8fdf9;
-$primary: #3ed24f;
+$primary:  #56c290;
 $secondary: #91d9e5;
 $accent: #5e9cda;
+$neutral: #f3f3f3;
 
-$success: #56c290;
+$success: #3ed24f;
 $warning: #c27f56;
 $danger: #c25656;
 $info: #5699c2;
@@ -33,6 +34,7 @@ $color-scheme: (
   'info': $info,
   'light': $light,
   'dark': $dark,
+  'neutral': $neutral,
 );
 
 // Merge custom colors with Bootstrap’s `$theme-colors`
@@ -55,6 +57,8 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 // Import custom modules
 @import './modules/sizing.scss';
 @import './modules/zoom.scss';
+@import './modules/spacing.scss';
+@import './modules/rounding.scss';
 
 // Import utilities
 @import './utils/font/font-size.scss';
@@ -63,4 +67,12 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 // Global styles
 * {
   font-family: 'Kanit', sans-serif !important;
+}
+.btn-primary:hover {
+  transition: filter .5s;
+  filter: brightness(90%);
+  
+}
+i{
+  font-size: 26px !important;
 }

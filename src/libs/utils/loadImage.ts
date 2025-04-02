@@ -5,7 +5,7 @@
  * @returns PNG file
  * @throws Error if no image is found
  */
-export async function loadImage(path: string, images : any) {
+export async function loadImage(path: string, images : any){
     if (images[path]) {
       const module = await images[path]();
       return module.default; 

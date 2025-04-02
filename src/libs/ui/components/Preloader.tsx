@@ -2,27 +2,29 @@ import * as React from 'react';
 import { cn } from '../../utils';
 
 interface PreloaderProps {
-    className? : string;
+  className?: string;
 }
 
-export const Preloader : React.FC<PreloaderProps> = (({className, ...props}) => {
-    return (
+export const Preloader: React.FC<PreloaderProps> = ({ className, ...props }) => {
+  return (
     <div
-        className={cn({className},
-            `d-flex flex-column 
+      className={cn(
+        { className },
+        `d-flex flex-column 
             justify-content-center align-items-center
             w-100 h-100-vh fade-in
-            `)}
-        {...props}
+            `
+      )}
+      {...props}
     >
-        <h1>Modelab</h1>
-        <div className="d-flex flex-row preloader mt-3">
-            <div className="spinner-grow" role="status"></div>
-            <div className="spinner-grow" role="status"></div>
-            <div className="spinner-grow" role="status"></div>
-            <div className="spinner-grow" role="status"></div>
-            <div className="spinner-grow" role="status"></div>
-        </div>
+      <h1>Modelab</h1>
+      <div className="d-flex flex-row preloader mt-3">
+        <div className="spinner-grow" role="status"></div>
+        <div className="spinner-grow" role="status"></div>
+        <div className="spinner-grow" role="status"></div>
+        <div className="spinner-grow" role="status"></div>
+        <div className="spinner-grow" role="status"></div>
+      </div>
     </div>
-    );  
-});
+  );
+};

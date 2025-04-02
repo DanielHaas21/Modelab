@@ -1,2 +1,9 @@
 @import './components/Preloader';
+@import './components/Footer';
 @import './components/coverImage';
+@import './pages/LandingPage';
+
+.fa-brands{
+    font-family: "Font Awesome 6 Brands" !important;
+    margin-right: 10px;
+}

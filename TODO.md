@@ -1,2 +1,3 @@
 - landing page finish
 - CONFIG cmd script
+- Logo

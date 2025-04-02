@@ -11,7 +11,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
     <header
       className={cn(
         { className },
-        'd-flex flex-row justify-content-start align-items-center h-8-vh w-100'
+        'd-flex flex-row justify-content-start align-items-center h-8-vh w-100 lts-2'
       )}
       {...props}
     >

@@ -1,7 +1,7 @@
 
-# UI 
+# ui
 
-This doc file explains and lists the naming conventions folder structure for the `/ui` directory
+This doc file explains and lists the naming conventions and folder structure for the `/ui` directory
 
 ### Directory structure 
 
@@ -15,5 +15,5 @@ ui
 ### Naming convetions
  
 - /componets -> UpperCamelCase and the filename must match the name of the components
-- /assets -> undetermined
-- /layouts -> TBD/TBA
+- /assets -> None
+- /layouts -> UpperCamelCase

@@ -4,8 +4,8 @@ export * from './Datepicker';
 export * from './Input';
 export * from './Label';
 export * from './Dropdown';
-export * from './Logo'
-export * from './CoverImage'
-export * from './Preloader'
+export * from './Logo';
+export * from './CoverImage';
+export * from './Preloader';
 export * from './Header';
-export * from './Footer'
+export * from './Footer';
