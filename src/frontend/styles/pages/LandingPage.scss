@@ -19,3 +19,20 @@
   height: 1px;
   background-color: black;
 }
+.slide-in-text {
+  font-size: 2rem;
+  opacity: 0;
+  transform: translateX(-100px);
+  animation: slideIn 1s ease-out forwards;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

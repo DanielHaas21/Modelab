@@ -1,27 +1,52 @@
 import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
-interface FooterProps {
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const FooterVariants = cva('', {
+  variants: {
+    variant: {
+      borderless: '',
+      bordered: '',
+    },
+  },
+  defaultVariants: {
+    variant: 'bordered',
+  },
+});
+
+type FooterVariantProps = VariantProps<typeof FooterVariants>;
+
+interface FooterProps extends FooterVariantProps {
   className?: string;
   children?: React.ReactNode[];
 }
 
-export const Footer: React.FC<FooterProps> = ({ className, children, ...props }) => {
+export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
   return (
-    <header
+    <footer
       className={cn(
-        { className },
-        'd-flex flex-row justify-content-end align-items-center h-6-vh w-100 bg-white'
+         variant, className,
+        'd-flex flex-row justify-content-end align-items-center h-6-vh w-100 bg-light'
       )}
       {...props}
     >
       {children}
-      <div className="d-flex flex-row justify-content-center mr-8">
-        <Link to="/" className="fs-2 hover-underline-animation text-decoration-none text-dark">About</Link>
-        <Link to="/" className="fs-2 hover-underline-animation text-decoration-none text-dark middle-link">Upload Assets</Link>
-        <Link to="/" className="fs-2 hover-underline-animation text-decoration-none text-dark">Home</Link>
-      </div>
-    </header>
+      <nav className="d-flex flex-row justify-content-center  mr-8">
+        <Link to="/" className="fs-2 hover-underline-animation text-decoration-none text-dark">
+          About
+        </Link>
+        <Link
+          to="/"
+          className="fs-2 hover-underline-animation text-decoration-none text-dark middle-link"
+        >
+          Upload Assets
+        </Link>
+        <Link to="/" className="fs-2 hover-underline-animation text-decoration-none text-dark">
+          Home
+        </Link>
+      </nav>
+    </footer>
   );
 };
-  // add actual routes in the future
+// add actual routes in the future

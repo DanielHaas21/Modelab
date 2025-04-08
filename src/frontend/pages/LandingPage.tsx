@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CoverImage, Preloader } from '../../libs/ui/components';
+import { CoverImage, Label, Preloader } from '../../libs/ui/components';
 import { DecideImageSize } from '../../libs/utils';
 import { img } from '../../libs/types/size';
 import { BaseLayout } from '../../libs/ui/layouts';
@@ -16,22 +16,22 @@ const LandingPage: React.FC = () => {
   if (!size) return <Preloader></Preloader>;
 
   return (
-    <BaseLayout>
+    <BaseLayout bordered={false}>
       <main className="d-flex flex-column  overflow-hidden justify-content-between bg-black h-86-vh bg-grid">
-        <h2 className="text-white kanit-light text-left w-100 ms-13 mt-5 fs-10 glowing lts-3">
+        <Label className="slide-in-text text-white kanit-light text-left w-100 ms-13 mt-5 fs-10 glowing lts-3">
           Welcome to Modelab
-        </h2>
+        </Label>
         <div className="d-flex flex-row w-100 h-84-vh">
-          <div className="d-flex flex-row justify-content-center  overflow-hidden">
+          <section className="d-flex flex-row justify-content-center  overflow-hidden">
             <div className="w-70 h-100 d-flex justify-content-center align-items-end">
               <CoverImage
                 className="w-100 object-fit-contain zoom-120 ms-7"
                 size={size}
               ></CoverImage>
             </div>
-          </div>
-          <div className="d-flex flex-row justify-content-center h-100 mr-5">
-            <div className="d-flex flex-column align-items-center justify-content-evenly mt-5 rounded-4 w-350-px h-50-vh p-2 bg-light">
+          </section>
+          <section className="d-flex flex-row justify-content-center h-100 mr-5">
+            <div className="d-flex flex-column align-items-center justify-content-evenly mt-5 rounded-4 w-350-px h-50-vh p-2 bg-light fade-in">
               <div className="d-flex flex-column align-items-center justify-content-between">
                 <Button font="regular" variant="primary" rounding="md" size="md">
                   <i className='fa-brands fa-google'></i>
@@ -51,7 +51,7 @@ const LandingPage: React.FC = () => {
                 <p className="lts-3 fs-2">Without downloads</p>
               </div>
             </div>
-          </div>
+          </section>
         </div>
       </main>
     </BaseLayout>

@@ -33,3 +33,19 @@
     transform: scaleX(1); /* Scale up to reveal underline on hover */
     transform-origin: bottom center;
 }
+
+.bordered-h{
+    $b: 40px;
+    width: calc(100% - $b * 2) !important;
+    border-bottom: 1px solid darken(map-get($theme-colors, 'neutral'),20%) !important;
+    margin-left: $b ;
+    margin-right: $b;
+}
+.bordered-f{
+    >nav{
+        border-top: 1px solid darken(map-get($theme-colors, 'neutral'),20%) !important;
+        padding: 20px;
+        padding-left: 40px;
+        padding-right: 10px;
+    }
+}
