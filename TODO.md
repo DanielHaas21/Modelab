@@ -1,4 +1,4 @@
 - elemental axios routes class
-- User popup 
-- user state 
 - model preview component
+- middleware docs
+- model detail layout

@@ -37,6 +37,7 @@ $color-scheme: (
   'neutral': $neutral,
 );
 
+
 // Merge custom colors with Bootstrap’s `$theme-colors`
 $theme-colors: map-merge($theme-colors, $color-scheme);
 
@@ -71,8 +72,10 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 .btn-primary:hover {
   transition: filter .5s;
   filter: brightness(90%);
-  
 }
 i{
   font-size: 26px !important;
+}
+.cursor-pointer{
+  cursor: pointer;
 }

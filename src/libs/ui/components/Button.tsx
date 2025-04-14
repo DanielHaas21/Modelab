@@ -3,8 +3,8 @@ import * as React from 'react';
 import { cn } from '../../utils';
 
 const buttonVariants = cva(
-  `d-flex justify-content-center align-items-center 
-   fs-2 lts-3
+  `d-flex align-items-center 
+  lts-3
    kanit-regular
    `,
   {
@@ -38,12 +38,18 @@ const buttonVariants = cva(
         lg: 'rounded-4',
         xl: 'rounded-6',
       },
+      font_size: {
+        sm: 'fs-1',
+        md: 'fs-2',
+        lg: 'fs-3',
+      },
     },
     defaultVariants: {
       variant: 'primary',
       size: 'md',
-      font:'regular',
-      rounding:'md'
+      font: 'regular',
+      rounding: 'md',
+      font_size: 'md',
     },
   }
 );
@@ -55,15 +61,16 @@ type BaseButtonAttributes = Pick<
   'onClick' | 'className' | 'disabled' | 'children'
 >;
 
-export interface ButtonProps extends BaseButtonAttributes, ButtonVariants {
-}
+export interface ButtonProps extends BaseButtonAttributes, ButtonVariants {}
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
-  const { variant, size, rounding, font, className, outline, ...restProps } = props;
+  const { variant, size, rounding, font, className, outline, font_size, ...restProps } = props;
 
   return (
     <button
-      className={cn(buttonVariants({ variant, size, font, rounding, className, outline }))}
+      className={cn(
+        buttonVariants({ variant, size, font, font_size, rounding, className, outline })
+      )}
       {...restProps}
       ref={ref}
     />

@@ -5,7 +5,8 @@ import { img } from '../../libs/types/size';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { Button } from '../../libs/ui/components/Button';
 import { Link } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);
 
@@ -31,10 +32,16 @@ const LandingPage: React.FC = () => {
             </div>
           </section>
           <section className="d-flex flex-row justify-content-center h-100 mr-5">
-            <div className="d-flex flex-column align-items-center justify-content-evenly mt-5 rounded-4 w-350-px h-50-vh p-2 bg-light fade-in">
+            <div className="d-flex flex-column align-items-center justify-content-evenly mt-5 rounded-4 w-350-px h-50-vh p-2 bg-light fade-in shadowed">
               <div className="d-flex flex-column align-items-center justify-content-between">
-                <Button font="regular" variant="primary" rounding="md" size="md">
-                  <i className='fa-brands fa-google'></i>
+                <Button
+                  className="justify-content-center"
+                  font="regular"
+                  variant="primary"
+                  rounding="md"
+                  size="md"
+                >
+                  <FontAwesomeIcon icon={faGoogle} className="mr-1"></FontAwesomeIcon>
                   Sign in
                 </Button>
                 <p className="lts-3 fs-2">For all features</p>
@@ -45,8 +52,16 @@ const LandingPage: React.FC = () => {
                 <span className="line"></span>
               </div>
               <div className="d-flex flex-column align-items-center justify-content-center">
-                <Button font="regular" variant="light" rounding="md" size="md">
-                  <Link className='text-dark text-decoration-none' to="/Browser">Browse assets</Link>
+                <Button
+                  className="justify-content-center"
+                  font="regular"
+                  variant="light"
+                  rounding="md"
+                  size="md"
+                >
+                  <Link className="text-dark text-decoration-none" to="/Browser">
+                    Browse assets
+                  </Link>
                 </Button>
                 <p className="lts-3 fs-2">Without downloads</p>
               </div>

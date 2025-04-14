@@ -33,7 +33,7 @@ const SelectInputVariants = cva(
 
 type SelectInputVariantProps = VariantProps<typeof SelectInputVariants>;
 
-export interface SelectInputProps extends SelectInputVariantProps, BaseSelectInputAttributes {
+interface SelectInputProps extends SelectInputVariantProps, BaseSelectInputAttributes {
   className?: string;
   options: SelectInputOption[]; //can be found in /types
 }

@@ -17,7 +17,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ className, ...props }) => 
       )}
       {...props}
     >
-      <h1 className='lts-3 fs-9 kanit-light'>Modelab</h1>
+      <h1 className="lts-3 fs-9 kanit-light">Modelab</h1>
       <div className="d-flex flex-row preloader mt-3">
         <div className="spinner-grow bg-dark" role="status"></div>
         <div className="spinner-grow bg-dark" role="status"></div>

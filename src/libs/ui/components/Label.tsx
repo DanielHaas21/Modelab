@@ -14,11 +14,11 @@ const labelVariants = cva(
   {
     variants: {
       size: {
-        xs: 'h-5 text-xs',
-        sm: 'h-6 text-sm',
-        md: 'h-7 text-base',
-        lg: 'h-8 text-lg',
-        xl: 'h-10 text-xl',
+        xs: 'fs-5',
+        sm: 'fs-6',
+        md: 'fs-7',
+        lg: 'fs-8',
+        xl: 'fs-10',
       },
     },
     defaultVariants: {
@@ -29,7 +29,7 @@ const labelVariants = cva(
 
 type LabelVariants = VariantProps<typeof labelVariants>;
 
-export interface LabelProps extends BaseLabelAttributes, LabelVariants {}
+interface LabelProps extends BaseLabelAttributes, LabelVariants {}
 
 export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
   ({ className, size, ...props }, ref) => {

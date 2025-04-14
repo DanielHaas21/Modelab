@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cn, loadImage } from '../../utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const images: any = import.meta.glob('../assets/*.png');
+const images = import.meta.glob('../assets/*.png'); // no idea what datatype this is
 const image_name: string = 'train_';
 
 const CoverImageVariants = cva('ddsds', {
