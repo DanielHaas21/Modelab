@@ -60,6 +60,7 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 @import './modules/zoom.scss';
 @import './modules/spacing.scss';
 @import './modules/rounding.scss';
+@import './modules/hover.scss';
 
 // Import utilities
 @import './utils/font/font-size.scss';
@@ -68,6 +69,9 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 // Global styles
 * {
   font-family: 'Kanit', sans-serif !important;
+}
+body{
+  overflow: hidden;
 }
 .btn-primary:hover {
   transition: filter .5s;

@@ -14,7 +14,7 @@
     transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease, margin 0.3s ease;
     opacity: 1;
 }
-  .message.exit {
+.message.exit {
     opacity: 0;
     height: 0 !important;
     margin: 0 !important;
@@ -34,4 +34,19 @@
 
 .fade-in-right{
     animation: fade-in-right forwards 1s;
+}
+
+@keyframes fade-in-left{
+    0%{
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+.fade-in-left{
+    animation: fade-in-left forwards 1s;
 }

@@ -10,3 +10,4 @@ export * from './Header';
 export * from './Footer';
 export * from './UserPopup';
 export * from './Message';
+export * from './ModelPreview';

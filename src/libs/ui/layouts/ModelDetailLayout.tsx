@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components';
-import { Image } from '../../types/Image';
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  image?: Image;
+  image?: string;
   bordered: boolean;
 }
 

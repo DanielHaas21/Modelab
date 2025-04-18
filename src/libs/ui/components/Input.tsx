@@ -39,19 +39,16 @@ type BaseInputAttributes = Pick<
 
 const inputVariants = cva(
   `
-    h-11 w-full rounded-md bg-neutral-100 
-    font-normal text-neutral-600 placeholder:text-neutral-300
-    disabled:cursor-not-allowed disabled:text-text-secondary
-    outline-none border-none focus:border-focused focus:ring-2 focus:ring-focused
+  h-40-px rounded-2 bg-light
   `,
   {
     variants: {
       size: {
-        xs: 'h-5 px-3 py-1 text-xs',
-        sm: 'h-9 px-4 py-4 text-sm',
-        md: 'h-10 px-4 py-6 text-base',
-        lg: 'h-12 px-5 text-lg',
-        xl: 'h-14 px-8 text-xl',
+        xs: ' w-150-px ',
+        sm: ' w-200-px ',
+        md: ' w-250-px ',
+        lg: ' w-300-px ',
+        xl: ' w-400-px ',
       },
     },
     defaultVariants: {
@@ -62,11 +59,20 @@ const inputVariants = cva(
 
 type InputVariants = VariantProps<typeof inputVariants>;
 
-export interface InputProps extends BaseInputAttributes, InputVariants {}
+export interface InputProps extends BaseInputAttributes, InputVariants {
+  placeholder?: string;
+}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, size, ...props }, ref) => {
-    return <input className={cn(inputVariants({ size, className }))} ref={ref} {...props} />;
+  ({ className, size,placeholder, ...props }, ref) => {
+    return (
+      <input
+        placeholder={placeholder}
+        className={cn(inputVariants({ size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
   }
 );
 

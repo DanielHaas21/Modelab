@@ -1,0 +1,8 @@
+.previews{
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0.5rem;
+    align-content: start; 
+}
+.main-section{
+    overflow-y: scroll;
+}

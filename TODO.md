@@ -1,4 +1,11 @@
-- elemental axios routes class
 - model preview component
 - middleware docs
-- model detail layout
+- custom scrollbar design
+
+### model detail 
+- data loading 
+- middleware
+- downloads if logged in 
+- model viewer if 3D
+
+### model detail upload mode

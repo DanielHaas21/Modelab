@@ -3,6 +3,7 @@ import './frontend/styles/export.scss';
 import LandingPage from './frontend/pages/LandingPage';
 import Browser from './frontend/pages/Browser';
 import About from './frontend/pages/About';
+import ModelDetail from './frontend/pages/ModelDetail';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -22,6 +23,7 @@ function App(): React.ReactElement {
             <Route path="/" element={<LandingPage />} />
             <Route path="/Browser" element={<Browser />} />
             <Route path="/About" element={<About />} />
+            <Route path="/models/:modelId" element={<ModelDetail />} />
           </Routes>
         </BrowserRouter>
       </Provider>

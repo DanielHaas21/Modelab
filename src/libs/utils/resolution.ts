@@ -1,21 +1,19 @@
-
 /**
- * 
+ *
  * @returns image size variant
  */
 
-import { img } from "../types/size";
+import { img } from '../types/size';
 
-export function DecideImageSize() : img {
-    let width : number = window.innerWidth; 
-    let height : number = window.innerHeight;
+export function DecideImageSize(): img {
+  let width: number = window.innerWidth;
+  let height: number = window.innerHeight;
 
-    if(width < 2560 && height < 1440){
-        return "fullhd";
-    }else if(width >= 2560 && height >= 1440 && width <= 3840 && height <= 2160) {
-        return "wqhd";
-    }else{
-        return "uhd";
-    }
+  if (width < 2560 && height < 1440) {
+    return 'fullhd';
+  } else if (width >= 2560 && height >= 1440 && width <= 3840 && height <= 2160) {
+    return 'wqhd';
+  } else {
+    return 'uhd';
+  }
 }
-
