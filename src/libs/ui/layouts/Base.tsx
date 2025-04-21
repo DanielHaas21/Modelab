@@ -4,11 +4,10 @@ import { Footer, MessageWrapper } from '../components';
 
 interface BaseProps {
   children?: React.ReactNode;
-  bordered:boolean
+  bordered: boolean;
 }
 
-export const BaseLayout: React.FC<BaseProps> = ({ children,bordered = true }) => {
-
+export const BaseLayout: React.FC<BaseProps> = ({ children, bordered = true }) => {
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'}></Header>

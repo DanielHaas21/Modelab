@@ -63,7 +63,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
         ref={ref}
         {...props}
       >
-        <div className={cn(meta.color, 'tag')}></div>
+        <div className={cn(meta.color, 'msg-tag')}></div>
         <div className="">
           <h2 className="fs-4 mt-1 mb-0 kanit-regular">{meta.label}</h2>
           <p className="kanit-light m-0">{children}</p>
