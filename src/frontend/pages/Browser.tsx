@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { Input, ModelPreview, Preloader } from '../../libs/ui/components';
+import { BrowserFilters } from '../../libs/ui/components/BrowserFilters';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
@@ -12,15 +13,13 @@ const Browser: React.FC = () => {
         <div className="ms-8 d-flex flex-column w-100">
           <div className="row w-100">
             <section
-              className={
-                previewsCol + ' px-0 d-flex align-items-center justify-content-center h-9-vh'
-              }
+              className={previewsCol + ' px-0 d-flex align-items-center justify-content-center'}
             >
               <Input size="xl" placeholder="Search" className="mt-5"></Input>
             </section>
           </div>
-          <div className="row w-100">
-            <section className={previewsCol + ' d-flex flex-wrap previews mx-0 min-h-75-vh mt-4'}>
+          <div className="row w-100 h-100 pb-2">
+            <section className={previewsCol + ' d-flex flex-wrap previews mx-0 mt-4'}>
               <React.Suspense fallback={<Preloader></Preloader>}>
                 <ModelPreview
                   name="test"
@@ -49,12 +48,7 @@ const Browser: React.FC = () => {
                 <ModelPreview name="test"></ModelPreview>
               </React.Suspense>
             </section>
-            <aside
-              className={
-                filtersCol +
-                ' d-flex align-items-center justify-content-start min-h-86-vh bg-primary'
-              }
-            ></aside>
+            <BrowserFilters />
           </div>
         </div>
       </main>
