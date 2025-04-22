@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
-import placeholder from '../assets/placeHolder.png';
+import placeholder from '../assets/placeholder.png';
 import { Label } from './Label';
 
 interface ModelPreviewProps {
@@ -31,7 +31,9 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
           {...props}
         >
           <img src={image || placeholder} className="rounded-2 w-90 mt-2"></img>
-          <Label className="w-85 text-left kanit-regular" size="sm">{name}</Label>
+          <Label className="w-85 text-left kanit-regular" size="sm">
+            {name}
+          </Label>
           <div className="w-85 d-flex flex-row flex-wrap justify-content-start kanit-light mb-2">
             {tags?.slice(0, 8).map((tag, index) => (
               <span className="mr-1" key={index}>

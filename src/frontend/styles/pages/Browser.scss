@@ -1,8 +1,14 @@
-.previews{
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 0.5rem;
-    align-content: start; 
+.previews {
+  // grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+  align-content: start;
+  justify-content: start;
 }
-.main-section{
-    overflow-y: scroll;
+
+.filters {
+  max-width: 300px;
+}
+
+.main-section {
+  overflow-y: scroll;
 }
