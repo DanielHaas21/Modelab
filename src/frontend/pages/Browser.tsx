@@ -5,7 +5,6 @@ import { BrowserFilters } from '../../libs/ui/components/BrowserFilters';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
-  const filtersCol = `col-xl-2 col-4`;
 
   return (
     <BaseLayout bordered={true}>
@@ -15,7 +14,16 @@ const Browser: React.FC = () => {
             <section
               className={previewsCol + ' px-0 d-flex align-items-center justify-content-center'}
             >
-              <Input size="xl" placeholder="Search" className="mt-5"></Input>
+              <Input
+                size="xl"
+                placeholder="Search"
+                className="mt-5"
+                inputGroupBefore={
+                  <span className="input-group-text">
+                    <i className="fa-solid fa-magnifying-glass fs-2" />
+                  </span>
+                }
+              />
             </section>
           </div>
           <div className="row w-100 h-100 pb-2">
