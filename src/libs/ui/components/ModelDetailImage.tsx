@@ -2,8 +2,8 @@ import * as React from 'react';
 import { cn } from '../../utils';
 import { DetailImage } from '../../types/DetailImage';
 import placeholder from '../assets/placeholder.png';
-
-
+import { Canvas } from "@react-three/fiber";
+import { Environment, OrbitControls } from "@react-three/drei";
 interface ModelDetailImageProps {
   className?: string;
   image: DetailImage;
@@ -32,7 +32,11 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       if (image instanceof File && /\.(fbx|obj)$/i.test(image.name)) {
         return (
           <div className={cn('model-viewer', className)} ref={ref}>
-       
+            <Canvas>
+                
+                <OrbitControls></OrbitControls>
+                <Environment background></Environment>
+            </Canvas>
           </div>
         );
       }
@@ -61,4 +65,4 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
         />
       );
     }
-  );
+);
