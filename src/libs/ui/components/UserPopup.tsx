@@ -7,6 +7,7 @@ import userIconDark from '../assets/user-circle-light.svg';
 import { Button } from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShuffle, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { Label } from './Label';
 
 interface UserPopupProps {
   className?: string;
@@ -37,12 +38,12 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
           }
           className="w-60-px"
         ></img>
-        <h2 className="kanit-light fs-6 m-0">{UserData.user?.username || 'test'}</h2>
+        <Label size="xxs" className="kanit-light m-0">{UserData.user?.username || 'test'}</Label>
         <p className="m-1 text-info">{UserData.user?.email || 'test email'}</p>
         <Button className="w-80 m-1" font_size="sm" variant="light" font="light">
           <FontAwesomeIcon icon={faShuffle} className="mr-1"></FontAwesomeIcon>Switch account
         </Button>
-        <Button className="w-80 justify-content-start" variant="primary" font_size="sm" font="light">
+        <Button  className="w-80 justify-content-start" variant="primary" font_size="sm" font="light">
           <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-4"></FontAwesomeIcon>Logout
         </Button>
       </div>

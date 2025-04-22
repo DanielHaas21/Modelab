@@ -62,7 +62,7 @@ src
 ```
 ### api
 
-To learn more about the structure about the api see: <br>
+To learn more about the structure of the api see: <br>
 [Modelab-api](https://github.com/DanielHaas21/Modelab-api)
 
 ### Utilities

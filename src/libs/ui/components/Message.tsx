@@ -6,6 +6,7 @@ import { RootState, AppDispatch } from '../../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { Remove } from '../../../store/slices/Message';
+import { Label } from './Label';
 
 const variantMeta = {
   Success: { label: 'Success Alert', color: 'bg-success' },
@@ -65,7 +66,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
       >
         <div className={cn(meta.color, 'msg-tag')}></div>
         <div className="">
-          <h2 className="fs-4 mt-1 mb-0 kanit-regular">{meta.label}</h2>
+          <Label size="xxs" className="mt-1 mb-0 kanit-regular">{meta.label}</Label>
           <p className="kanit-light m-0">{children}</p>
         </div>
         <FontAwesomeIcon
