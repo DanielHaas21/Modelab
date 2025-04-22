@@ -1,0 +1,1 @@
+export type DetailImage = string | File | Blob | ArrayBuffer;

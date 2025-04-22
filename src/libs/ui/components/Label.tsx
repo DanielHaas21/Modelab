@@ -14,6 +14,7 @@ const labelVariants = cva(
   {
     variants: {
       size: {
+        xxs: 'fs-4',
         xs: 'fs-5',
         sm: 'fs-6',
         md: 'fs-7',

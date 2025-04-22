@@ -20,7 +20,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
 }) => {
   return (
     <>
-      <Header className={bordered ? 'bordered-h' : 'w-100'}></Header>
+      <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'}></Header>
       <main className="w-100 min-h-86-vh d-flex">
         <div className="d-flex flex-column w-50">
           <section className="d-flex align-items-center justify-content-start w-100 h-9-vh">
