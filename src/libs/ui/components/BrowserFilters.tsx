@@ -53,13 +53,14 @@ interface BrowserFiltersProps {
   categories: CategoryOption[]; // All category options
   tags: TagOption[]; // Initial tags state
   onChange?: (category: CategoryOption, tags: TagOption[]) => void; // Invoked when the overall filter state changed, returns the selected category and all selected tags
+  className?: string;
 }
 
 /**
  * Filter for the browser
  */
 export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(
-  ({ onChange, categories, tags: defaultTags }, ref) => {
+  ({ onChange, categories, tags: defaultTags, className }, ref) => {
     const categoryFiltersId: string = 'browserFilterCateg';
 
     const [tags, setTags] = React.useState<TagOption[]>(defaultTags);
@@ -105,7 +106,7 @@ export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersPro
     };
 
     return (
-      <aside className="col-xl-2 col-4 d-flex flex-column" ref={ref}>
+      <aside className={className + ' col-xl-2 col-4 d-flex flex-column'} ref={ref}>
         <div className="w-100">
           <Label size="xs">Category</Label>
           <div className="w-100">
