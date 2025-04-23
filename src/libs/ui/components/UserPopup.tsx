@@ -24,7 +24,7 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
         {...props}
         className={cn(
           className,
-          'd-flex flex-column align-items-center justify-content-start w-300-px h-250-px position-absolute bg-light rounded-4 shadowed-black z-1 popup'
+          'd-flex flex-column align-items-center justify-content-start w-300-px h-250-px position-absolute bg-light rounded-4 shadowed-black popup'
         )}
       >
         <div id="polygon" className="bg-light"></div>
