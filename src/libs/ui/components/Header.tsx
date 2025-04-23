@@ -50,7 +50,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
       <header
         className={cn(
           className,
-          'd-flex flex-row justify-content-between align-items-center h-8-vh  lts-2 bg-light'
+          'd-flex flex-row justify-content-between align-items-center lts-2 bg-light'
         )}
         {...props}
       >

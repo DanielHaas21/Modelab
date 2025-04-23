@@ -69,9 +69,11 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 * {
   font-family: 'Kanit', sans-serif;
 }
-body {
-  overflow: hidden;
+
+#root {
+  min-height: 100vh;
 }
+
 .btn-primary:hover {
   transition: filter 0.5s;
   filter: brightness(90%);

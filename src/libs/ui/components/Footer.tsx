@@ -26,8 +26,9 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
   return (
     <footer
       className={cn(
-         variant, className,
-        'd-flex flex-row justify-content-end align-items-center h-6-vh w-100 bg-light'
+        variant,
+        className,
+        'd-flex flex-row justify-content-end align-items-center bg-light'
       )}
       {...props}
     >
