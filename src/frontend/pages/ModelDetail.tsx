@@ -59,11 +59,11 @@ const ModelDetail: React.FC = () => {
         tellus sit amet nibh dignissim sagittis. Nam sed tellus id magna elementum tincidunt.
         Pellentesque ipsum. Ut tempus purus at lorem. Maecenas aliquet accumsan leo.
       </p>
-      <div className="ms-3 mt-2 d-flex justify-content-between align-items-center">
-        <Label size="xxs" className="kanit-regular">
+      <div className="ms-3 mt-2 d-flex align-items-center">
+        <Label size="xxs" className="kanit-regular w-50">
           Category
         </Label>
-        <p className="m-0">3D Model</p>
+        <p className="m-0 w-50">3D Model</p>
       </div>
       <div className="ms-3 mt-2 d-flex justify-content-between">
         <Label size="xxs" className="kanit-regular">
