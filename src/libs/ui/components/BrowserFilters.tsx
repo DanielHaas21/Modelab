@@ -1,42 +1,9 @@
 import * as React from 'react';
 import { Label } from './Label';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { AssetTag } from './AssetTag';
 import { Option } from 'react-bootstrap-typeahead/types/types';
-
-interface CategoryRadioProps {
-  name: string;
-  id: string;
-  label: string;
-  labelClassName?: string;
-  defaultChecked?: boolean;
-  onChecked?: () => void;
-}
-
-/**
- * Category Radio Button for the category filter
- */
-const CategoryRadio = React.forwardRef<HTMLInputElement, CategoryRadioProps>(
-  ({ name, id, defaultChecked, label, labelClassName, onChecked }, ref) => {
-    return (
-      <>
-        <input
-          type="radio"
-          className="btn-check"
-          name={name}
-          id={id}
-          autoComplete="off"
-          defaultChecked={defaultChecked}
-          ref={ref}
-          onChange={onChecked}
-        />
-        <label className={labelClassName} htmlFor={id}>
-          {label}
-        </label>
-      </>
-    );
-  }
-);
+import { AssetTag } from './AssetTag';
+import { CategoryRadio } from './CategoryRadio';
 
 interface CategoryOption {
   name: string;
