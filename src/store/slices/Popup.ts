@@ -16,9 +16,12 @@ const PopupSlice = createSlice({
     Show: (state) => {
       state.value = true;
     },
+    Toggle: (state) => {
+      state.value = !state.value;
+    },
   },
 });
 
-export const { Hide, Show } = PopupSlice.actions;
+export const { Hide, Show, Toggle } = PopupSlice.actions;
 
 export default PopupSlice.reducer;

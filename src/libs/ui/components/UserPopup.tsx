@@ -38,13 +38,22 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
           }
           className="w-60-px"
         ></img>
-        <Label size="xxs" className="kanit-light m-0">{UserData.user?.username || 'test'}</Label>
+        <Label size="xxs" className="kanit-light m-0">
+          {UserData.user?.username || 'test'}
+        </Label>
         <p className="m-1 text-info">{UserData.user?.email || 'test email'}</p>
         <Button className="w-80 m-1" font_size="sm" variant="light" font="light">
-          <FontAwesomeIcon icon={faShuffle} className="mr-1"></FontAwesomeIcon>Switch account
+          <FontAwesomeIcon icon={faShuffle} className="mr-1" />
+          Switch account
         </Button>
-        <Button  className="w-80 justify-content-start" variant="primary" font_size="sm" font="light">
-          <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-4"></FontAwesomeIcon>Logout
+        <Button
+          className="w-80 justify-content-start"
+          variant="primary"
+          font_size="sm"
+          font="light"
+        >
+          <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-4" />
+          Logout
         </Button>
       </div>
     );
