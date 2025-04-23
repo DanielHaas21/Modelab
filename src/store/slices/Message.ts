@@ -10,7 +10,7 @@ interface MessageState {
   messages: Message[];
 }
 
-const initialState: MessageState = { messages: [{ variant: 'Success', message: 'test' }] };
+const initialState: MessageState = { messages: [] };
 
 const MessageSlice = createSlice({
   name: 'Message',
