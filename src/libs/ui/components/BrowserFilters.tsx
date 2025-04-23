@@ -40,21 +40,24 @@ const CategoryRadio = React.forwardRef<HTMLInputElement, CategoryRadioProps>(
 
 interface CategoryOption {
   name: string;
-  id: number;
+  id: number; // Unique
 }
 
 interface TagOption {
   name: string;
-  id: number;
+  id: number; // Unique
   isSelected?: boolean;
 }
 
 interface BrowserFiltersProps {
-  categories: CategoryOption[];
-  tags: TagOption[];
-  onChange?: (category: CategoryOption, tags: TagOption[]) => void;
+  categories: CategoryOption[]; // All category options
+  tags: TagOption[]; // Initial tags state
+  onChange?: (category: CategoryOption, tags: TagOption[]) => void; // Invoked when the overall filter state changed, returns the selected category and all selected tags
 }
 
+/**
+ * Filter for the browser
+ */
 export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(
   ({ onChange, categories, tags: defaultTags }, ref) => {
     const categoryFiltersId: string = 'browserFilterCateg';

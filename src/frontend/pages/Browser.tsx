@@ -63,8 +63,8 @@ const Browser: React.FC = () => {
                 { name: 'Audio', id: 3 },
               ]}
               tags={[
-                { name: 'Medieval', id: 1 },
-                { name: 'C4D', id: 2 },
+                { name: 'Medieval', id: 1, isSelected: true },
+                { name: 'C4D', id: 2, isSelected: true },
                 { name: 'Maya', id: 3 },
                 { name: 'Prop', id: 4 },
                 { name: 'FBX', id: 5 },
