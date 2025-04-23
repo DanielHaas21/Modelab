@@ -47,10 +47,10 @@ const ModelDetail: React.FC = () => {
 
   return (
     <ModelDetailLayout bordered={true} image={test}>
-      <Label size="lg" className=" mt-1 kanit-regular lts-1">
+      <Label size="lg" className="kanit-regular lts-1">
         Model name
       </Label>
-      <p className="ms-3 mt-4 kanit-light w-80">
+      <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce tellus. Etiam dui sem,
         fermentum vitae, sagittis id, malesuada in, quam. Suspendisse sagittis ultrices augue.
         Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Suspendisse

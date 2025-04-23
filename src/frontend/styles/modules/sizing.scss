@@ -36,4 +36,11 @@ $sizes: 10, 20, 30, 40, 50, 60, 70, 75, 90, 100, 150, 200, 250, 300, 350, 400, 4
   .min-#{$h}#{$i}-vh {
     min-height: #{$i}vh;
   }
+
+  .max-#{$w}#{$i}-vw {
+    max-width: #{$i}vw;
+  }
+  .max-#{$h}#{$i}-vh {
+    max-height: #{$i}vh;
+  }
 }
