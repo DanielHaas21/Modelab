@@ -1,8 +1,8 @@
-import React, { MouseEventHandler } from 'react';
+import * as React from 'react';
 
 interface AssetTagProps {
   name: string;
-  onClose?: MouseEventHandler<HTMLButtonElement>;
+  onClose?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const AssetTag = React.forwardRef<HTMLDivElement, AssetTagProps>(

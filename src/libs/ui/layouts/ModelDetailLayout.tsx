@@ -1,15 +1,17 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
-import { Footer } from '../components';
+import { Footer, Preloader } from '../components';
 import { MessageWrapper } from '../components';
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { ModelFileProps } from '../../types/ModelFileProps';
+import { ModelDetailImage } from '../components/ModelDetailImage';
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  image?: React.ReactElement;
+  image?: ModelFileProps;
   bordered: boolean;
 }
 
@@ -33,7 +35,9 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           <section className="d-flex flex-column ms-8 mt-5">{children}</section>
         </div>
         <aside className="d-flex flex-column align-items-center justify-content-start w-50 min-h-86-vh">
-          {image}
+          <React.Suspense fallback={<Preloader></Preloader>}>
+            <ModelDetailImage image={image!} ></ModelDetailImage>
+          </React.Suspense>
         </aside>
       </main>
       <Footer className={bordered ? 'bordered-f' : 'w-100'}></Footer>
