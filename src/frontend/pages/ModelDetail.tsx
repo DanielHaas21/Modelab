@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Label } from '../../libs/ui/components';
+import { AssetTag } from '../../libs/ui/components/AssetTag';
 import test from "../../libs/ui/assets/example_model.fbx";
 import Service from '../../middleware/api/Service';
 const ModelDetail: React.FC =  () => {
@@ -49,7 +50,9 @@ const ModelDetail: React.FC =  () => {
 
   return (
     <ModelDetailLayout bordered={true} image={test}>
-      <Label size="lg" className=" mt-1 kanit-regular lts-1">Model name</Label>
+      <Label size="lg" className=" mt-1 kanit-regular lts-1">
+        Model name
+      </Label>
       <p className="ms-3 mt-4 kanit-light w-80">
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce tellus. Etiam dui sem,
         fermentum vitae, sagittis id, malesuada in, quam. Suspendisse sagittis ultrices augue.
@@ -60,27 +63,34 @@ const ModelDetail: React.FC =  () => {
         Pellentesque ipsum. Ut tempus purus at lorem. Maecenas aliquet accumsan leo.
       </p>
       <div className="ms-3 mt-2 w-50 d-flex justify-content-between">
-        <Label size="xxs" className="kanit-regular">Category</Label>
+        <Label size="xxs" className="kanit-regular">
+          Category
+        </Label>
         <p>3D Model</p>
       </div>
       <div className="ms-3 mt-2 w-80 d-flex justify-content-between">
-        <Label size="xxs" className="kanit-regular">Tags</Label>
+        <Label size="xxs" className="kanit-regular">
+          Tags
+        </Label>
         <div className="d-flex justify-content-start flex-wrap flex-row w-50">
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
-          <span className="model-tag rounded-2 px-1 pr-1">tag</span>
+          <AssetTag name="Medieval" />
+          <AssetTag name="C4D" />
+          <AssetTag name="Maya" />
+          <AssetTag name="Prop" />
+          <AssetTag name="FBX" />
+          <AssetTag name="Unity" />
+          <AssetTag name="Medieval" />
+          <AssetTag name="C4D" />
+          <AssetTag name="Maya" />
+          <AssetTag name="Prop" />
+          <AssetTag name="FBX" />
+          <AssetTag name="Unity" />
+          <AssetTag name="Medieval" />
+          <AssetTag name="C4D" />
+          <AssetTag name="Maya" />
+          <AssetTag name="Prop" />
+          <AssetTag name="FBX" />
+          <AssetTag name="Unity" />
         </div>
       </div>
       <Button

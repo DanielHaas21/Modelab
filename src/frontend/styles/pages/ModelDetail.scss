@@ -1,11 +1,5 @@
 @import '../bootstrap';
-.download{
-    bottom: 300px;
-}
-.model-tag{
-    border: 1px solid map-get($theme-colors, "neutral" );
-    width: fit-content !important;
-    height: fit-content !important;
-    margin-bottom: 4px;
-    margin-right: 5px !important;
+
+.download {
+  bottom: 300px;
 }

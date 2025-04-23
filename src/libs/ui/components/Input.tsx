@@ -35,11 +35,12 @@ type BaseInputAttributes = Pick<
   | 'onChange'
   | 'onBlur'
   | 'onFocus'
+  | 'list'
 >;
 
 const inputVariants = cva(
   `
-  h-40-px rounded-2 bg-light
+  input-group h-40-px rounded-2 bg-light
   `,
   {
     variants: {
@@ -61,17 +62,18 @@ type InputVariants = VariantProps<typeof inputVariants>;
 
 export interface InputProps extends BaseInputAttributes, InputVariants {
   placeholder?: string;
+  inputGroupBefore?: React.ReactNode;
+  inputGroupAfter?: React.ReactNode;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, size,placeholder, ...props }, ref) => {
+  ({ className, size, placeholder, inputGroupBefore, inputGroupAfter, ...props }, ref) => {
     return (
-      <input
-        placeholder={placeholder}
-        className={cn(inputVariants({ size, className }))}
-        ref={ref}
-        {...props}
-      />
+      <div className={cn(inputVariants({ size, className }))}>
+        {inputGroupBefore}
+        <input placeholder={placeholder} className="form-control" ref={ref} {...props} />
+        {inputGroupAfter}
+      </div>
     );
   }
 );

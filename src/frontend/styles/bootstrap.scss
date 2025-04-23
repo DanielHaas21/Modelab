@@ -1,6 +1,6 @@
 $text: #041c0b;
 $background: #f8fdf9;
-$primary:  #56c290;
+$primary: #56c290;
 $secondary: #91d9e5;
 $accent: #5e9cda;
 $neutral: #e5e5e5;
@@ -37,7 +37,6 @@ $color-scheme: (
   'neutral': $neutral,
 );
 
-
 // Merge custom colors with Bootstrap’s `$theme-colors`
 $theme-colors: map-merge($theme-colors, $color-scheme);
 
@@ -68,18 +67,18 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 
 // Global styles
 * {
-  font-family: 'Kanit', sans-serif !important;
+  font-family: 'Kanit', sans-serif;
 }
-body{
+body {
   overflow: hidden;
 }
 .btn-primary:hover {
-  transition: filter .5s;
+  transition: filter 0.5s;
   filter: brightness(90%);
 }
-i{
+i {
   font-size: 26px !important;
 }
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
