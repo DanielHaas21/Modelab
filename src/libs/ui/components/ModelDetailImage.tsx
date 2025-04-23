@@ -19,61 +19,76 @@ const Model : React.FC<ModelProps> = (({file}) => {
 interface ModelDetailImageProps {
   className?: string;
   image: ModelFileProps;
+  canvasKey?: number;
+  onContextLoss?: (e: Event) => void; 
 }
 
 export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImageProps>(
-    ({ className, image, ...props }, ref) => {
+  ({ className, image, canvasKey, onContextLoss, ...props }, ref) => {
+    const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+    const is3DFile = isFile._3D(image);
+    const isImageFile = isFile._img(image);
 
-      console.log(image);
-      const [imageUrl, setImageUrl] = React.useState<string | null>(null);
-      const is3DFile = isFile._3D(image);
-      const isImageFile = isFile._img(image);
-      console.log(is3DFile, isImageFile);
-      React.useEffect(() => {
-        if (image instanceof File && isImageFile) {
-          const url = URL.createObjectURL(image);
-          setImageUrl(url);
-          return () => URL.revokeObjectURL(url);
-        } else if (typeof image === 'string' && isImageFile) {
-          setImageUrl(image);
-        } else {
-          setImageUrl(null);
-        }
-      }, [image]);
+    React.useEffect(() => {
+      if (image instanceof File && isImageFile) {
+        const url = URL.createObjectURL(image);
+        setImageUrl(url);
+        return () => URL.revokeObjectURL(url);
+      } else if (typeof image === 'string' && isImageFile) {
+        setImageUrl(image);
+      } else {
+        setImageUrl(null);
+      }
+    }, [image]);
 
-      if (is3DFile) {
-        return (
-          <div className={cn('model-viewer mt-5 h-90 w-90 d-flex align-items-center justify-content-center', className)} ref={ref}>
-            <Canvas className='h-80 w-90'>
-              {image instanceof File && <Model file={image} />}
-              <OrbitControls />
-              <Environment background preset='sunset'/>
-            </Canvas>
-          </div>
-        );
-      }
-  
-      if (imageUrl) {
-        return (
-          <img
-            ref={ref as React.RefObject<HTMLImageElement>}
-            className={cn('object-cover rounded-xl', className)}
-            src={imageUrl}
-            alt="Preview"
-            {...props}
-          />
-        );
-      }
-  
-      // Proprietary/unsupported file type fallback
+    if (is3DFile) {
+      return (
+        <div
+          className={cn(
+            'model-viewer mt-5 h-90 w-90 d-flex align-items-center justify-content-center',
+            className
+          )}
+          ref={ref}
+        >
+          <Canvas
+            key={canvasKey}
+            className="h-80 w-90"
+            onCreated={({ gl }) => { // We prevent dismounting and trigger a rerender
+              gl.domElement.addEventListener('webglcontextlost', (e) => {
+                e.preventDefault();
+                onContextLoss && onContextLoss(e);
+              });
+            }}
+          >
+            {image instanceof File && <Model file={image} />}
+            <OrbitControls />
+            <Environment background preset="sunset" />
+          </Canvas>
+        </div>
+      );
+    }
+
+    if (imageUrl) {
       return (
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
           className={cn('object-cover rounded-xl', className)}
-          src={placeholder}
-          alt="Unsupported format"
+          src={imageUrl}
+          alt="Preview"
           {...props}
         />
       );
     }
+
+    // Fallback for unsupported types
+    return (
+      <img
+        ref={ref as React.RefObject<HTMLImageElement>}
+        className={cn('object-cover rounded-xl', className)}
+        src={placeholder}
+        alt="Unsupported format"
+        {...props}
+      />
+    );
+  }
 );
