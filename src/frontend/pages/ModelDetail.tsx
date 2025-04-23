@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Label } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import test from "../../libs/ui/assets/example_model.fbx";
+import test from '../../libs/ui/assets/example_model.fbx';
 import Service from '../../middleware/api/Service';
-const ModelDetail: React.FC =  () => {
-
-  const testp = new Service("http://localhost/Modelab-api/");
+const ModelDetail: React.FC = () => {
+  const testp = new Service('http://localhost/Modelab-api/');
 
   let objectUrl;
   React.useEffect(() => {
@@ -28,13 +27,12 @@ const ModelDetail: React.FC =  () => {
         if (!response.ok) {
           throw new Error('Failed to fetch model data');
         }
-        
+
         const blob = await response.blob();
         objectUrl = URL.createObjectURL(blob);
 
         // For example: setting it to an <a> tag or <img> src
         console.log(objectUrl);
-
       } catch (error) {
         console.error('Error fetching model data:', error);
       }
@@ -42,7 +40,6 @@ const ModelDetail: React.FC =  () => {
 
     fetchData();
   }, []); // Empty dependency array ensures useEffect runs once after component mounts
-
 
   const User = useSelector((state: RootState) => state.User);
 
@@ -62,13 +59,13 @@ const ModelDetail: React.FC =  () => {
         tellus sit amet nibh dignissim sagittis. Nam sed tellus id magna elementum tincidunt.
         Pellentesque ipsum. Ut tempus purus at lorem. Maecenas aliquet accumsan leo.
       </p>
-      <div className="ms-3 mt-2 w-50 d-flex justify-content-between">
+      <div className="ms-3 mt-2 d-flex justify-content-between align-items-center">
         <Label size="xxs" className="kanit-regular">
           Category
         </Label>
-        <p>3D Model</p>
+        <p className="m-0">3D Model</p>
       </div>
-      <div className="ms-3 mt-2 w-80 d-flex justify-content-between">
+      <div className="ms-3 mt-2 d-flex justify-content-between">
         <Label size="xxs" className="kanit-regular">
           Tags
         </Label>
@@ -93,14 +90,16 @@ const ModelDetail: React.FC =  () => {
           <AssetTag name="Unity" />
         </div>
       </div>
-      <Button
-        onClick={
-          User.isAuthenticated ? Download : undefined /*replace with link to oauth in the future*/
-        }
-        className="d-flex justify-content-center position-absolute ms-4 download"
-      >
-        Download
-      </Button>
+      <div className="sticky-bottom mt-4 ms-4 pb-4">
+        <Button
+          onClick={
+            User.isAuthenticated ? Download : undefined /*replace with link to oauth in the future*/
+          }
+          className="d-flex justify-content-center download"
+        >
+          Download
+        </Button>
+      </div>
     </ModelDetailLayout>
   );
 };

@@ -27,8 +27,9 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
         <div className="d-flex flex-column w-50">
           <section className="d-flex align-items-center justify-content-start w-100 h-9-vh">
             <Link className="text-decoration-none ms-6 mt-5" to="/Browser">
-              <Button>
-                <FontAwesomeIcon className="mr-3" icon={faArrowLeft}></FontAwesomeIcon>Go back
+              <Button variant={'light'} outline>
+                <FontAwesomeIcon className="mr-3" icon={faArrowLeft} />
+                Go back
               </Button>
             </Link>
           </section>
@@ -36,7 +37,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
         </div>
         <aside className="d-flex flex-column align-items-center justify-content-start w-50 min-h-86-vh">
           <React.Suspense fallback={<Preloader></Preloader>}>
-            <ModelDetailImage image={image!} ></ModelDetailImage>
+            <ModelDetailImage image={image!}></ModelDetailImage>
           </React.Suspense>
         </aside>
       </main>

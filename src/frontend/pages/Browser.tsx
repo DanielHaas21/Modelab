@@ -2,6 +2,8 @@ import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { Input, ModelPreview, Preloader } from '../../libs/ui/components';
 import { BrowserFilters } from '../../libs/ui/components/BrowserFilters';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
@@ -19,7 +21,7 @@ const Browser: React.FC = () => {
                 placeholder="Search"
                 inputGroupBefore={
                   <span className="input-group-text">
-                    <i className="fa-solid fa-magnifying-glass fs-2" />
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
                   </span>
                 }
               />
