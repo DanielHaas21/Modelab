@@ -5,14 +5,50 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Label } from '../../libs/ui/components';
+import test from "../../libs/ui/assets/example_model.fbx";
+import Service from '../../middleware/api/Service';
+const ModelDetail: React.FC =  () => {
 
-const ModelDetail: React.FC = () => {
+  const testp = new Service("http://localhost/Modelab-api/");
+
+  let objectUrl;
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost/Modelab-api/file/1', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any other headers if needed
+          },
+          // You can pass body data here if required
+          //body: JSON.stringify({ /* Your POST body data */ }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch model data');
+        }
+        
+        const blob = await response.blob();
+        objectUrl = URL.createObjectURL(blob);
+
+        // For example: setting it to an <a> tag or <img> src
+        console.log(objectUrl);
+
+      } catch (error) {
+        console.error('Error fetching model data:', error);
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array ensures useEffect runs once after component mounts
+
+
   const User = useSelector((state: RootState) => state.User);
 
   const Download = () => {};
 
   return (
-    <ModelDetailLayout bordered={true}>
+    <ModelDetailLayout bordered={true} image={test}>
       <Label size="lg" className=" mt-1 kanit-regular lts-1">Model name</Label>
       <p className="ms-3 mt-4 kanit-light w-80">
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce tellus. Etiam dui sem,
