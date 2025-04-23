@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Label } from './Label';
-import { Input } from './Input';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import { AssetTag } from './AssetTag';
+import { Option } from 'react-bootstrap-typeahead/types/types';
 
 interface CategoryRadioProps {
   name: string;
@@ -9,13 +10,14 @@ interface CategoryRadioProps {
   label: string;
   labelClassName?: string;
   defaultChecked?: boolean;
+  onChecked?: () => void;
 }
 
 /**
  * Category Radio Button for the category filter
  */
 const CategoryRadio = React.forwardRef<HTMLInputElement, CategoryRadioProps>(
-  ({ name, id, defaultChecked, label, labelClassName }, ref) => {
+  ({ name, id, defaultChecked, label, labelClassName, onChecked }, ref) => {
     return (
       <>
         <input
@@ -26,6 +28,7 @@ const CategoryRadio = React.forwardRef<HTMLInputElement, CategoryRadioProps>(
           autoComplete="off"
           defaultChecked={defaultChecked}
           ref={ref}
+          onChange={onChecked}
         />
         <label className={labelClassName} htmlFor={id}>
           {label}
@@ -35,133 +38,122 @@ const CategoryRadio = React.forwardRef<HTMLInputElement, CategoryRadioProps>(
   }
 );
 
-interface BrowserFiltersProps {}
+interface CategoryOption {
+  name: string;
+  id: number;
+}
 
-/**
- * @todo replace datalist with a custom autocomplete
- */
-export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(({}, ref) => {
-  const categoryFiltersId: string = 'browserFilterCateg';
-  const tagDatalistId: string = 'browserFilterTags';
+interface TagOption {
+  name: string;
+  id: number;
+  isSelected?: boolean;
+}
 
-  const categories: { name: string; id: number }[] = [
-    { name: '3D Model', id: 1 },
-    { name: '2D Texture', id: 2 },
-    { name: 'Audio', id: 3 },
-  ];
+interface BrowserFiltersProps {
+  categories: CategoryOption[];
+  tags: TagOption[];
+  onChange?: (category: CategoryOption, tags: TagOption[]) => void;
+}
 
-  const [tags, setTags] = React.useState<{ name: string; id: number; isSelected?: boolean }[]>([
-    { name: 'Medieval', id: 1 },
-    { name: 'C4D', id: 2 },
-    { name: 'Maya', id: 3 },
-    { name: 'Prop', id: 4 },
-    { name: 'FBX', id: 5 },
-    { name: 'Unity', id: 6 },
-    { name: 'Unity Second Test', id: 7 },
-  ]);
+export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(
+  ({ onChange, categories, tags: defaultTags }, ref) => {
+    const categoryFiltersId: string = 'browserFilterCateg';
 
-  const [tagSearchText, setTagSearchText] = React.useState<string>('');
+    const [tags, setTags] = React.useState<TagOption[]>(defaultTags);
+    const [selectedCategory, setSelectedCategory] = React.useState<CategoryOption>(categories[0]);
 
-  return (
-    <aside className="col-xl-2 col-4 d-flex flex-column" ref={ref}>
-      <div className="w-100">
-        <Label size="xs">Category</Label>
+    const [typeaheadSelected, setTypeaheadSelected] = React.useState<Option[]>([]);
+
+    React.useEffect(() => {
+      if (onChange === undefined) return;
+      onChange(
+        selectedCategory,
+        tags.filter((tag) => tag.isSelected)
+      );
+    }, [tags, selectedCategory]);
+
+    const onTagsSelected = (selected: Option[]) => {
+      setTypeaheadSelected(selected);
+      if (selected.length != 1) return;
+      const option = selected[0] as { label: string; value: number };
+
+      const tagIndex = tags.findIndex((tag) => tag.id == option.value);
+      if (tagIndex == -1) return;
+      setTypeaheadSelected([]);
+
+      const updatedTags = [...tags];
+      updatedTags[tagIndex] = {
+        ...updatedTags[tagIndex],
+        isSelected: true,
+      };
+      setTags(updatedTags);
+    };
+
+    const onTagClosed = (tag: TagOption) => {
+      const tagIndex = tags.findIndex(({ id: currId }) => currId == tag.id);
+      if (tagIndex === -1) return;
+
+      const updatedTags = [...tags];
+      updatedTags[tagIndex] = {
+        ...updatedTags[tagIndex],
+        isSelected: false,
+      };
+      setTags(updatedTags);
+    };
+
+    return (
+      <aside className="col-xl-2 col-4 d-flex flex-column" ref={ref}>
         <div className="w-100">
-          {...categories.map(({ name }, index) => {
-            return (
-              <CategoryRadio
-                id={categoryFiltersId + index}
-                label={name}
-                name={categoryFiltersId}
-                defaultChecked={index == 0}
-                labelClassName={'btn mb-1' + (index < categories.length - 1 ? ' mr-1' : '')}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="w-100 mt-4">
-        <Label size="xs">Tags</Label>
-        <div className="w-100">
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-
-              let tagIndex = tags.findIndex(
-                ({ isSelected, name }) => !isSelected && name === tagSearchText
+          <Label size="xs">Category</Label>
+          <div className="w-100">
+            {...categories.map((category, index) => {
+              return (
+                <CategoryRadio
+                  id={categoryFiltersId + index}
+                  label={category.name}
+                  name={categoryFiltersId}
+                  defaultChecked={category.id == selectedCategory.id}
+                  labelClassName={'btn mb-1' + (index < categories.length - 1 ? ' mr-1' : '')}
+                  onChecked={() => {
+                    setSelectedCategory(category);
+                  }}
+                />
               );
-
-              if (tagIndex === -1) {
-                const nameRegex = new RegExp(`^${tagSearchText}`, 'i');
-
-                const simmilarTagsIndexes: number[] = [];
-                tags.forEach(({ name, isSelected }, index) => {
-                  if (isSelected || !nameRegex.test(name)) return;
-                  simmilarTagsIndexes.push(index);
-                });
-
-                if (simmilarTagsIndexes.length == 1) tagIndex = simmilarTagsIndexes[0];
-              }
-
-              if (tagIndex == -1) return;
-
-              setTagSearchText('');
-
-              const updatedTags = [...tags];
-              updatedTags[tagIndex] = {
-                ...updatedTags[tagIndex],
-                isSelected: true,
-              };
-              setTags(updatedTags);
-            }}
-          >
-            <Input
-              placeholder="Search"
-              list={tagDatalistId}
-              className="w-100"
-              value={tagSearchText}
-              onChange={(event) => {
-                setTagSearchText(event.target.value);
-              }}
-              inputGroupBefore={
-                <span className="input-group-text">
-                  <i className="fa-solid fa-magnifying-glass fs-2" />
-                </span>
-              }
-            />
-            <datalist id={tagDatalistId}>
-              {...tags
-                .filter(({ isSelected }) => !isSelected)
-                .map(({ name }) => {
-                  return <option value={name} />;
-                })}
-            </datalist>
-          </form>
-          <div className="w-100 mt-2 d-flex flex-wrap">
-            {...tags
-              .filter(({ isSelected }) => isSelected)
-              .map(({ name, id }) => {
-                return (
-                  <AssetTag
-                    name={name}
-                    onClose={(_) => {
-                      const tagIndex = tags.findIndex(({ id: currId }) => currId == id);
-                      if (tagIndex === -1) return;
-
-                      const updatedTags = [...tags];
-                      updatedTags[tagIndex] = {
-                        ...updatedTags[tagIndex],
-                        isSelected: false,
-                      };
-                      setTags(updatedTags);
-                    }}
-                  />
-                );
-              })}
+            })}
           </div>
         </div>
-      </div>
-    </aside>
-  );
-});
+
+        <div className="w-100 mt-4">
+          <Label size="xs">Tags</Label>
+          <div className="w-100">
+            <Typeahead
+              id="test"
+              placeholder="Search"
+              options={tags
+                .filter(({ isSelected }) => !isSelected)
+                .map(({ name, id }) => {
+                  return { label: name, value: id };
+                })}
+              selected={typeaheadSelected}
+              onChange={onTagsSelected}
+            />
+            <div className="w-100 mt-2 d-flex flex-wrap">
+              {...tags
+                .filter(({ isSelected }) => isSelected)
+                .map((tag) => {
+                  return (
+                    <AssetTag
+                      name={tag.name}
+                      onClose={(_) => {
+                        onTagClosed(tag);
+                      }}
+                    />
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+      </aside>
+    );
+  }
+);

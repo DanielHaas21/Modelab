@@ -56,7 +56,22 @@ const Browser: React.FC = () => {
                 <ModelPreview name="test"></ModelPreview>
               </React.Suspense>
             </section>
-            <BrowserFilters />
+            <BrowserFilters
+              categories={[
+                { name: '3D Model', id: 1 },
+                { name: '2D Texture', id: 2 },
+                { name: 'Audio', id: 3 },
+              ]}
+              tags={[
+                { name: 'Medieval', id: 1 },
+                { name: 'C4D', id: 2 },
+                { name: 'Maya', id: 3 },
+                { name: 'Prop', id: 4 },
+                { name: 'FBX', id: 5 },
+                { name: 'Unity', id: 6 },
+                { name: 'Unity Second Test', id: 7 },
+              ]}
+            />
           </div>
         </div>
       </main>
