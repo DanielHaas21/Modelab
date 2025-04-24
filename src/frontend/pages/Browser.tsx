@@ -5,19 +5,21 @@ import { CategoryOption, TagOption } from '../../libs/ui/components/BrowserFilte
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
-import { Category } from '../../middleware/api';
+import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
-  const categoryApi = new Category(import.meta.env.VITE_API_PATH);
+
+  const categorApi = new Category(import.meta.env.VITE_API_PATH);
+  const tagApi = new Tag(import.meta.env.VITE_API_PATH);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
 
   React.useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await categoryApi.get_all();
+        const data = await categorApi.get_all();
         setCategories(data.categories);
       } catch (err) {
         if (err instanceof ApiError) {
@@ -26,22 +28,26 @@ const Browser: React.FC = () => {
       }
     };
 
+    const fetchTags = async () => {
+      try {
+        const data = await tagApi.get_all();
+        setTags(data.tags);
+      } catch (err) {
+        if (err instanceof ApiError) {
+          console.error('Failed to fetch tags', err);
+        }
+      }
+    };
+
     fetchCategories();
+    fetchTags();
   }, []);
 
   const [selectedCategory, setSelectedCategory] = React.useState<CategoryOption>(
     categories.length > 0 ? categories[0] : { id: 1, name: 'None' }
   );
 
-  const [tags, setTags] = React.useState<TagOption[]>([
-    { name: 'Medieval', id: 1, isSelected: true },
-    { name: 'C4D', id: 2, isSelected: true },
-    { name: 'Maya', id: 3 },
-    { name: 'Prop', id: 4 },
-    { name: 'FBX', id: 5 },
-    { name: 'Unity', id: 6 },
-    { name: 'Unity Second Test', id: 7 },
-  ]);
+  const [tags, setTags] = React.useState<TagOption[]>([]);
 
   const [searchText, setSearchText] = React.useState<string>('');
 
