@@ -74,8 +74,8 @@ export class Asset extends Service {
     return this.POST(routes.POST.Asset + id) as Promise<AssetGet>;
   }
 
-  public async get_all(): Promise<AssetGetAll> {
-    return this.POST(routes.POST.Asset + 'all') as Promise<AssetGetAll>;
+  public async get_all(page: number, count: number): Promise<AssetGetAll> {
+    return this.POST(routes.POST.Asset + 'all', { page, count }) as Promise<AssetGetAll>;
   }
 
   public async search(query: SearchQuery): Promise<AssetSearch> {

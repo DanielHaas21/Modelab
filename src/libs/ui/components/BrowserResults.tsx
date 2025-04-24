@@ -3,6 +3,8 @@ import { CategoryOption, TagOption } from './BrowserFilters';
 import { ModelPreview } from './ModelPreview';
 import { Label } from './Label';
 import { Preloader } from './Preloader';
+import { Asset } from '../../../middleware/api';
+import ApiError from '../../../middleware/api/ApiError';
 
 export interface SearchQuery {
   category: CategoryOption;
@@ -16,36 +18,40 @@ interface ModelResult {
 }
 
 interface BrowserResultProps {
-  searchQuery: SearchQuery;
+  searchQuery?: SearchQuery;
 }
 
-const sleep = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
+const fetchAssets = async (searchQuery?: SearchQuery) => {
+  const assetApi = new Asset(import.meta.env.VITE_API_PATH);
 
-const testResults: ModelResult[] = [
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-  { name: 'test', tags: ['tag', 'tag', 'tag', 'tag', 'tag', 'tag'] },
-];
+  // Get all if no query
+  // if (searchQuery === undefined) {
+  const { assets, info } = await assetApi.get_all(0, 10);
 
-const testFetch = async () => {
-  await sleep(500);
-  return testResults;
+  return assets.map((asset) => {
+    return {
+      name: asset.name,
+      tags: asset.tags.map((tag) => tag.name),
+    };
+  });
+  // }
+
+  // Use the search
+  // const { assets, info } = await assetApi.search({
+  //   page: 0,
+  //   count: 10,
+  //   categoryQuery: undefined,
+  //   tagQuery: undefined,
+  //   nameQuery: undefined,
+  //   descriptionQuery: undefined,
+  // });
+
+  // return assets.map((asset) => {
+  //   return {
+  //     name: asset.name,
+  //     tags: asset.tags.map((tag) => tag.name),
+  //   };
+  // });
 };
 
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
@@ -55,8 +61,15 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
   React.useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const results = await testFetch();
-      setLoadedResults(results);
+
+      try {
+        setLoadedResults(await fetchAssets(searchQuery));
+      } catch (err) {
+        if (err instanceof ApiError) {
+          console.error('Failed to fetch assets', err);
+        }
+      }
+
       setLoading(false);
     };
 
