@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
 import { Category } from '../../middleware/api';
+import ApiError from '../../middleware/api/ApiError';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
@@ -15,9 +16,14 @@ const Browser: React.FC = () => {
 
   React.useEffect(() => {
     const fetchCategories = async () => {
-      const data = await categoryApi.get_all();
-      setCategories(data.categories);
-      console.log('Fetched categories');
+      try {
+        const data = await categoryApi.get_all();
+        setCategories(data.categories);
+      } catch (err) {
+        if (err instanceof ApiError) {
+          console.error('Failed to fetch categories', err);
+        }
+      }
     };
 
     fetchCategories();
