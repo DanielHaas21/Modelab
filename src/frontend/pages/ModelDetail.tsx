@@ -9,24 +9,29 @@ import { AssetTag } from '../../libs/ui/components/AssetTag';
 import test from '../../libs/ui/assets/example_model.fbx';
 import testpng from '../../libs/ui/assets/train_uhd.png';
 import { File } from '../../middleware/api';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { Add } from '../../store/slices/Message';
+import { useNavigate } from 'react-router-dom';
 
 const ModelDetail: React.FC = () => {
-  const testp = new File('http://localhost/Modelab-api/');
-  let objectUrl;
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await testp.get(1);
-        console.log(response)
-      } catch (error) {
-        console.error('Error fetching model data:', error);
-      }
-    };
-
-    fetchData();
-  }, []); // Empty dependency array ensures useEffect runs once after component mounts
-
   const User = useSelector((state: RootState) => state.User);
+  const Dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const test = () => {
+      if (!User.isAuthenticated) {
+        Dispatch(Add({ variant: 'Alert', message: 'You must log in order to use this function' }));
+    
+        navigate('/Browser');
+    
+        return null;
+      }
+    }
+
+    test();
+  },[0])
 
   const Download = () => {};
 
@@ -55,7 +60,7 @@ const ModelDetail: React.FC = () => {
           Tags
         </Label>
         <div className="d-flex justify-content-start flex-wrap flex-row w-50">
-          <AssetTag name="Medieval" />  
+          <AssetTag name="Medieval" />
           <AssetTag name="C4D" />
           <AssetTag name="Maya" />
           <AssetTag name="Prop" />

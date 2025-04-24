@@ -19,7 +19,7 @@ interface UserState {
 
 const initialState: UserState = {
   user: null,
-  isAuthenticated: true, // for dev purposes can be set to true
+  isAuthenticated: false, // for dev purposes can be set to true
   loading: false,
   error: null,
 };
