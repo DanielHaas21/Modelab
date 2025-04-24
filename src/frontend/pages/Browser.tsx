@@ -5,16 +5,27 @@ import { CategoryOption, TagOption } from '../../libs/ui/components/BrowserFilte
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
+import { Category } from '../../middleware/api';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
+  const categoryApi = new Category('http://localhost/Modelab-api/');
 
-  const [categories, setCategories] = React.useState<CategoryOption[]>([
-    { name: '3D Model', id: 1 },
-    { name: '2D Texture', id: 2 },
-    { name: 'Audio', id: 3 },
-  ]);
-  const [selectedCategory, setSelectedCategory] = React.useState<CategoryOption>(categories[0]);
+  const [categories, setCategories] = React.useState<CategoryOption[]>([]);
+
+  React.useEffect(() => {
+    const fetchCategories = async () => {
+      const data = await categoryApi.get_all();
+      setCategories(data.categories);
+      console.log('Fetched categories');
+    };
+
+    fetchCategories();
+  }, []);
+
+  const [selectedCategory, setSelectedCategory] = React.useState<CategoryOption>(
+    categories.length > 0 ? categories[0] : { id: 1, name: 'None' }
+  );
 
   const [tags, setTags] = React.useState<TagOption[]>([
     { name: 'Medieval', id: 1, isSelected: true },
