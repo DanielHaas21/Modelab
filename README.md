@@ -45,6 +45,7 @@ src
 │   ├───pages 
 │   ├───styles 
 │   └───types 
+├───global - contains d.ts declarations
 ├───libs 
 │   ├───auth - contains auth helpers
 │   ├───ui 

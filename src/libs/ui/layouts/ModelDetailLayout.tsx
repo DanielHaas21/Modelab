@@ -35,7 +35,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           <section className="d-flex flex-column">{children}</section>
           <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1">
             <Link className="text-decoration-none" to="/Browser">
-              <Button variant={'light'} outline>
+              <Button variant='light'>
                 <FontAwesomeIcon className="mr-3" icon={faArrowLeft} />
                 Go back
               </Button>
@@ -48,7 +48,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
               image={image!}
               canvasKey={canvasKey}
               onContextLoss={handleContextLoss}
-            />
+            />  
           </React.Suspense>
         </aside>
       </main>

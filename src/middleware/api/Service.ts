@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 
 // adjust later
-interface ApiResponse<T> {
+interface ApiResponse {
   success: boolean;
-  data: T;
+  data: Object;
   message?: string;
 }
 
@@ -19,20 +19,20 @@ export default class Service {
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
-        // Other common headers like Authorization can be set here
       },
     });
   }
 
   // Axios request wrapper methods
+  protected async GET(url: string, config?: AxiosRequestConfig): Promise<Object> {
+    const response: AxiosResponse<ApiResponse> = await this.axiosInstance.get(url, config);
 
-  public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response: AxiosResponse<ApiResponse<T>> = await this.axiosInstance.get(url, config);
-    return response.data.data;
+    return response.data;
   }
 
-  public async post<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response: AxiosResponse<ApiResponse<T>> = await this.axiosInstance.post(url, config);
-    return response.data.data;
+  protected async POST(url: string, data?: Object, config?: AxiosRequestConfig): Promise<Object> {
+    const response: AxiosResponse<ApiResponse> = await this.axiosInstance.post(url, data, config);
+
+    return response.data;
   }
 }
