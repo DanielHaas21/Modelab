@@ -17,21 +17,8 @@ import { useNavigate } from 'react-router-dom';
 const ModelDetail: React.FC = () => {
   const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const test = () => {
-      if (!User.isAuthenticated) {
-        Dispatch(Add({ variant: 'Alert', message: 'You must log in order to use this function' }));
-    
-        navigate('/Browser');
-    
-        return null;
-      }
-    }
 
-    test();
-  },[0])
 
   const Download = () => {};
 

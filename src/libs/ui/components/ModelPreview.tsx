@@ -3,6 +3,11 @@ import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
 import placeholder from '../assets/placeholder.png';
 import { Label } from './Label';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../store/store';
+import { Add } from '../../../store/slices/Message';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 interface ModelPreviewProps {
   className?: string;
@@ -20,9 +25,19 @@ interface ModelPreviewProps {
  */
 export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
   ({ className, image, name, id, tags, ...props }, ref) => {
+    const User = useSelector((state: RootState) => state.User);
+    const Dispatch = useDispatch<AppDispatch>();
+
+    const CheckLogin = () => {
+      if (!User.isAuthenticated) {
+        Dispatch(Add({ variant: 'Info', message: 'You must log in order to use this function' }));
+      }
+    };
+
     return (
       <Link
-        to={'/models/' + (id || null)}
+        onClick={CheckLogin}
+        to={User.isAuthenticated ? '/models/' + (id || null) : '/Browser'}
         className="darken text-decoration-none fade-in-left text-dark rounded-3"
       >
         <div
@@ -41,7 +56,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
               </span>
             ))}
             {Array.isArray(tags) &&
-              tags.length > 8 && ( // using tags?. somehow doesnt work
+              tags.length > 8 && (
                 <span>...and {tags.length - 8} more</span>
               )}
           </div>

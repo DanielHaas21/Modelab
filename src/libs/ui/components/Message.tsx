@@ -9,11 +9,11 @@ import { Remove } from '../../../store/slices/Message';
 import { Label } from './Label';
 
 const variantMeta = {
-  Success: { label: 'Success Alert', color: 'bg-success' },
-  Warning: { label: 'Warning Alert', color: 'bg-warning' },
-  Error: { label: 'Error Alert', color: 'bg-danger' },
-  Alert: { label: 'Fail Alert', color: 'bg-danger' },
-  Info: { label: 'Info Alert', color: 'bg-info' },
+  Success: { label: 'Succes', color: 'bg-success' },
+  Warning: { label: 'Warning', color: 'bg-warning' },
+  Error: { label: 'Error', color: 'bg-danger' },
+  Alert: { label: 'Alert', color: 'bg-danger' },
+  Info: { label: 'Info', color: 'bg-info' },
 } as const;
 
 type VariantType = keyof typeof variantMeta;
@@ -59,19 +59,21 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
         className={cn(
           className,
           variant,
-          'd-flex bg-light overflow-hidden flex-row message fade-in-right justify-content-start align-items-start rounded-3 w-250-px h-75-px'
+          'd-flex bg-light overflow-hidden flex-row message fade-in-right justify-content-start align-items-stretch rounded-3 w-250-px'
         )}
         ref={ref}
         {...props}
       >
         <div className={cn(meta.color, 'msg-tag')}></div>
-        <div className="h-100">
-          <Label size="xxs" className="mt-1 mb-0 kanit-regular">{meta.label}</Label>
-          <p className="kanit-light m-0">{children}</p>
+        <div className="h-100 pt-1 pb-1 mr-1">
+          <Label size="xxs" className="mt-1 mb-0 kanit-regular">
+            {meta.label}
+          </Label>
+          <p className="kanit-light m-0 w-100">{children}</p>
         </div>
         <FontAwesomeIcon
           icon={faClose}
-          className="fs-3 mr-1 ms-1 cursor-pointer align-self-center"
+          className="fs-3 mr-1 ms-auto cursor-pointer align-self-center"
           onClick={onRemove}
         ></FontAwesomeIcon>
       </div>
@@ -84,17 +86,20 @@ interface MessageWrapperProps {
 }
 
 export const MessageWrapper: React.FC<MessageWrapperProps> = ({ classname, ...props }) => {
-  const Messages = useSelector((state: RootState) => state.Message.messages);
+  const StateMessages = useSelector((state: RootState) => state.Message.messages);
   const Dispatch = useDispatch<AppDispatch>();
-  const [removingIndexes, setRemovingIndexes] = React.useState<number[]>([]);
+  const [removingIds, setRemovingIds] = React.useState<number[]>([]);
 
-  const handleRemove = (index: number) => {
-    setRemovingIndexes((prev) => [...prev, index]);
+  const handleRemove = (id: number) => {
+    setRemovingIds((prev) => [...prev, id]);
     setTimeout(() => {
-      Dispatch(Remove(index));
-      setRemovingIndexes((prev) => prev.filter((i) => i !== index));
-    }, 300); // match CSS transition duration
+      Dispatch(Remove(id));
+      setRemovingIds((prev) => prev.filter((i) => i !== id));
+    }, 300);
   };
+
+  // Render only the last 8 messages
+  const visibleMessages = StateMessages.slice(-8);
 
   return (
     <div
@@ -105,12 +110,12 @@ export const MessageWrapper: React.FC<MessageWrapperProps> = ({ classname, ...pr
       )}
       {...props}
     >
-      {Messages.map((ms, index) => (
+      {visibleMessages.map((ms, index) => (
         <Message
           key={index}
           variant={ms.variant}
           onRemove={() => handleRemove(index)}
-          className={removingIndexes.includes(index) ? 'exit' : ''}
+          className={removingIds.includes(index) ? 'exit' : ''}
         >
           {ms.message}
         </Message>

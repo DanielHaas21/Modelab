@@ -1,52 +1,59 @@
 @import '../bootstrap';
-#MessageWrapper{
-    bottom: 70px;
-    right: 30px;
-    transition: 1s all;
+#MessageWrapper {
+  bottom: 70px;
+  right: 30px;
+  transition: 1s all;
+  z-index: 1100000;
 }
-.msg-tag{
-    height: 100%;
-    width: 7px;
-    margin-right: 10px;
+.msg-tag {
+  width: 7px;
+  margin-right: 10px;
 }
 .message {
-    border: 1px solid darken(map-get($theme-colors, 'neutral'),20%) !important;
-    transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease, margin 0.3s ease;
-    opacity: 1;
+  border: 1px solid darken(map-get($theme-colors, 'neutral'), 20%) !important;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    max-height 0.3s ease,
+    margin 0.3s ease,
+    padding 0.3s ease;
+  opacity: 1;
+  max-height: 500px; // or larger depending on your needs
+  overflow: hidden;
 }
+
 .message.exit {
+  opacity: 0;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+@keyframes fade-in-right {
+  0% {
     opacity: 0;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden;
-}
-@keyframes fade-in-right{
-    0%{
-        opacity: 0;
-        transform: translateX(50px);
-    }
-    100%{
-        opacity: 1;
-        transform: translateX(0px);
-    }
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 }
 
-.fade-in-right{
-    animation: fade-in-right forwards 1s;
+.fade-in-right {
+  animation: fade-in-right forwards 1s;
 }
 
-@keyframes fade-in-left{
-    0%{
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    100%{
-        opacity: 1;
-        transform: translateX(0px);
-    }
+@keyframes fade-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 }
 
-.fade-in-left{
-    animation: fade-in-left forwards 1s;
+.fade-in-left {
+  animation: fade-in-left forwards 1s;
 }
