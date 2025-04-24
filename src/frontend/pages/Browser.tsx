@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
-import { Input, Preloader } from '../../libs/ui/components';
-import { BrowserFilters, CategoryOption, TagOption } from '../../libs/ui/components/BrowserFilters';
+import { Input, BrowserFilters } from '../../libs/ui/components';
+import { CategoryOption, TagOption } from '../../libs/ui/components/BrowserFilters';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
