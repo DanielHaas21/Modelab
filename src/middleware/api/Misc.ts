@@ -5,8 +5,4 @@ export class Misc extends Service {
   constructor(baseURL: string) {
     super(baseURL);
   }
-
-  public async Info(): Promise<Object> {
-    return this.GET(routes.MISC.Info);
-  }
 }

@@ -10,7 +10,7 @@ import ApiError from '../../middleware/api/ApiError';
 
 const Browser: React.FC = () => {
   const previewsCol = `col-xl-10 col-8`;
-  const categoryApi = new Category('http://localhost/Modelab-api/');
+  const categoryApi = new Category(import.meta.env.VITE_API_PATH);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
 
