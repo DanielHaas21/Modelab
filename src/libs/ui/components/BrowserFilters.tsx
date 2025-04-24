@@ -5,12 +5,12 @@ import { Option } from 'react-bootstrap-typeahead/types/types';
 import { AssetTag } from './AssetTag';
 import { CategoryRadio } from './CategoryRadio';
 
-interface CategoryOption {
+export interface CategoryOption {
   name: string;
   id: number; // Unique
 }
 
-interface TagOption {
+export interface TagOption {
   name: string;
   id: number; // Unique
   isSelected?: boolean;
@@ -18,7 +18,10 @@ interface TagOption {
 
 interface BrowserFiltersProps {
   categories: CategoryOption[]; // All category options
+  selectedCategory: CategoryOption;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<CategoryOption>>;
   tags: TagOption[]; // Initial tags state
+  setTags: React.Dispatch<React.SetStateAction<TagOption[]>>;
   onChange?: (category: CategoryOption, tags: TagOption[]) => void; // Invoked when the overall filter state changed, returns the selected category and all selected tags
   className?: string;
 }
@@ -27,11 +30,11 @@ interface BrowserFiltersProps {
  * Filter for the browser
  */
 export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(
-  ({ onChange, categories, tags: defaultTags, className }, ref) => {
+  (
+    { onChange, categories, selectedCategory, setSelectedCategory, tags, setTags, className },
+    ref
+  ) => {
     const categoryFiltersId: string = 'browserFilterCateg';
-
-    const [tags, setTags] = React.useState<TagOption[]>(defaultTags);
-    const [selectedCategory, setSelectedCategory] = React.useState<CategoryOption>(categories[0]);
 
     const [typeaheadSelected, setTypeaheadSelected] = React.useState<Option[]>([]);
 
