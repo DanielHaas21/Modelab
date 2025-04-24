@@ -10,7 +10,4 @@ export const routes = {
   GET: {
     File: '/file/',
   },
-  MISC: {
-    Info: '/info',
-  },
 } as const;

@@ -1,10 +1,11 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
+import ApiError from './ApiError';
 
 // adjust later
 interface ApiResponse {
-  success: boolean;
   data: Object;
   message?: string;
+  cause?: string;
 }
 
 /**
@@ -23,16 +24,29 @@ export default class Service {
     });
   }
 
+  private checkResponse(response: AxiosResponse<ApiResponse>): void {
+    if (response.status !== 200)
+      throw new ApiError('Failed with code: ' + response.status, response.status, 'request');
+
+    if (response.data.cause !== undefined) {
+      throw new ApiError(
+        response.data.message ?? 'message',
+        response.status,
+        response.data.cause ?? 'server'
+      );
+    }
+  }
+
   // Axios request wrapper methods
   protected async GET(url: string, config?: AxiosRequestConfig): Promise<Object> {
     const response: AxiosResponse<ApiResponse> = await this.axiosInstance.get(url, config);
-
+    this.checkResponse(response);
     return response.data;
   }
 
   protected async POST(url: string, data?: Object, config?: AxiosRequestConfig): Promise<Object> {
     const response: AxiosResponse<ApiResponse> = await this.axiosInstance.post(url, data, config);
-
+    this.checkResponse(response);
     return response.data;
   }
 }

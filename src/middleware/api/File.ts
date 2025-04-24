@@ -6,7 +6,7 @@ export class File extends Service {
     super(baseURL);
   }
 
-  public async get(id: number): Promise<Object> {
-    return this.GET(routes.GET.File + id);
+  public async get(id: number): Promise<string> {
+    return this.GET(routes.GET.File + id) as Promise<string>;
   }
 }
