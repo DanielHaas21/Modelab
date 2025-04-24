@@ -88,7 +88,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       {...loadedResults.map((result) => {
         return (
           <React.Suspense fallback={<Preloader />}>
-            <ModelPreview name={result.name} tags={result.tags} />
+            <ModelPreview name={result.name} tags={result.tags} id={1}/>
           </React.Suspense>
         );
       })}

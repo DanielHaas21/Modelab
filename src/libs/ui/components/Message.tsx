@@ -49,7 +49,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
     React.useEffect(() => {
       const timer = setTimeout(() => {
         onRemove();
-      }, 10000);
+      }, 100000);
 
       return () => clearTimeout(timer);
     }, [onRemove]);
@@ -65,13 +65,13 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
         {...props}
       >
         <div className={cn(meta.color, 'msg-tag')}></div>
-        <div className="">
+        <div className="h-100">
           <Label size="xxs" className="mt-1 mb-0 kanit-regular">{meta.label}</Label>
           <p className="kanit-light m-0">{children}</p>
         </div>
         <FontAwesomeIcon
           icon={faClose}
-          className="fs-3 ms-4 mt-3 cursor-pointer"
+          className="fs-3 mr-1 ms-1 cursor-pointer align-self-center"
           onClick={onRemove}
         ></FontAwesomeIcon>
       </div>
