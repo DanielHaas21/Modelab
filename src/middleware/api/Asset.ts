@@ -35,22 +35,20 @@ export interface AssetGet {
   asset: AssetData;
 }
 
+export interface PaginatedInfo {
+  page: number;
+  count: number;
+  pageCount: number;
+}
+
 export interface AssetGetAll {
   assets: AssetData[];
-  info: {
-    page: number;
-    count: number;
-    pageCount: number;
-  };
+  info: PaginatedInfo;
 }
 
 export interface AssetSearch {
   assets: AssetData[];
-  info: {
-    page: number;
-    count: number;
-    pageCount: number;
-  };
+  info: PaginatedInfo;
 }
 
 export interface AssetGetFiles {
@@ -85,17 +83,20 @@ export class Asset extends Service {
       query.descriptionQuery === undefined &&
       query.nameQuery === undefined
     ) {
-      throw console.error('At least one query type must be specified');
+      console.error('At least one query type must be specified');
+      throw new Error('At least one query type must be specified');
     }
 
-    return this.POST(routes.POST.Asset + 'search', {
+    const data = {
       page: query.page,
       count: query.count,
       ...(query.nameQuery !== undefined && { nameQuery: query.nameQuery }),
       ...(query.descriptionQuery !== undefined && { descriptionQuery: query.descriptionQuery }),
-      ...(query.categoryQuery !== undefined && { categoryQuery: query.categoryQuery }),
-      ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery }),
-    }) as Promise<AssetSearch>;
+      ...(query.categoryQuery !== undefined && { categoryQuery: query.categoryQuery.join(',') }),
+      ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery.join(',') }),
+    };
+
+    return this.POST(routes.POST.Asset + 'search', data) as Promise<AssetSearch>;
   }
 
   public async get_files(id: number): Promise<AssetGetFiles> {

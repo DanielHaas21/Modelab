@@ -3,11 +3,12 @@ import { Label } from './Label';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
 import { AssetTag } from './AssetTag';
-import { CategoryRadio } from './CategoryRadio';
+import { CategoryCheckbox } from './CategoryCheckbox';
 
 export interface CategoryOption {
   name: string;
   id: number; // Unique
+  isSelected?: boolean;
 }
 
 export interface TagOption {
@@ -18,11 +19,9 @@ export interface TagOption {
 
 interface BrowserFiltersProps {
   categories: CategoryOption[]; // All category options
-  selectedCategory: CategoryOption;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<CategoryOption>>;
-  tags: TagOption[]; // Initial tags state
+  setCategories: React.Dispatch<React.SetStateAction<CategoryOption[]>>;
+  tags: TagOption[];
   setTags: React.Dispatch<React.SetStateAction<TagOption[]>>;
-  onChange?: (category: CategoryOption, tags: TagOption[]) => void; // Invoked when the overall filter state changed, returns the selected category and all selected tags
   className?: string;
 }
 
@@ -30,21 +29,10 @@ interface BrowserFiltersProps {
  * Filter for the browser
  */
 export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(
-  (
-    { onChange, categories, selectedCategory, setSelectedCategory, tags, setTags, className },
-    ref
-  ) => {
+  ({ categories, setCategories, tags, setTags, className }, ref) => {
     const categoryFiltersId: string = 'browserFilterCateg';
 
     const [typeaheadSelected, setTypeaheadSelected] = React.useState<Option[]>([]);
-
-    React.useEffect(() => {
-      if (onChange === undefined) return;
-      onChange(
-        selectedCategory,
-        tags.filter((tag) => tag.isSelected)
-      );
-    }, [tags, selectedCategory]);
 
     const onTagsSelected = (selected: Option[]) => {
       setTypeaheadSelected(selected);
@@ -82,14 +70,18 @@ export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersPro
           <div className="w-100">
             {...categories.map((category, index) => {
               return (
-                <CategoryRadio
+                <CategoryCheckbox
                   id={categoryFiltersId + index}
                   label={category.name}
-                  name={categoryFiltersId}
-                  defaultChecked={category.id == selectedCategory.id}
+                  checked={category.isSelected !== undefined && category.isSelected}
                   labelClassName={'btn mb-1' + (index < categories.length - 1 ? ' mr-1' : '')}
-                  onChecked={() => {
-                    setSelectedCategory(category);
+                  onChanged={() => {
+                    const updatedCategories = [...categories];
+                    updatedCategories[index] = {
+                      ...updatedCategories[index],
+                      isSelected: !category.isSelected,
+                    };
+                    setCategories(updatedCategories);
                   }}
                 />
               );

@@ -3,95 +3,159 @@ import { CategoryOption, TagOption } from './BrowserFilters';
 import { ModelPreview } from './ModelPreview';
 import { Label } from './Label';
 import { Preloader } from './Preloader';
-import { Asset } from '../../../middleware/api';
+import { Asset, AssetData, PaginatedInfo } from '../../../middleware/api';
 import ApiError from '../../../middleware/api/ApiError';
+import { InfiniteScroll } from './InfiniteScroll';
 
 export interface SearchQuery {
-  category: CategoryOption;
+  categories: CategoryOption[];
   tags: TagOption[];
-  query: string;
+  nameQuery: string;
 }
 
-interface ModelResult {
+interface AssetResult {
   name: string;
   tags: string[];
 }
+
+interface FetchResult {
+  assets: AssetResult[];
+  info: PaginatedInfo;
+}
+
+const fetchAssets = async (
+  searchQuery: SearchQuery | undefined,
+  page: number,
+  count: number
+): Promise<FetchResult> => {
+  const assetApi = new Asset(import.meta.env.VITE_API_PATH);
+
+  const formatResult = (assets: AssetData[], info: PaginatedInfo): FetchResult => {
+    return {
+      info,
+      assets: assets.map((asset) => {
+        return {
+          name: asset.name + ' ' + asset.id,
+          tags: asset.tags.map((tag) => tag.name),
+        };
+      }),
+    };
+  };
+
+  // Get all if no query
+  if (
+    searchQuery === undefined ||
+    (searchQuery.categories.length == 0 &&
+      searchQuery.tags.length == 0 &&
+      searchQuery.nameQuery.length == 0)
+  ) {
+    const { assets, info } = await assetApi.get_all(page, count);
+    return formatResult(assets, info);
+  }
+
+  // Use the search
+  const { assets, info } = await assetApi.search({
+    page,
+    count,
+    categoryQuery:
+      searchQuery.categories.length > 0
+        ? searchQuery.categories.map((category) => category.id)
+        : undefined,
+    tagQuery: searchQuery.tags.length > 0 ? searchQuery.tags.map((tag) => tag.id) : undefined,
+    nameQuery: searchQuery.nameQuery.length > 0 ? searchQuery.nameQuery : undefined,
+    descriptionQuery: undefined,
+  });
+  return formatResult(assets, info);
+};
 
 interface BrowserResultProps {
   searchQuery?: SearchQuery;
 }
 
-const fetchAssets = async (searchQuery?: SearchQuery) => {
-  const assetApi = new Asset(import.meta.env.VITE_API_PATH);
-
-  // Get all if no query
-  // if (searchQuery === undefined) {
-  const { assets, info } = await assetApi.get_all(0, 10);
-
-  return assets.map((asset) => {
-    return {
-      name: asset.name,
-      tags: asset.tags.map((tag) => tag.name),
-    };
-  });
-  // }
-
-  // Use the search
-  // const { assets, info } = await assetApi.search({
-  //   page: 0,
-  //   count: 10,
-  //   categoryQuery: undefined,
-  //   tagQuery: undefined,
-  //   nameQuery: undefined,
-  //   descriptionQuery: undefined,
-  // });
-
-  // return assets.map((asset) => {
-  //   return {
-  //     name: asset.name,
-  //     tags: asset.tags.map((tag) => tag.name),
-  //   };
-  // });
-};
-
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
-  const [loadedResults, setLoadedResults] = React.useState<ModelResult[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const loadPerPage = 2; // Assets loaded per page
+
+  interface Results {
+    searchQuery?: SearchQuery;
+    assets: AssetResult[];
+    page: number;
+    hasMore: boolean;
+  }
+
+  const [results, setResults] = React.useState<Results>({
+    assets: [],
+    hasMore: true,
+    page: 0,
+  });
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const handler = setTimeout(() => {
+      setResults({
+        searchQuery: searchQuery,
+        assets: [],
+        hasMore: true,
+        page: 0,
+      });
+    }, 200);
 
-      try {
-        setLoadedResults(await fetchAssets(searchQuery));
-      } catch (err) {
-        if (err instanceof ApiError) {
-          console.error('Failed to fetch assets', err);
-        }
-      }
-
-      setLoading(false);
-    };
-
-    fetchData();
+    return () => clearTimeout(handler);
   }, [searchQuery]);
 
-  if (loading) {
-    return <Preloader />;
-  }
+  const fetchPage = async (
+    page: number,
+    searchQuery?: SearchQuery
+  ): Promise<FetchResult | undefined> => {
+    try {
+      return await fetchAssets(searchQuery, page, loadPerPage);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        console.error('Failed to fetch assets', err);
+      } else {
+        throw err;
+      }
+    }
+  };
 
-  if (loadedResults.length === 0) {
-    return <Label className="text-center w-100">No results</Label>;
-  }
+  const loadMore = async () => {
+    if (!results.hasMore) return;
+
+    const result = await fetchPage(results.page, results.searchQuery);
+
+    if (result == undefined) {
+      return;
+    }
+    const { assets, info } = result;
+
+    const hasMore = results.page < info.pageCount - 1;
+    const updatedResults: Results = {
+      searchQuery: results.searchQuery,
+      assets: [...results.assets, ...assets],
+      page: info.page + (hasMore ? 1 : 0),
+      hasMore: hasMore,
+    };
+    setResults(updatedResults);
+
+    // console.log(info, assets.length);
+  };
+
   return (
-    <>
-      {...loadedResults.map((result) => {
-        return (
-          <React.Suspense fallback={<Preloader />}>
-            <ModelPreview name={result.name} tags={result.tags} id={1}/>
-          </React.Suspense>
-        );
-      })}
-    </>
+    <InfiniteScroll
+      className="col-xl-10 col-8 h-100"
+      hasMore={results.hasMore}
+      itemCount={results.assets.length}
+      loadMore={loadMore}
+      loader={<Label className="w-100 text-center">Loading...</Label>}
+    >
+      {results.assets.length == 0 && <Label className="w-100 text-center">Found nothing...</Label>}
+      <section className="d-flex flex-wrap previews mx-0">
+        {...results.assets.map((result) => {
+          return (
+            <React.Suspense fallback={<Preloader />}>
+              <ModelPreview name={result.name} tags={result.tags} id={1} />
+            </React.Suspense>
+          );
+        })}
+      </section>
+    </InfiniteScroll>
   );
 };
