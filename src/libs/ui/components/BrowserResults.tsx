@@ -75,6 +75,8 @@ interface BrowserResultProps {
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
   const loadPerPage = 2; // Assets loaded per page
 
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   interface Results {
     searchQuery?: SearchQuery;
     assets: AssetResult[];
@@ -118,6 +120,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
 
   const loadMore = async () => {
     if (!results.hasMore) return;
+    setIsLoading(true);
 
     const result = await fetchPage(results.page, results.searchQuery);
 
@@ -134,6 +137,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       hasMore: hasMore,
     };
     setResults(updatedResults);
+    setIsLoading(false);
 
     // console.log(info, assets.length);
   };
@@ -146,7 +150,9 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       loadMore={loadMore}
       loader={<Label className="w-100 text-center">Loading...</Label>}
     >
-      {results.assets.length == 0 && <Label className="w-100 text-center">Found nothing...</Label>}
+      {results.assets.length == 0 && !isLoading && (
+        <Label className="w-100 text-center">Found nothing...</Label>
+      )}
       <section className="d-flex flex-wrap previews mx-0">
         {...results.assets.map((result) => {
           return (
