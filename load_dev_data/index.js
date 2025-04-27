@@ -2,8 +2,8 @@ import axios from "axios";
 import fs from 'fs';
 import FormData from 'form-data';
 
-const createFile = (path, isHidden) => {
-    return {path, isHidden}
+const createFile = (path, isHidden, isMain) => {
+    return {path, isHidden, isMain}
 };
 
 const createAsset = (name, description, categoryId, tagIds, files) => {
@@ -50,8 +50,9 @@ const load = async () => {
             form.append('tagIds[]', tagId.toString());
         });
 
-        files.forEach(({path, isHidden}, index) => {
+        files.forEach(({path, isHidden, isMain}, index) => {
             form.append('filesMeta[' + index.toString() + '][isHidden]', isHidden ? '1' : '0');
+            form.append('filesMeta[' + index.toString() + '][isMain]', isMain ? '1' : '0');
             form.append('files[]', fs.createReadStream(path));
         });
 
@@ -89,11 +90,11 @@ const tags = ['Unity', 'Maya', 'Cinema4D', 'Blender', 'FBX', 'OBJ', 'STL', 'Prop
 
 const assets = [
     createAsset('Chram', lorem, 1, [2, 5, 9], [
-        createFile(`${dirname}/files/Chram/Chram.mb`, false),
-        createFile(`${dirname}/files/Chram/Chram_export.mb`, false),
-        createFile(`${dirname}/files/Chram/chram.fbx`, false),
-        createFile(`${dirname}/files/Chram/Chram_All.png`, false),
-        createFile(`${dirname}/files/Chram/Chram_Persp.png`, false),
+        createFile(`${dirname}/files/Chram/Chram.mb`, false, false),
+        createFile(`${dirname}/files/Chram/Chram_export.mb`, false, false),
+        createFile(`${dirname}/files/Chram/chram.fbx`, false, true),
+        createFile(`${dirname}/files/Chram/Chram_All.png`, false, true),
+        createFile(`${dirname}/files/Chram/Chram_Persp.png`, false, true),
     ]),
 ];
 
