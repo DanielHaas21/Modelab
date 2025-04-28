@@ -11,29 +11,17 @@ import { ModelFileProps } from '../types/ModelFileProps';
  * @returns model
  */
 export function useModelFromFile(file: ModelFileProps) {
-  const objectUrl = React.useMemo(() => {
-    return typeof file === 'string' ? file.split('?')[0] : URL.createObjectURL(file);
-  }, [file]);
 
-  console.log(objectUrl)
-  const loader = /\.(obj)$/i.test(typeof file === 'string' ? file.split('?')[0] : file.name)
+  const loader = /\.(obj)$/i.test(file.name)
     ? OBJLoader
     : FBXLoader;
 
 
-  const model = useLoader(loader, objectUrl, (loaderInstance) => {
+  const model = useLoader(loader, file.bin, (loaderInstance) => {
     loaderInstance.manager.onError = (url) => {
       console.error('Error loading model from', url);
     };
   });
-
-  React.useEffect(() => {
-    if (typeof file !== 'string') {
-      return () => {
-        URL.revokeObjectURL(objectUrl);
-      };  
-    }
-  }, [objectUrl, file]);
 
   return model;
 }

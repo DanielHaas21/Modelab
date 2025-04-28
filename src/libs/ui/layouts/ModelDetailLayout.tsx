@@ -26,7 +26,6 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     e.preventDefault();
     setCanvasKey((prev) => prev + 1);
   }, []);
-  
 
   return (
     <>
