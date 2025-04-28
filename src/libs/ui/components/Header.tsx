@@ -7,7 +7,7 @@ import userIconDark from '../assets/user-circle-light.svg';
 import { UserPopup } from './UserPopup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
-import { Show, Hide, Toggle } from '../../../store/slices/Popup';
+import { Hide, Toggle } from '../../../store/slices/Popup';
 
 interface HeaderProps {
   className?: string;

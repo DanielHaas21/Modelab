@@ -26,29 +26,30 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     e.preventDefault();
     setCanvasKey((prev) => prev + 1);
   }, []);
+  
 
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />
       <main className="w-100 h-86-vh d-flex ps-8 pe-8 pt-5">
         <div className="d-flex flex-column w-50">
-          <section className="d-flex flex-column">{children}</section>
+          <section className="d-flex flex-column mt-5">{children}</section>
           <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1">
             <Link className="text-decoration-none" to="/Browser">
-              <Button variant='light'>
+              <Button variant="light">
                 <FontAwesomeIcon className="mr-3" icon={faArrowLeft} />
                 Go back
               </Button>
             </Link>
           </section>
         </div>
-        <aside className="d-flex flex-column align-items-center justify-content-start w-50 min-h-86-vh">
+        <aside className="d-flex flex-column align-items-center justify-content-center w-50 min-h-70-vh">
           <React.Suspense fallback={<Preloader />}>
             <ModelDetailImage
               image={image!}
               canvasKey={canvasKey}
               onContextLoss={handleContextLoss}
-            />  
+            />
           </React.Suspense>
         </aside>
       </main>

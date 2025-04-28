@@ -15,7 +15,6 @@ interface ModelPreviewProps {
   image?: string; // if left empty placeholder shall be used
   name: string;
   tags?: string[];
-  //category : string;  not sure if this one is needed
 }
 
 /**

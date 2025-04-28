@@ -1,0 +1,1 @@
+export type clearance = 1 | 2;

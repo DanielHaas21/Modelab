@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { clearance } from '../types/clearance';
 
 interface UserData {
   id: string | number;
-  clearance: number;
+  clearance: clearance;
   email: string;
   username: string;
   first_name: string;
@@ -19,7 +20,7 @@ interface UserState {
 
 const initialState: UserState = {
   user: null,
-  isAuthenticated: false, // for dev purposes can be set to true
+  isAuthenticated: true, // for dev purposes can be set to true
   loading: false,
   error: null,
 };

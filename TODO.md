@@ -6,4 +6,6 @@
 - data loading 
 - middleware
 
+-enhance about page
+
 ### model detail upload mode
