@@ -9,7 +9,7 @@ import { Remove } from '../../../store/slices/Message';
 import { Label } from './Label';
 
 const variantMeta = {
-  Success: { label: 'Succes', color: 'bg-success' },
+  Success: { label: 'Success', color: 'bg-success' },
   Warning: { label: 'Warning', color: 'bg-warning' },
   Error: { label: 'Error', color: 'bg-danger' },
   Alert: { label: 'Alert', color: 'bg-danger' },
@@ -49,7 +49,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
     React.useEffect(() => {
       const timer = setTimeout(() => {
         onRemove();
-      }, 100000);
+      }, 10000);
 
       return () => clearTimeout(timer);
     }, [onRemove]);

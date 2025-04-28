@@ -11,11 +11,7 @@ import { ModelFileProps } from '../types/ModelFileProps';
  * @returns model
  */
 export function useModelFromFile(file: ModelFileProps) {
-
-  const loader = /\.(obj)$/i.test(file.name)
-    ? OBJLoader
-    : FBXLoader;
-
+  const loader = /\.(obj)$/i.test(file.name) ? OBJLoader : FBXLoader;
 
   const model = useLoader(loader, file.bin, (loaderInstance) => {
     loaderInstance.manager.onError = (url) => {

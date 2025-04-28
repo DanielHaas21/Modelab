@@ -3,8 +3,7 @@
 - dark mode implementation 
 
 ### model detail 
-- data loading 
-- middleware
+- carousel
 
 -enhance about page
 

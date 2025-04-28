@@ -7,6 +7,7 @@ import { useModelFromFile } from '../../hooks/useModelFromFile';
 import { ModelFileProps } from '../../types/ModelFileProps';
 import { isFile } from '../../utils';
 import { Scene } from 'three';
+
 // Helper component for the canvas model
 interface ModelProps {
   file: ModelFileProps;
@@ -40,7 +41,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       }
     }, [image]);
 
-    const SceneConfig = new Scene();
+    const SceneConfig: Scene = new Scene();
     SceneConfig.backgroundBlurriness = 1;
 
     if (is3DFile) {
@@ -66,7 +67,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
           >
             <Model file={image} />
             <OrbitControls />
-            <directionalLight position={[5, 5, 5]} intensity={1} />
+            <directionalLight position={[5, 5, 5]} intensity={1.5} />
             <ambientLight intensity={0.4} />
             <Environment background preset="sunset" />
           </Canvas>
