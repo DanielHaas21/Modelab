@@ -3,7 +3,6 @@ import {
   CategoryOption,
   CategorySelect,
   Input,
-  Label,
   ModelInfoSection,
   UploadedFile,
 } from '../../libs/ui/components';
@@ -20,7 +19,7 @@ const Separator = (
   </div>
 );
 
-const UploadModel: React.FC = () => {
+const ModelManage: React.FC = () => {
   const { action } = useParams();
   const categoryApi = new Category(import.meta.env.VITE_API_PATH);
 
@@ -110,4 +109,4 @@ const UploadModel: React.FC = () => {
   );
 };
 
-export default UploadModel;
+export default ModelManage;
