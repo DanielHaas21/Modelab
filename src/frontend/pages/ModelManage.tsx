@@ -4,13 +4,15 @@ import {
   CategorySelect,
   Input,
   ModelInfoSection,
+  TagOption,
+  TagSelect,
   UploadedFile,
 } from '../../libs/ui/components';
 import { useParams } from 'react-router-dom';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile } from '@fortawesome/free-solid-svg-icons';
-import { Category } from '../../middleware/api';
+import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 
 const Separator = (
@@ -22,6 +24,7 @@ const Separator = (
 const ModelManage: React.FC = () => {
   const { action } = useParams();
   const categoryApi = new Category(import.meta.env.VITE_API_PATH);
+  const tagApi = new Tag(import.meta.env.VITE_API_PATH);
 
   if (action == 'upload') {
   } else {
@@ -29,6 +32,7 @@ const ModelManage: React.FC = () => {
   }
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
+  const [tags, setTags] = React.useState<TagOption[]>([]);
 
   React.useEffect(() => {
     const fetchCategories = async () => {
@@ -42,7 +46,19 @@ const ModelManage: React.FC = () => {
       }
     };
 
+    const fetchTags = async () => {
+      try {
+        const data = await tagApi.get_all();
+        setTags(data.tags);
+      } catch (err) {
+        if (err instanceof ApiError) {
+          console.error('Failed to fetch categories', err);
+        }
+      }
+    };
+
     fetchCategories();
+    fetchTags();
   }, []);
 
   const ref = React.useRef<HTMLInputElement>(null);
@@ -72,7 +88,9 @@ const ModelManage: React.FC = () => {
       <ModelInfoSection name="Category">
         <CategorySelect categories={categories} setCategories={setCategories} isRadio={true} />
       </ModelInfoSection>
-      <ModelInfoSection name="Tags">tags</ModelInfoSection>
+      <ModelInfoSection name="Tags">
+        <TagSelect tags={tags} setTags={setTags} />
+      </ModelInfoSection>
       <ModelInfoSection name="Files">
         <div className="input-group">
           <button
