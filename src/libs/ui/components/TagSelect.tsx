@@ -58,6 +58,7 @@ export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
           })}
         selected={typeaheadSelected}
         onChange={onTagsSelected}
+        className="min-h-40-px w-100"
       />
       <div className="w-100 mt-2 d-flex flex-wrap">
         {...tags

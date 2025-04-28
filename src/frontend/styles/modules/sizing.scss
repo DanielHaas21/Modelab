@@ -10,6 +10,13 @@ $sizes: 10, 20, 30, 40, 50, 60, 70, 75, 90, 100, 150, 200, 250, 300, 350, 400, 4
   .#{$w}#{$size}-px {
     width: #{$size}px;
   }
+
+  .min-#{$h}#{$size}-px {
+    min-height: #{$size}px;
+  }
+  .min-#{$w}#{$size}-px {
+    min-width: #{$size}px;
+  }
 }
 
 .h-min-content {
@@ -23,6 +30,7 @@ $sizes: 10, 20, 30, 40, 50, 60, 70, 75, 90, 100, 150, 200, 250, 300, 350, 400, 4
   .h-#{$i} {
     height: percentage($i) / 100;
   }
+
   .#{$w}#{$i}-vw {
     width: #{$i}vw;
   }

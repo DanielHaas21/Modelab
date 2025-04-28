@@ -33,6 +33,11 @@ const ModelManage: React.FC = () => {
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
+  const [assetName, setAssetName] = React.useState<string>('');
+  const [assetDescription, setAssetDescription] = React.useState<string>('');
+
+  const maxAssetNameLength = 128;
+  const maxAssetDescriptionLength = 320;
 
   React.useEffect(() => {
     const fetchCategories = async () => {
@@ -61,7 +66,7 @@ const ModelManage: React.FC = () => {
     fetchTags();
   }, []);
 
-  const ref = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [files, setFiles] = React.useState<File[]>([]);
 
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,14 +82,38 @@ const ModelManage: React.FC = () => {
 
   return (
     <ModelDetailLayout image={null} bordered={true} goBack={false}>
-      <Input
-        type="text"
-        className="w-100 mb-2"
-        size={'lg'}
-        maxLength={128}
-        placeholder="Model name"
-      />
-      <textarea className="form-control mb-2" rows={8} maxLength={320} placeholder="Description" />
+      <div className="position-relative">
+        <Input
+          type="text"
+          className="w-100 mb-2"
+          inputClassName="fs-4"
+          size={'xl'}
+          maxLength={maxAssetNameLength}
+          placeholder="Asset name"
+          value={assetName}
+          onChange={(event) => {
+            setAssetName(event.target.value.substring(0, maxAssetNameLength));
+          }}
+        />
+        <p className="position-absolute" style={{ right: '8px', bottom: 0, zIndex: 10000 }}>
+          {assetName.length} / {maxAssetNameLength}
+        </p>
+      </div>
+      <div className="position-relative">
+        <textarea
+          className="form-control mb-2"
+          rows={8}
+          maxLength={maxAssetDescriptionLength}
+          placeholder="Asset description"
+          value={assetDescription}
+          onChange={(event) => {
+            setAssetDescription(event.target.value.substring(0, maxAssetDescriptionLength));
+          }}
+        />
+        <p className="position-absolute" style={{ right: '8px', bottom: 0 }}>
+          {assetDescription.length} / {maxAssetDescriptionLength}
+        </p>
+      </div>
       <ModelInfoSection name="Category">
         <CategorySelect categories={categories} setCategories={setCategories} isRadio={true} />
       </ModelInfoSection>
@@ -95,8 +124,8 @@ const ModelManage: React.FC = () => {
         <div className="input-group">
           <button
             onClick={() => {
-              if (!ref.current) return;
-              ref.current.click();
+              if (!fileInputRef.current) return;
+              fileInputRef.current.click();
             }}
             className="form-control text-start d-flex justify-content-between"
           >
@@ -104,7 +133,7 @@ const ModelManage: React.FC = () => {
             <FontAwesomeIcon icon={faFile} className="fs-2" />
           </button>
         </div>
-        <Input ref={ref} onChange={addFile} className="d-none" type="file" />
+        <Input ref={fileInputRef} onChange={addFile} className="d-none" type="file" />
         <div className="w-100">
           {files.map((file, index) => {
             return (
