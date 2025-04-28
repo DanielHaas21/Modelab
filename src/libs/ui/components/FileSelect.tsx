@@ -4,15 +4,19 @@ import React from 'react';
 import { UploadedFile } from './UploadedFile';
 import { Input } from './Input';
 
-const Separator = (
-  <div className="w-100 my-1 d-flex justify-content-center">
-    <div className="w-80" style={{ backgroundColor: 'black', height: '1px' }} />
-  </div>
-);
+export interface FileOption {
+  name: string;
+  type: string;
+  isHidden: boolean;
+  isMain: boolean;
+
+  id?: number;
+  file?: File;
+}
 
 interface FileSelectProps {
-  files: File[];
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  files: FileOption[];
+  setFiles: React.Dispatch<React.SetStateAction<FileOption[]>>;
 }
 
 export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
@@ -23,7 +27,13 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
     const file = event.target.files[0];
 
     const updatedFiles = [...files];
-    updatedFiles.push(file);
+    updatedFiles.push({
+      file,
+      name: file.name,
+      type: file.type,
+      isMain: false,
+      isHidden: false,
+    });
     setFiles(updatedFiles);
 
     event.target.value = '';
@@ -31,7 +41,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
 
   return (
     <>
-      <div className="input-group">
+      <div className="input-group mb-2">
         <button
           onClick={() => {
             if (!fileInputRef.current) return;
@@ -44,10 +54,10 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         </button>
       </div>
       <Input ref={fileInputRef} onChange={addFile} className="d-none" type="file" />
-      <div className="w-100 overflow-y-auto" style={{ maxHeight: '336px' }}>
+      <div className="w-100 overflow-y-auto" style={{ maxHeight: '249px' }}>
         {files.map((file, index) => {
           return (
-            <>
+            <div className="w-100" key={index}>
               <UploadedFile
                 file={file}
                 onClose={() => {
@@ -56,8 +66,12 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
                   setFiles(updatedFiles);
                 }}
               />
-              {index < files.length - 1 && Separator}
-            </>
+              {index < files.length - 1 && (
+                <div className="w-100 my-1 d-flex justify-content-center">
+                  <div className="w-80" style={{ backgroundColor: 'black', height: '1px' }} />
+                </div>
+              )}
+            </div>
           );
         })}
       </div>

@@ -1,17 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Label } from './Label';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FileOption } from './FileSelect';
 
 interface UploadedFileProps {
-  file: File;
+  file: FileOption;
   onClose: () => void;
 }
 
-const formatName = (file: File) => {
+const formatName = (file: FileOption) => {
   return file.name.split('.')[0];
 };
 
-const formatType = (file: File) => {
+const formatType = (file: FileOption) => {
   return file.name.split('.')[1].toUpperCase() || file.type;
 };
 

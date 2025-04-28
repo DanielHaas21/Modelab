@@ -47,7 +47,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       return (
         <div
           className={cn(
-            'model-viewer mt-5 h-70 w-90 d-flex align-items-center justify-content-center',
+            'model-viewer h-70 w-90 d-flex align-items-center justify-content-center',
             className
           )}
           ref={ref}
