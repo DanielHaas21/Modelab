@@ -2,7 +2,9 @@ import * as React from 'react';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Button } from '../../libs/ui/components/Button';
 import { useParams } from 'react-router-dom';
-import { Label, Preloader } from '../../libs/ui/components';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
 import { ModelData } from '../../middleware/types';
 import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
@@ -45,27 +47,27 @@ const ModelDetail: React.FC = () => {
   if (!modelData) return <Preloader />;
 
   return (
-    <ModelDetailLayout bordered={true} image={modelData.files.mainFile}>
+    <ModelDetailLayout
+      bordered={true}
+      image={modelData.files.mainFile}
+      editButtonId={User.isAuthenticated ? modelData?.id : undefined}
+    >
       <Label size="lg" className="kanit-regular lts-1">
         {modelData.name}
       </Label>
       <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
-      <div className="ms-3 mt-2 d-flex align-items-center">
-        <Label size="xxs" className="kanit-regular w-50">
-          Category
-        </Label>
+      <ModelInfoSection name="Category">
         <p className="m-0 w-50" key={modelData.category.id}>
           {modelData.category.name}
         </p>
-      </div>
-      <div className="ms-3 mt-2 d-flex justify-content-between">
-        <Label size="xxs" className="kanit-regular">
-          Tags
-        </Label>
-        <div className="d-flex justify-content-start flex-wrap flex-row w-50">
-          {modelData.tags?.map((tag) => <AssetTag key={tag.id} name={tag.name}></AssetTag>)}
+      </ModelInfoSection>
+      <ModelInfoSection name="Tags">
+        <div className="w-50 mt-2 d-flex flex-wrap">
+          {modelData.tags?.map((tag) => {
+            return <AssetTag key={tag.id} name={tag.name} />;
+          })}
         </div>
-      </div>
+      </ModelInfoSection>
       <div className="sticky-bottom mt-4 ms-4 pb-4">
         <Button
           onClick={() => Download(modelData.files.mainFile.bin, modelData.files.mainFile.type)}

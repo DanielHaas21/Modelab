@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
-import { Input, BrowserFilters } from '../../libs/ui/components';
-import { CategoryOption, TagOption } from '../../libs/ui/components/BrowserFilters';
+import {
+  Input,
+  TagSelect,
+  Label,
+  CategorySelect,
+  CategoryOption,
+  TagOption,
+} from '../../libs/ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
@@ -9,7 +15,7 @@ import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 
 const Browser: React.FC = () => {
-  const categorApi = new Category(import.meta.env.VITE_API_PATH);
+  const categoryApi = new Category(import.meta.env.VITE_API_PATH);
   const tagApi = new Tag(import.meta.env.VITE_API_PATH);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
@@ -17,7 +23,7 @@ const Browser: React.FC = () => {
   React.useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await categorApi.get_all();
+        const data = await categoryApi.get_all();
         setCategories(data.categories);
       } catch (err) {
         if (err instanceof ApiError) {
@@ -81,13 +87,25 @@ const Browser: React.FC = () => {
         </div>
         <div className="row w-100 flex-grow-1 overflow-y-hidden">
           <BrowserResults searchQuery={searchQuery} />
-          <BrowserFilters
-            className="sticky-top h-min-content"
-            categories={categories}
-            setCategories={setCategories}
-            tags={tags}
-            setTags={setTags}
-          />
+          <aside className="sticky-top h-min-content col-xl-2 col-4 d-flex flex-column">
+            <div className="w-100">
+              <Label size="xs">Category</Label>
+              <div className="w-100">
+                <CategorySelect
+                  categories={categories}
+                  setCategories={setCategories}
+                  isRadio={false}
+                />
+              </div>
+            </div>
+
+            <div className="w-100 mt-4">
+              <Label size="xs">Tags</Label>
+              <div className="w-100">
+                <TagSelect tags={tags} setTags={setTags} />
+              </div>
+            </div>
+          </aside>
         </div>
       </main>
     </BaseLayout>

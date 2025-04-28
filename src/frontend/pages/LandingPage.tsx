@@ -66,7 +66,7 @@ const LandingPage: React.FC = () => {
                     rounding="md"
                     size="md"
                   >
-                    <Link className="text-dark text-decoration-none" to="/Browser">
+                    <Link className="text-dark text-decoration-none" to="/browser">
                       Browse assets
                     </Link>
                   </Button>
