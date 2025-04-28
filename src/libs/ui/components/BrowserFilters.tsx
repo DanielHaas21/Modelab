@@ -4,12 +4,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
 import { AssetTag } from './AssetTag';
 import { CategoryCheckbox } from './CategoryCheckbox';
-
-export interface CategoryOption {
-  name: string;
-  id: number; // Unique
-  isSelected?: boolean;
-}
+import { CategoryOption, CategorySelect } from './CategorySelect';
 
 export interface TagOption {
   name: string;
@@ -18,7 +13,7 @@ export interface TagOption {
 }
 
 interface BrowserFiltersProps {
-  categories: CategoryOption[]; // All category options
+  categories: CategoryOption[];
   setCategories: React.Dispatch<React.SetStateAction<CategoryOption[]>>;
   tags: TagOption[];
   setTags: React.Dispatch<React.SetStateAction<TagOption[]>>;
@@ -30,8 +25,6 @@ interface BrowserFiltersProps {
  */
 export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersProps>(
   ({ categories, setCategories, tags, setTags, className }, ref) => {
-    const categoryFiltersId: string = 'browserFilterCateg';
-
     const [typeaheadSelected, setTypeaheadSelected] = React.useState<Option[]>([]);
 
     const onTagsSelected = (selected: Option[]) => {
@@ -68,24 +61,7 @@ export const BrowserFilters = React.forwardRef<HTMLDivElement, BrowserFiltersPro
         <div className="w-100">
           <Label size="xs">Category</Label>
           <div className="w-100">
-            {...categories.map((category, index) => {
-              return (
-                <CategoryCheckbox
-                  id={categoryFiltersId + index}
-                  label={category.name}
-                  checked={category.isSelected !== undefined && category.isSelected}
-                  labelClassName={'btn mb-1' + (index < categories.length - 1 ? ' mr-1' : '')}
-                  onChanged={() => {
-                    const updatedCategories = [...categories];
-                    updatedCategories[index] = {
-                      ...updatedCategories[index],
-                      isSelected: !category.isSelected,
-                    };
-                    setCategories(updatedCategories);
-                  }}
-                />
-              );
-            })}
+            <CategorySelect categories={categories} setCategories={setCategories} isRadio={false} />
           </div>
         </div>
 

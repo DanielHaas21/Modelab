@@ -34,11 +34,11 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
     >
       {children}
       <nav className="d-flex flex-row justify-content-center  mr-8">
-        <Link to="/About" className="fs-2 hover-underline-animation text-decoration-none text-dark">
+        <Link to="/about" className="fs-2 hover-underline-animation text-decoration-none text-dark">
           About
         </Link>
         <Link
-          to="/"
+          to="/manage/upload"
           className="fs-2 hover-underline-animation text-decoration-none text-dark middle-link"
         >
           Upload Assets

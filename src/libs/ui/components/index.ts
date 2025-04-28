@@ -19,3 +19,6 @@ export * from './CategoryCheckbox';
 export * from './Header';
 export * from './ModelPreview';
 export * from './InfiniteScroll';
+export * from './ModelInfoSection';
+export * from './UploadedFile';
+export * from './CategorySelect';

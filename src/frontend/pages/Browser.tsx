@@ -9,7 +9,7 @@ import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 
 const Browser: React.FC = () => {
-  const categorApi = new Category(import.meta.env.VITE_API_PATH);
+  const categoryApi = new Category(import.meta.env.VITE_API_PATH);
   const tagApi = new Tag(import.meta.env.VITE_API_PATH);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
@@ -17,7 +17,7 @@ const Browser: React.FC = () => {
   React.useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await categorApi.get_all();
+        const data = await categoryApi.get_all();
         setCategories(data.categories);
       } catch (err) {
         if (err instanceof ApiError) {

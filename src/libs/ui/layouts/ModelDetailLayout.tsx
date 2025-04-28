@@ -11,14 +11,16 @@ import { ModelDetailImage } from '../components/ModelDetailImage';
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  image?: ModelFileProps;
+  image?: ModelFileProps | null;
   bordered: boolean;
+  goBack?: boolean;
 }
 
 export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   children,
   image,
   bordered = true,
+  goBack = true,
 }) => {
   const [canvasKey, setCanvasKey] = React.useState(0); // In the component it watches for context loss and triggers a re-render by changing the key
 
@@ -26,31 +28,36 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     e.preventDefault();
     setCanvasKey((prev) => prev + 1);
   }, []);
-  
 
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />
       <main className="w-100 h-86-vh d-flex ps-8 pe-8 pt-5">
-        <div className="d-flex flex-column w-50">
+        <div className="d-flex flex-column w-50 pe-5">
           <section className="d-flex flex-column mt-5">{children}</section>
-          <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1">
-            <Link className="text-decoration-none" to="/Browser">
-              <Button variant="light">
-                <FontAwesomeIcon className="mr-3" icon={faArrowLeft} />
-                Go back
-              </Button>
-            </Link>
-          </section>
+          {goBack && (
+            <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1">
+              <Link className="text-decoration-none" to="/browser">
+                <Button variant="light">
+                  <FontAwesomeIcon className="mr-3" icon={faArrowLeft} />
+                  Go back
+                </Button>
+              </Link>
+            </section>
+          )}
         </div>
-        <aside className="d-flex flex-column align-items-center justify-content-center w-50 min-h-70-vh">
-          <React.Suspense fallback={<Preloader />}>
-            <ModelDetailImage
-              image={image!}
-              canvasKey={canvasKey}
-              onContextLoss={handleContextLoss}
-            />
-          </React.Suspense>
+        <aside className="d-flex flex-column align-items-center justify-content-center w-50 min-h-70-vh overflow-hidden">
+          {image === null ? (
+            <div className="w-100 h-100 bg-primary my-5 rounded-4" />
+          ) : (
+            <React.Suspense fallback={<Preloader />}>
+              <ModelDetailImage
+                image={image!}
+                canvasKey={canvasKey}
+                onContextLoss={handleContextLoss}
+              />
+            </React.Suspense>
+          )}
         </aside>
       </main>
       <Footer className={bordered ? 'bordered-f' : 'w-100'} />

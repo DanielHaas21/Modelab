@@ -78,6 +78,16 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
   transition: filter 0.5s;
   filter: brightness(90%);
 }
+
+.pe-8 {
+  padding-right: 8rem;
+}
+
+.px-8 {
+  padding-left: 8rem;
+  padding-right: 8rem;
+}
+
 i {
   font-size: 26px !important;
 }

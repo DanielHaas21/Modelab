@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import UploadModel from './frontend/pages/UploadModel';
 
 /**
  *
@@ -21,9 +22,10 @@ function App(): React.ReactElement {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/Browser" element={<Browser />} />
-            <Route path="/About" element={<About />} />
+            <Route path="/browser" element={<Browser />} />
+            <Route path="/about" element={<About />} />
             <Route path="/models/:modelId" element={<ModelDetail />} />
+            <Route path="/manage/:action" element={<UploadModel />} />
           </Routes>
         </BrowserRouter>
       </Provider>
