@@ -15,6 +15,7 @@ export * from './Message';
 export * from './Button';
 export * from './Footer';
 export * from './ModelDetailImage';
-export * from './CategoryRadio';
+export * from './CategoryCheckbox';
 export * from './Header';
 export * from './ModelPreview';
+export * from './InfiniteScroll';

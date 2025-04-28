@@ -32,7 +32,7 @@ export default class Service {
       throw new ApiError(
         response.data.message ?? 'message',
         response.status,
-        response.data.cause ?? 'server'
+        response.data.cause ?? 'service'
       );
     }
   }

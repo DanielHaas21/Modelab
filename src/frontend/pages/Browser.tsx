@@ -9,8 +9,6 @@ import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 
 const Browser: React.FC = () => {
-  const previewsCol = `col-xl-10 col-8`;
-
   const categorApi = new Category(import.meta.env.VITE_API_PATH);
   const tagApi = new Tag(import.meta.env.VITE_API_PATH);
 
@@ -43,64 +41,53 @@ const Browser: React.FC = () => {
     fetchTags();
   }, []);
 
-  const [selectedCategory, setSelectedCategory] = React.useState<CategoryOption>(
-    categories.length > 0 ? categories[0] : { id: 1, name: 'None' }
-  );
-
   const [tags, setTags] = React.useState<TagOption[]>([]);
 
   const [searchText, setSearchText] = React.useState<string>('');
 
-  const [searchQuery, setSearchQuery] = React.useState<SearchQuery>({
-    query: searchText,
-    category: selectedCategory,
+  const [searchQuery, setSearchQuery] = React.useState<SearchQuery | undefined>({
+    nameQuery: searchText,
+    categories: categories.filter((category) => category.isSelected),
     tags: tags.filter((tag) => tag.isSelected),
   });
 
   React.useEffect(() => {
     setSearchQuery({
-      query: searchText,
-      category: selectedCategory,
+      nameQuery: searchText,
+      categories: categories.filter((category) => category.isSelected),
       tags: tags.filter((tag) => tag.isSelected),
     });
-  }, [searchText, tags, selectedCategory]);
+  }, [searchText, tags, categories]);
 
   return (
     <BaseLayout bordered={true}>
-      <main className="w-100 h-100 d-flex flex-row justify-content-start">
-        <div className="ms-8 d-flex flex-column w-100">
-          <div className="row w-100 pt-5 pb-4 sticky-top bg-light">
-            <section
-              className={previewsCol + ' px-0 d-flex align-items-center justify-content-center'}
-            >
-              <Input
-                size="xl"
-                placeholder="Search"
-                value={searchText}
-                onChange={(event) => {
-                  setSearchText(event.target.value);
-                }}
-                inputGroupBefore={
-                  <span className="input-group-text">
-                    <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
-                  </span>
-                }
-              />
-            </section>
-          </div>
-          <div className="row w-100 h-100 pb-2" style={{ overflowY: 'scroll' }}>
-            <section className={previewsCol + ' d-flex flex-wrap previews mx-0'}>
-              <BrowserResults searchQuery={searchQuery} />
-            </section>
-            <BrowserFilters
-              className="sticky-top h-min-content"
-              categories={categories}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-              tags={tags}
-              setTags={setTags}
+      <main className="w-100 h-100 ps-8 d-flex flex-column">
+        <div className="row w-100 pt-5 pb-4 bg-light">
+          <section className="col-xl-10 col-8 px-0 d-flex align-items-center justify-content-center">
+            <Input
+              size="xl"
+              placeholder="Search"
+              value={searchText}
+              onChange={(event) => {
+                setSearchText(event.target.value);
+              }}
+              inputGroupBefore={
+                <span className="input-group-text">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
+                </span>
+              }
             />
-          </div>
+          </section>
+        </div>
+        <div className="row w-100 flex-grow-1 overflow-y-hidden">
+          <BrowserResults searchQuery={searchQuery} />
+          <BrowserFilters
+            className="sticky-top h-min-content"
+            categories={categories}
+            setCategories={setCategories}
+            tags={tags}
+            setTags={setTags}
+          />
         </div>
       </main>
     </BaseLayout>
