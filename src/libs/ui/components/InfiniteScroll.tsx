@@ -54,7 +54,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   return (
     <div
       ref={scrollDivRef}
-      className={className + ' flex-grow-1 overflow-y-scroll'}
+      className={className + ' flex-grow-1 overflow-y-auto'}
       onScroll={tryLoadMore}
     >
       {children}

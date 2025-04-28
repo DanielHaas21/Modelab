@@ -63,8 +63,10 @@ const ModelDetail: React.FC = () => {
         <Label size="xxs" className="kanit-regular">
           Tags
         </Label>
-        <div className="d-flex justify-content-start flex-wrap flex-row w-50">
-          {modelData.tags?.map((tag) => <AssetTag key={tag.id} name={tag.name}></AssetTag>)}
+        <div className="w-50 mt-2 d-flex flex-wrap">
+          {modelData.tags?.map((tag) => {
+            return <AssetTag name={tag.name} />;
+          })}
         </div>
       </div>
       <div className="sticky-bottom mt-4 ms-4 pb-4">
