@@ -16,6 +16,7 @@ export interface SearchQuery {
 interface AssetResult {
   name: string;
   tags: string[];
+  id: number;
 }
 
 interface FetchResult {
@@ -37,6 +38,7 @@ const fetchAssets = async (
         return {
           name: asset.name + ' ' + asset.id,
           tags: asset.tags.map((tag) => tag.name),
+          id: asset.id,
         };
       }),
     };
@@ -157,7 +159,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
         {...results.assets.map((result) => {
           return (
             <React.Suspense fallback={<Preloader />}>
-              <ModelPreview name={result.name} tags={result.tags} id={1} />
+              <ModelPreview name={result.name} tags={result.tags} id={result.id} />
             </React.Suspense>
           );
         })}
