@@ -9,7 +9,9 @@ export class isFile {
      * @returns boolean
      */
   public static _3D(file: ModelFileProps): boolean {
+    console.log(file);
     const name = typeof file === 'string' ? file.split('?')[0]  : file.name;
+    console.log(/\.(fbx|obj)$/i.test(name))
     return /\.(fbx|obj)$/i.test(name);
   }
 
@@ -20,6 +22,7 @@ export class isFile {
    */
   public static _img(file: ModelFileProps): boolean {
     const name = typeof file === 'string' ? file.split('?')[0]  : file.name;
+    console.log(/\.(png|jpe?g|gif)$/i.test(name))
     return /\.(png|jpe?g|gif)$/i.test(name);
   }
 }

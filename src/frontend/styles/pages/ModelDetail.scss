@@ -3,3 +3,6 @@
 .download {
   bottom: 300px;
 }
+.wrapper{
+  border: 1px solid map-get($theme-colors, "neutral" );
+}

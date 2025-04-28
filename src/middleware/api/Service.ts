@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 import ApiError from './ApiError';
 
-// adjust later
+// Base API response
 interface ApiResponse {
   data: Object;
   message?: string;

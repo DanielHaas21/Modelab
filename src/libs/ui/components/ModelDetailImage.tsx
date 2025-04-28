@@ -14,6 +14,9 @@ interface ModelProps {
 
 const Model: React.FC<ModelProps> = ({ file }) => {
   const File = useModelFromFile(file);
+  console.log(File)
+  if (!File) return null;
+
   return <primitive object={File}></primitive>;
 };
 
@@ -26,6 +29,8 @@ interface ModelDetailImageProps {
 
 export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImageProps>(
   ({ className, image, canvasKey, onContextLoss, ...props }, ref) => {
+    console.log(image)
+
     const [imageUrl, setImageUrl] = React.useState<string | null>(null);
     const is3DFile = isFile._3D(image);
     const isImageFile = isFile._img(image);
@@ -41,19 +46,20 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
         setImageUrl(null);
       }
     }, [image]);
-
+    
+    console.log(imageUrl)
     if (is3DFile) {
       return (
         <div
           className={cn(
-            'model-viewer mt-5 h-90 w-90 d-flex align-items-center justify-content-center',
+            'model-viewer mt-5 h-70 w-90 d-flex align-items-center justify-content-center',
             className
           )}
           ref={ref}
         >
           <Canvas
             key={canvasKey}
-            className="h-80 w-90"
+            className="h-80 w-90 rounded-4"
             onCreated={({ gl }) => {
               // We prevent dismounting and trigger a rerender
               gl.domElement.addEventListener('webglcontextlost', (e) => {
@@ -74,7 +80,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       return (
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('object-cover rounded-xl', className)}
+          className={cn('object-fit-contain rounded-4 w-80 wrapper', className)}
           src={imageUrl}
           alt="Preview"
           {...props}
@@ -86,7 +92,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     return (
       <img
         ref={ref as React.RefObject<HTMLImageElement>}
-        className={cn('object-cover rounded-xl', className)}
+        className={cn('object-fit-contain rounded-4 wrapper w-80', className)}
         src={placeholder}
         alt="Unsupported format"
         {...props}
