@@ -1,35 +1,38 @@
 import * as React from 'react';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Button } from '../../libs/ui/components/Button';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Label, Preloader } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import test from '../../libs/ui/assets/example_model.fbx';
-import testpng from '../../libs/ui/assets/train_uhd.png';
-import { File } from '../../middleware/api';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
-import { Add } from '../../store/slices/Message';
 import { ModelData } from '../../middleware/actions/LoadModelDetail';
-import { useNavigate } from 'react-router-dom';
 import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
-import axios from 'axios';
 
 const ModelDetail: React.FC = () => {
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
   const User = useSelector((state: RootState) => state.User);
-  const Dispatch = useDispatch<AppDispatch>();
   const model = useParams();
-  const Download = () => {};
 
+  const Download = (data: string, type: string) => {
+    const blob = new Blob([data], { type: type });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = 'task';
+
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
+  console.log(parseInt(model.modelId!));
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const ModelData = await LoadModelDetail(parseInt(model.modelId!));
-        console.log(ModelData);
-        console.log(test)
         setModelData(ModelData);
       } catch (error) {
         console.error('Error fetching model data:', error);
@@ -37,13 +40,13 @@ const ModelDetail: React.FC = () => {
     };
 
     fetchData();
-  }, [0]); 
+  }, [0]);
 
   if (!modelData) return <Preloader />;
 
-  console.log(modelData.Files)
+  console.log(modelData.Files);
   return (
-    <ModelDetailLayout bordered={true} image={modelData!.Files[0]}>
+    <ModelDetailLayout bordered={true} image={modelData.Files[0]}>
       <Label size="lg" className="kanit-regular lts-1">
         {modelData?.name}
       </Label>
@@ -67,7 +70,9 @@ const ModelDetail: React.FC = () => {
       <div className="sticky-bottom mt-4 ms-4 pb-4">
         <Button
           onClick={
-            User.isAuthenticated ? Download : undefined /*replace with link to oauth in the future*/
+            User.isAuthenticated
+              ? () => Download(modelData.Files[0].bin, modelData.Files[0].name)
+              : undefined /*replace with link to oauth in the future*/
           }
           className="d-flex justify-content-center mt-6 download"
         >

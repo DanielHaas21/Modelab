@@ -1,6 +1,5 @@
 import { ModelFileProps } from '../../libs/types/ModelFileProps';
-import { binaryStringToFile } from '../../libs/utils';
-import { Asset, File} from '../api';
+import { Asset } from '../api';
 
 interface ModelDataProp {
   id: number;
@@ -17,19 +16,20 @@ export interface ModelData {
 }
 
 export default async function LoadModelDetail(id: number): Promise<ModelData> {
-  const FILE = new File(import.meta.env.VITE_API_PATH);
   const ASSET = new Asset(import.meta.env.VITE_API_PATH);
 
   const ModelMetadata = await ASSET.get(id);
   const FileMetadata = await ASSET.get_files(id);
-  const BinFile = await FILE.get(id);
+  const mainFileMeta = FileMetadata.files.find((file) => file.isMain === true);
+
+  if (!mainFileMeta) throw Error;
 
   const name = ModelMetadata.asset.name;
   const desc = ModelMetadata.asset.description;
   const category = ModelMetadata.asset.category;
   const tags = ModelMetadata.asset.tags;
 
-  const mainFile = FileMetadata.files.filter((file) => file.isMain != true);
+  const mainFile: ModelFileProps = { bin: import.meta.env.VITE_API_PATH + `file/${mainFileMeta.id}`, name: mainFileMeta.name, type: mainFileMeta.type };
 
   console.log(mainFile);
   const data: ModelData = {
@@ -38,7 +38,7 @@ export default async function LoadModelDetail(id: number): Promise<ModelData> {
     desc: desc,
     category: category,
     tags: tags,
-    Files:[]
+    Files: [mainFile],
   };
   return data;
 }
