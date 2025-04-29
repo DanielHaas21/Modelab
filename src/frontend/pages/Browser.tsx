@@ -7,49 +7,28 @@ import {
   CategorySelect,
   CategoryOption,
   TagOption,
+  Button,
 } from '../../libs/ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
 import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
+import { AppDispatch, RootState } from '../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { Clear, Set } from '../../store/slices/BrowserFilter';
 
 const Browser: React.FC = () => {
   const categoryApi = new Category(import.meta.env.VITE_API_PATH);
   const tagApi = new Tag(import.meta.env.VITE_API_PATH);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
-
-  React.useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await categoryApi.get_all();
-        setCategories(data.categories);
-      } catch (err) {
-        if (err instanceof ApiError) {
-          console.error('Failed to fetch categories', err);
-        }
-      }
-    };
-
-    const fetchTags = async () => {
-      try {
-        const data = await tagApi.get_all();
-        setTags(data.tags);
-      } catch (err) {
-        if (err instanceof ApiError) {
-          console.error('Failed to fetch tags', err);
-        }
-      }
-    };
-
-    fetchCategories();
-    fetchTags();
-  }, []);
-
   const [tags, setTags] = React.useState<TagOption[]>([]);
 
-  const [searchText, setSearchText] = React.useState<string>('');
+  const BrowserFilter = useSelector((state: RootState) => state.BrowserFilter);
+  const Dispatch = useDispatch<AppDispatch>();
+
+  const [searchText, setSearchText] = React.useState<string>(BrowserFilter.value?.nameQuery ?? '');
 
   const [searchQuery, setSearchQuery] = React.useState<SearchQuery | undefined>({
     nameQuery: searchText,
@@ -57,12 +36,93 @@ const Browser: React.FC = () => {
     tags: tags.filter((tag) => tag.isSelected),
   });
 
+  const resetFilters = () => {
+    setSearchText('');
+
+    const updatedCategories = [...categories].map((category) => {
+      return {
+        ...category,
+        isSelected: false,
+      };
+    });
+    setCategories(updatedCategories);
+
+    const updatedTags = [...tags].map((tag) => {
+      return {
+        ...tag,
+        isSelected: false,
+      };
+    });
+    setTags(updatedTags);
+
+    Dispatch(Clear());
+  };
+
   React.useEffect(() => {
-    setSearchQuery({
+    const loadCategories = async () => {
+      try {
+        const data = await categoryApi.get_all();
+        setCategories(
+          data.categories.map((category) => {
+            return {
+              ...category,
+              isSelected:
+                BrowserFilter.value?.categories.find(
+                  (otherCategory) => category.id == otherCategory.id
+                ) !== undefined,
+            };
+          })
+        );
+      } catch (err) {
+        if (err instanceof ApiError) {
+          console.error('Failed to fetch categories', err);
+        }
+      }
+    };
+
+    const loadTags = async () => {
+      try {
+        const data = await tagApi.get_all();
+        setTags(data.tags);
+        setTags(
+          data.tags.map((tag) => {
+            return {
+              ...tag,
+              isSelected:
+                BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
+            };
+          })
+        );
+      } catch (err) {
+        if (err instanceof ApiError) {
+          console.error('Failed to fetch tags', err);
+        }
+      }
+    };
+
+    const load = async () => {
+      await loadCategories();
+      await loadTags();
+      if (BrowserFilter.value !== null) {
+        setSearchText(BrowserFilter.value.nameQuery);
+      }
+    };
+
+    load();
+  }, []);
+
+  React.useEffect(() => {
+    const searchQuery = {
       nameQuery: searchText,
       categories: categories.filter((category) => category.isSelected),
       tags: tags.filter((tag) => tag.isSelected),
-    });
+    };
+    if (searchQuery.nameQuery.length == 0 && categories.length == 0 && tags.length == 0) {
+      Dispatch(Clear());
+    } else {
+      setSearchQuery(searchQuery);
+      Dispatch(Set(searchQuery));
+    }
   }, [searchText, tags, categories]);
 
   return (
@@ -104,6 +164,18 @@ const Browser: React.FC = () => {
               <div className="w-100">
                 <TagSelect tags={tags} setTags={setTags} />
               </div>
+            </div>
+
+            <div className="w-100 mt-4">
+              <Button
+                onClick={resetFilters}
+                className="w-100 justify-content-center"
+                size={'sm'}
+                variant="light"
+                outline
+              >
+                Clear Filters
+              </Button>
             </div>
           </aside>
         </div>

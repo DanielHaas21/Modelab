@@ -4,8 +4,7 @@ import { cn } from '../../utils';
 
 const buttonVariants = cva(
   `d-flex align-items-center 
-  lts-3
-   kanit-regular
+  lts-3 kanit-regular
    `,
   {
     variants: {
