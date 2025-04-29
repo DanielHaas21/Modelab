@@ -26,7 +26,7 @@ interface ModelDetailProps {
 
 export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   children,
-  image,
+  image = null,
   bordered = true,
   goBack = true,
   editButtonId,

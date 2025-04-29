@@ -166,7 +166,7 @@ const ModelManage: React.FC = () => {
     }
   };
 
-  if (isLoadingAsset) return <Preloader />;
+  if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
 
   return (
     <ModelDetailLayout

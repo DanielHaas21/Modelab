@@ -4,19 +4,23 @@ import { Button } from '../../libs/ui/components/Button';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
+import { ErrorDisplay, Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
 import { ModelData } from '../../middleware/types';
 import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { Add } from '../../store/slices/Message';
+import icon_boom from '../../libs/ui/assets/icon_boom.png';
+import { BaseLayout } from '../../libs/ui/layouts';
 
 const ModelDetail: React.FC = () => {
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
   const model = useParams();
   const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
+
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const Download = (data: string, type: string) => {
     const blob = new Blob([data], { type: type });
@@ -34,18 +38,29 @@ const ModelDetail: React.FC = () => {
 
   React.useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const ModelData = await LoadModelDetail(parseInt(model.modelId!));
         setModelData(ModelData);
       } catch (error) {
         console.error('Error fetching model data:', error);
       }
+      setIsLoading(false);
     };
 
     fetchData();
   }, []);
 
-  if (!modelData) return <Preloader />;
+  if (isLoading) return <Preloader className="min-h-100-vh" />;
+
+  if (!modelData)
+    return (
+      <BaseLayout bordered={true}>
+        <ErrorDisplay image={icon_boom} code={404} message="Oops! Asset not found">
+          <p>The asset you're looking for doesn't exist or has been moved.</p>
+        </ErrorDisplay>
+      </BaseLayout>
+    );
 
   return (
     <ModelDetailLayout

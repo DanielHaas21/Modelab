@@ -152,7 +152,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       loader={<Label className="w-100 text-center">Loading...</Label>}
     >
       {results.assets.length == 0 && !isLoading && (
-        <Label className="w-100 text-center">No asset found...</Label>
+        <Label className="w-100 text-center">No assets found.</Label>
       )}
       <section className="d-flex flex-wrap previews mx-0">
         {...results.assets.map((result) => {

@@ -9,10 +9,10 @@ export const Preloader: React.FC<PreloaderProps> = ({ className, ...props }) => 
   return (
     <div
       className={cn(
-        { className },
+        className,
         `d-flex flex-column 
             justify-content-center align-items-center
-            w-100 h-100-vh fade-in
+            w-100 h-100 fade-in
             `
       )}
       {...props}
