@@ -15,6 +15,7 @@ import { Add } from '../../store/slices/Message';
 const ModelDetail: React.FC = () => {
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
   const model = useParams();
+  const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
 
   const Download = (data: string, type: string) => {
@@ -50,7 +51,9 @@ const ModelDetail: React.FC = () => {
     <ModelDetailLayout
       bordered={true}
       image={modelData.files.mainFile}
-      editButtonId={User.isAuthenticated ? modelData?.id : undefined}
+      editButtonId={
+        User.isAuthenticated ? (User.user?.clearance === 2 ? modelData?.id : undefined) : undefined
+      }
     >
       <Label size="lg" className="kanit-regular lts-1">
         {modelData.name}

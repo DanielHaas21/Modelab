@@ -1,15 +1,17 @@
 import { ModelFileProps } from '../../libs/types/ModelFileProps';
 import { Asset } from '../api';
+import ApiError from '../api/ApiError';
 import { ModelData } from '../types';
+import { ASSET } from '../ApiClients';
 
 export default async function LoadModelDetail(id: number): Promise<ModelData> {
-  const ASSET = new Asset(import.meta.env.VITE_API_PATH);
 
   const ModelMetadata = await ASSET.get(id);
   const FileMetadata = await ASSET.get_files(id);
   const mainFileMeta = FileMetadata.files.find((file) => file.isMain === true);
 
-  if (!mainFileMeta) throw "Failed to load files meta data";
+  
+  if (!mainFileMeta) throw new ApiError("Failed to load file metadata",404,"service");
 
   const name = ModelMetadata.asset.name;
   const desc = ModelMetadata.asset.description;

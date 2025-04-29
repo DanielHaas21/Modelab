@@ -4,6 +4,10 @@ import { Link } from 'react-router-dom';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../store/store';
+import { Add } from '../../../store/slices/Message';
+
 const FooterVariants = cva('', {
   variants: {
     variant: {
@@ -25,6 +29,21 @@ interface FooterProps extends FooterVariantProps {
 
 export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
   const User = useSelector((state: RootState) => state.User);
+  const Dispatch = useDispatch<AppDispatch>();
+
+  const NotifyUser = () => {
+    User.isAuthenticated
+      ? User.user?.clearance == 1
+        ? Dispatch(
+            Add({
+              variant: 'Error',
+              message: 'You dont have the requiered clearance for this function',
+            })
+          )
+        : null
+      : Dispatch(Add({ variant: 'Info', message: 'You must log in order to use this function' }));
+  };
+
   return (
     <footer
       className={cn(
@@ -40,7 +59,8 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
           About
         </Link>
         <Link
-          to="/manage/upload"
+          onClick={NotifyUser}
+          to={User.isAuthenticated ? (User.user?.clearance == 2 ? '/manage/upload' : '') : ''}
           className="fs-2 hover-underline-animation text-decoration-none text-dark middle-link"
         >
           Upload Assets

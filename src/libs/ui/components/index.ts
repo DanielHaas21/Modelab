@@ -23,3 +23,4 @@ export * from './TagSelect.tsx';
 export * from './FileSelect.tsx';
 export * from './UploadedFile.tsx';
 export * from './UserPopup.tsx';
+export * from './GeneralPopup.tsx';

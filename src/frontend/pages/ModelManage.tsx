@@ -11,16 +11,20 @@ import {
   TagOption,
   TagSelect,
 } from '../../libs/ui/components';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Asset, AssetData, Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
+import createModel from '../../middleware/actions/CreateModel';
+import editModel from '../../middleware/actions/EditModel';
 
 const ModelManage: React.FC = () => {
   const { action } = useParams();
   const User = useSelector((state: RootState) => state.User);
+
+  const [refresh, setRefresh] = React.useState(0);
 
   const uploadAction = 'upload';
   const maxAssetNameLength = 128;
@@ -38,6 +42,20 @@ const ModelManage: React.FC = () => {
   const [assetName, setAssetName] = React.useState<string>('');
   const [assetDescription, setAssetDescription] = React.useState<string>('');
   const [files, setFiles] = React.useState<FileOption[]>([]);
+
+  React.useEffect(() => {
+    setAssetName('');
+    setAssetDescription('');
+    setTags(
+      tags.map((tag) => {
+        return {
+          ...tag,
+          isSelected: false,
+        };
+      })
+    );
+    setFiles([]);
+  }, [action, refresh]);
 
   React.useEffect(() => {
     const loadCategories = async (asset: AssetData | null) => {
@@ -135,8 +153,19 @@ const ModelManage: React.FC = () => {
     load();
   }, []);
 
-  const uploadSave = () => {
-    console.log(asset);
+  const uploadSave = async () => {
+    if (action === 'upload') {
+      await createModel({
+        name: assetName,
+        desc: assetDescription,
+        category: categories.find((cat) => cat.isSelected == true)?.id ?? 1,
+        tags: tags.filter((tag) => tag.isSelected == true).map((tag) => tag.id),
+        files: files.filter((file) => file.file !== undefined),
+      });
+      setRefresh((prev) => prev + 1);
+    } else {
+      await editModel({});
+    }
   };
 
   if (isLoadingAsset) return <Preloader />;

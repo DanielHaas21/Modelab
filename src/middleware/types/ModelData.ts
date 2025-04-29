@@ -1,4 +1,5 @@
 import { ModelFileProps } from '../../libs/types/ModelFileProps';
+import { FileOption } from '../../libs/ui/components';
 
 interface ModelDataProp {
   id: number;
@@ -15,4 +16,12 @@ export interface ModelData {
     mainFile: ModelFileProps;
     other: ModelFileProps[];
   };
+}
+
+export interface CreateModelData {
+  name: string;
+  desc: string;
+  category: number;
+  tags: number[];
+  files: FileOption[];
 }
