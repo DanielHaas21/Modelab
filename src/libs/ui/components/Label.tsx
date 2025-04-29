@@ -28,7 +28,7 @@ const labelVariants = cva(
   }
 );
 
-type LabelVariants = VariantProps<typeof labelVariants>;
+export type LabelVariants = VariantProps<typeof labelVariants>;
 
 interface LabelProps extends BaseLabelAttributes, LabelVariants {}
 
