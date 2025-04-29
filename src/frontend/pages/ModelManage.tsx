@@ -73,6 +73,8 @@ const ModelManage: React.FC = () => {
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch categories', err);
+        } else {
+          throw err;
         }
       }
     };
@@ -92,6 +94,8 @@ const ModelManage: React.FC = () => {
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch tags', err);
+        } else {
+          throw err;
         }
       }
     };
@@ -103,6 +107,8 @@ const ModelManage: React.FC = () => {
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch assets', err);
+        } else {
+          throw err;
         }
       }
     };
@@ -114,6 +120,8 @@ const ModelManage: React.FC = () => {
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch asset files', err);
+        } else {
+          throw err;
         }
       }
     };

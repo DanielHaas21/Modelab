@@ -8,14 +8,25 @@ import { Add } from '../../../store/slices/Message';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { ScrollLabel } from './ScrollLabel';
+import { ASSET, FILE } from '../../../middleware/ApiClients';
+import ApiError from '../../../middleware/api/ApiError';
 
 interface ModelPreviewProps {
   className?: string;
-  id?: number; // marked as optional for testing only; should be requiered
-  image?: string; // if left empty placeholder shall be used
+  id: number;
   name: string;
   tags?: string[];
 }
+
+const imageTypes = [
+  'image/png', // PNG
+  'image/jpeg', // JPG, JPEG
+  'image/gif', // GIF
+  'image/svg+xml', // SVG
+  'image/webp', // WEBP
+  'image/tiff', // TIFF
+  'image/bmp', // BMP
+];
 
 /**
  * Is a preview for a Model/texture
@@ -23,7 +34,7 @@ interface ModelPreviewProps {
  * tags are limited to 8, if more is passed there will be ...and tags.length-8 more shown instead
  */
 export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
-  ({ className, image, name, id, tags, ...props }, ref) => {
+  ({ className, name, id, tags, ...props }, ref) => {
     const User = useSelector((state: RootState) => state.User);
     const Dispatch = useDispatch<AppDispatch>();
 
@@ -32,6 +43,32 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
         Dispatch(Add({ variant: 'Info', message: 'You must log in order to use this function' }));
       }
     };
+
+    const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+      const fetchPreview = async () => {
+        try {
+          const { files } = await ASSET.get_files(id);
+          return files.find((file) => !file.isHidden && imageTypes.includes(file.type));
+        } catch (err) {
+          if (err instanceof ApiError) {
+            console.error('Failed to fetch files', err);
+          } else {
+            throw err;
+          }
+        }
+      };
+
+      const loadImage = async () => {
+        const preview = (await fetchPreview()) ?? null;
+        if (preview == null) return;
+
+        setImageUrl(FILE.getURL(preview.id));
+      };
+
+      loadImage();
+    }, [id]);
 
     return (
       <Link
@@ -44,7 +81,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
           ref={ref}
           {...props}
         >
-          <img src={image || placeholder} className="rounded-2 w-90 mt-2"></img>
+          <img src={imageUrl === null ? placeholder : imageUrl} className="rounded-2 w-90 mt-2" />
           <div className="w-85">
             <ScrollLabel size="sm" className="text-left kanit-regular fw-bold">
               {name}

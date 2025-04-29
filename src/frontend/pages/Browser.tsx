@@ -76,6 +76,8 @@ const Browser: React.FC = () => {
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch categories', err);
+        } else {
+          throw err;
         }
       }
     };
@@ -96,6 +98,8 @@ const Browser: React.FC = () => {
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch tags', err);
+        } else {
+          throw err;
         }
       }
     };

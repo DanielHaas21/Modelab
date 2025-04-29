@@ -13,8 +13,10 @@ interface ApiResponse {
  */
 export default class Service {
   private axiosInstance: AxiosInstance;
+  protected baseURL: string;
 
   constructor(baseURL: string) {
+    this.baseURL = baseURL;
     this.axiosInstance = axios.create({
       baseURL,
       timeout: 10000,
