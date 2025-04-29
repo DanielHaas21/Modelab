@@ -20,9 +20,14 @@ const formatType = (file: FileOption) => {
 };
 
 export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onChange, index }) => {
-  const [isMain, setIsMain] = React.useState<boolean>(false);
+  const [isMain, setIsMain] = React.useState<boolean>(file.isMain);
+  const [isHidden, setIsHidden] = React.useState<boolean>(file.isHidden);
   const [isPreview, setIsPreview] = React.useState<boolean>(false);
-  const [isHidden, setIsHidden] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    setIsMain(file.isMain);
+    setIsHidden(file.isHidden);
+  }, [file]);
 
   React.useEffect(() => {
     onChange(isMain, isPreview, isHidden);
