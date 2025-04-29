@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { CategoryOption, TagOption } from './BrowserFilters';
 import { ModelPreview } from './ModelPreview';
 import { Label } from './Label';
 import { Preloader } from './Preloader';
 import { Asset, AssetData, PaginatedInfo } from '../../../middleware/api';
 import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
+import { CategoryOption } from './CategorySelect';
+import { TagOption } from './TagSelect';
 
 export interface SearchQuery {
   categories: CategoryOption[];
