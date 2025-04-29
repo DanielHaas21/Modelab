@@ -6,13 +6,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { ModelData } from '../../middleware/actions/LoadModelDetail';
+import { ModelData } from '../../middleware/types';
 import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { Add } from '../../store/slices/Message';
 
 const ModelDetail: React.FC = () => {
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
-  const User = useSelector((state: RootState) => state.User);
   const model = useParams();
+  const Dispatch = useDispatch<AppDispatch>();
 
   const Download = (data: string, type: string) => {
     const blob = new Blob([data], { type: type });
@@ -24,7 +27,7 @@ const ModelDetail: React.FC = () => {
     link.download = 'task';
 
     link.click();
-
+    Dispatch(Add({ variant: 'Success', message: 'Asset saved successfully!' }));
     URL.revokeObjectURL(url);
   };
 
@@ -39,19 +42,18 @@ const ModelDetail: React.FC = () => {
     };
 
     fetchData();
-  }, [0]);
+  }, []);
 
   if (!modelData) return <Preloader />;
 
-  console.log(modelData.Files);
   return (
     <ModelDetailLayout
       bordered={true}
-      image={modelData.Files[0]}
+      image={modelData.files.mainFile}
       editButtonId={User.isAuthenticated ? modelData?.id : undefined}
     >
       <Label size="lg" className="kanit-regular lts-1">
-        {modelData?.name}
+        {modelData.name}
       </Label>
       <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
       <ModelInfoSection name="Category">
@@ -68,11 +70,7 @@ const ModelDetail: React.FC = () => {
       </ModelInfoSection>
       <div className="sticky-bottom mt-4 ms-4 pb-4">
         <Button
-          onClick={
-            User.isAuthenticated
-              ? () => Download(modelData.Files[0].bin, modelData.Files[0].name)
-              : undefined /*replace with link to oauth in the future*/
-          }
+          onClick={() => Download(modelData.files.mainFile.bin, modelData.files.mainFile.type)}
           className="d-flex justify-content-center mt-6 download"
         >
           Download

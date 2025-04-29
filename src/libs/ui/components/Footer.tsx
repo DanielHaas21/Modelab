@@ -2,7 +2,8 @@ import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
 import { cva, type VariantProps } from 'class-variance-authority';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 const FooterVariants = cva('', {
   variants: {
     variant: {
@@ -23,6 +24,7 @@ interface FooterProps extends FooterVariantProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
+  const User = useSelector((state: RootState) => state.User);
   return (
     <footer
       className={cn(
