@@ -11,8 +11,6 @@
 - permission redirects
 - middleware docs
 
-### model detail upload mode
-- middleware
 
 ### model detail edit mode
 - track history of changes,  
