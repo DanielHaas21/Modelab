@@ -6,8 +6,13 @@ const createFile = (path, isHidden, isMain) => {
     return {path, isHidden, isMain}
 };
 
-const createAsset = (name, description, categoryId, tagIds, files) => {
-    return {name, description, categoryId, tagIds, files};
+const createAsset = (name, description, categoryId, tagIds, filesDir, files) => {
+    return {name, description, categoryId, tagIds, files: files.map((file) => { 
+        return {
+            ...file,
+            path: filesDir + file.path
+        }
+    })};
 };
 
 const post = async (endpoint, data) => {
@@ -78,23 +83,67 @@ fermentum vitae, sagittis id, malesuada in, quam. Suspendisse sagittis ultrices 
 Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Suspendisse
 sagittis ultrices augue. Vivamus porttitor turpis ac leo. Integer malesuada. Nullam eget
 nisl. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Proin in
-tellus sit amet nibh dignissim sagittis. Nam sed tellus id magna elementum tincidunt.
-Pellentesque ipsum. Ut tempus purus at lorem. Maecenas aliquet accumsan leo.`;
+tellus sit amet nibh dignissim sagittis.`;
 
 const BASE_URL = 'http://localhost/Modelab-api';
 
 const dirname = import.meta.dirname;
 
 const categories = ['3D Models', '2D Textures', 'Audio'];
-const tags = ['Unity', 'Maya', 'Cinema4D', 'Blender', 'FBX', 'OBJ', 'STL', 'Prop', 'Medieval', 'Skybox'];
+
+const ModelCateg = 1;
+
+const tags = ['Maya', 'FBX', 'OBJ', 'Prop', 'Shrine', 'Textured'];
+
+const MayaTag = 1;
+const FBXTag = 2;
+const OBJTag = 3;
+const PropTag = 4;
+const ShrineTag = 5;
+const TexturedTag = 6;
 
 const assets = [
-    createAsset('Chram', lorem, 1, [2, 5, 9], [
-        createFile(`${dirname}/files/Chram/Chram.mb`, false, false),
-        createFile(`${dirname}/files/Chram/Chram_export.mb`, false, false),
-        createFile(`${dirname}/files/Chram/chram.fbx`, false, true),
-        createFile(`${dirname}/files/Chram/Chram_All.png`, false, true),
-        createFile(`${dirname}/files/Chram/Chram_Persp.png`, false, true),
+    createAsset('Chram', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Chram/`, [
+        createFile('Chram.mb', false, false),
+        createFile('Chram_export.mb', false, false),
+        createFile('chram.fbx', false, true),
+        createFile('Chram_All.png', false, true),
+        createFile('Chram_Persp.png', false, true),
+    ]),
+    createAsset('Baudys', lorem, ModelCateg, [MayaTag, ShrineTag], `${dirname}/files/Baudys/`, [
+        createFile('Baudys.mb', false, false),
+        createFile('all.png', false, true),
+        createFile('persp.png', false, true),
+    ]),
+    createAsset('Bugaj', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag, TexturedTag], `${dirname}/files/Bugaj/`, [
+        createFile('Bugaj.mb', false, false),
+        createFile('Bugaj.fbx', false, true),
+        createFile('all.png', false, false),
+        createFile('persp.png', false, false),
+    ]),
+    createAsset('CP_NabytekHraoTruny', lorem, ModelCateg, [MayaTag, OBJTag, PropTag], `${dirname}/files/CP_NabytekHraoTruny/`, [
+        createFile('CP_NabytekHraoTruny.mb', false, false),
+        createFile('CP_NabytekHraoTruny.mtl', false, true),
+        createFile('CP_NabytekHraoTruny.obj', false, true),
+    ]),
+    createAsset('Sedmihradsky', lorem, ModelCateg, [MayaTag, OBJTag, ShrineTag], `${dirname}/files/Sedmihradsky/`, [
+        createFile('Sedmihradsky.mb', false, false),
+        createFile('Sedmihradsky.obj', false, true),
+        createFile('Sedmihradsky.mtl', false, true),
+        createFile('all.png', false, false),
+        createFile('persp.png', false, false),
+    ]),
+    createAsset('Stastka', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Stastka/`, [
+        createFile('Stastka.mb', false, false),
+        createFile('Stastka.fbx', false, true),
+        createFile('all.png', false, false),
+        createFile('persp.png', false, false),
+    ]),
+    createAsset('Tumova_TajMahal', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Tumova_TajMahal/`, [
+        createFile('Tumova_TajMahal.mb', false, false),
+        createFile('Tumova_TajMahal.fbx', false, true),
+        createFile('all.png', false, false),
+        createFile('persp.png', false, false),
     ]),
 ];
 
