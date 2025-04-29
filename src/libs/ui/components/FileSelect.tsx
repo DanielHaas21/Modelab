@@ -25,6 +25,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;
     const file = event.target.files[0];
+    console.log(file.webkitRelativePath);
 
     const updatedFiles = [...files];
     updatedFiles.push({
@@ -59,10 +60,21 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
           return (
             <div className="w-100" key={index}>
               <UploadedFile
+                index={index}
                 file={file}
                 onClose={() => {
                   const updatedFiles = [...files];
                   updatedFiles.splice(index, 1);
+                  setFiles(updatedFiles);
+                }}
+                onChange={(isMain, isPreview, isHidden) => {
+                  const updatedFiles = [...files];
+                  updatedFiles[index] = {
+                    ...file,
+                    isMain: isMain,
+                    // isPreview: isPreview,
+                    isHidden: isHidden,
+                  };
                   setFiles(updatedFiles);
                 }}
               />
