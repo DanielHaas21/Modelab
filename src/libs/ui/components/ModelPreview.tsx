@@ -2,7 +2,6 @@ import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
 import placeholder from '../assets/placeholder.png';
-import { Label } from './Label';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { Add } from '../../../store/slices/Message';
