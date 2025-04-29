@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Button,
   CategoryOption,
   CategorySelect,
   FileOption,
@@ -36,7 +35,6 @@ const ModelManage: React.FC = () => {
 
   const [asset, setAsset] = React.useState<AssetData | null>(null);
   const [isLoadingAsset, setIsLoadingAsset] = React.useState<boolean>(action != uploadAction);
-
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
   const [assetName, setAssetName] = React.useState<string>('');
