@@ -49,7 +49,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     const refocusCameraRef = React.useRef<() => void>(() => {});
 
     const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
-    const [autoRotate, setAutoRotate] = React.useState<boolean>(true);
+    const [autoRotate, setAutoRotate] = React.useState<boolean>(false);
 
     const SceneConfig: Scene = new Scene();
     SceneConfig.backgroundBlurriness = 1;
