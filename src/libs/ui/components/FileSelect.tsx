@@ -9,6 +9,7 @@ export interface FileOption {
   type: string;
   isHidden: boolean;
   isMain: boolean;
+  isPreview: boolean;
 
   id?: number;
   file?: File;
@@ -25,7 +26,6 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;
     const file = event.target.files[0];
-    console.log(file.webkitRelativePath);
 
     const updatedFiles = [...files];
     updatedFiles.push({
@@ -34,6 +34,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
       type: file.type,
       isMain: false,
       isHidden: false,
+      isPreview: false,
     });
     setFiles(updatedFiles);
 
@@ -72,7 +73,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
                   updatedFiles[index] = {
                     ...file,
                     isMain: isMain,
-                    // isPreview: isPreview,
+                    isPreview: isPreview,
                     isHidden: isHidden,
                   };
                   setFiles(updatedFiles);
