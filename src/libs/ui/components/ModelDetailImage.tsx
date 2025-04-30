@@ -8,6 +8,8 @@ import { ModelFileProps } from '../../types/ModelFileProps';
 import { isFile } from '../../utils';
 import { Box3, Euler, Object3D, Scene, Vector3 } from 'three';
 import { useThree } from '@react-three/fiber';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsSpin, faBars, faCameraRotate, faRotate } from '@fortawesome/free-solid-svg-icons';
 
 // Helper component for the canvas model
 interface ModelProps {
@@ -44,6 +46,10 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     const modelRef = React.useRef<Object3D | null>(null);
     const orbitControlsRef = React.createRef<any>(); // this is bad, but there is no type for this
+    const refocusCameraRef = React.useRef<() => void>(() => {});
+
+    const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
+    const [autoRotate, setAutoRotate] = React.useState<boolean>(true);
 
     const SceneConfig: Scene = new Scene();
     SceneConfig.backgroundBlurriness = 1;
@@ -58,12 +64,17 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     const modelLoaded = (model: Object3D) => {
       modelRef.current = model;
+      refocusCameraRef.current();
+    };
+
+    const toggleAutoRotate = () => {
+      setAutoRotate(!autoRotate);
     };
 
     const FocusCamera = () => {
       const { camera } = useThree();
 
-      React.useEffect(() => {
+      const refocusCamera = () => {
         if (!modelRef.current) return;
 
         const box = new Box3().setFromObject(modelRef.current);
@@ -82,10 +93,12 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
         if (orbitControlsRef.current) {
           orbitControlsRef.current.target.copy(center);
-          orbitControlsRef.current.update();
+          orbitControlsRef.current.autoRotate = true;
+          orbitControlsRef.current.autoRotateSpeed = 0;
         }
-      }, []);
+      };
 
+      refocusCameraRef.current = refocusCamera;
       return null;
     };
 
@@ -93,7 +106,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       return (
         <div
           className={cn(
-            'model-viewer h-70 w-90 d-flex align-items-center justify-content-center',
+            'model-viewer h-70 w-90 d-flex align-items-center justify-content-center position-relative',
             className
           )}
           ref={ref}
@@ -111,12 +124,41 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
             }}
           >
             <Model onLoad={modelLoaded} file={image} />
-            <OrbitControls ref={orbitControlsRef} />
+            <OrbitControls
+              ref={(ctrl) => {
+                orbitControlsRef.current = ctrl;
+                if (orbitControlsRef.current)
+                  orbitControlsRef.current.autoRotateSpeed = autoRotate ? 4 : 0;
+              }}
+            />
             <FocusCamera />
-            <directionalLight position={[5, 5, 5]} intensity={1.5} />
-            <ambientLight intensity={0.4} />
+            <directionalLight position={[5, 5, 5]} intensity={3} />
+            <ambientLight intensity={1} />
             <Environment background preset="sunset" />
           </Canvas>
+          <div
+            className="position-absolute d-flex flex-column"
+            style={{ right: 0, top: 0, bottom: 0 }}
+          >
+            <button
+              onClick={() => {
+                setActionsOpen(!actionsOpen);
+              }}
+              className="btn"
+            >
+              <FontAwesomeIcon icon={faBars} />
+            </button>
+            {actionsOpen && (
+              <div className="rounded d-flex flex-column">
+                <button onClick={refocusCameraRef.current} className="btn">
+                  <FontAwesomeIcon icon={faCameraRotate} />
+                </button>
+                <button onClick={toggleAutoRotate} className="btn">
+                  <FontAwesomeIcon className={autoRotate ? 'auto-spin' : ''} icon={faArrowsSpin} />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       );
     }
