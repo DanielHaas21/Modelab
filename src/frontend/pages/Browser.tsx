@@ -62,20 +62,20 @@ const Browser: React.FC = () => {
     const loadCategories = async () => {
       try {
         const data = await categoryApi.get_all();
-        setCategories(
-          data.categories.map((category) => {
-            return {
-              ...category,
-              isSelected:
-                BrowserFilter.value?.categories.find(
-                  (otherCategory) => category.id == otherCategory.id
-                ) !== undefined,
-            };
-          })
-        );
+        return data.categories.map((category) => {
+          return {
+            ...category,
+            isSelected:
+              BrowserFilter.value?.categories.find(
+                (otherCategory) => category.id == otherCategory.id
+              ) !== undefined,
+          };
+        });
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch categories', err);
+        } else {
+          throw err;
         }
       }
     };
@@ -83,26 +83,27 @@ const Browser: React.FC = () => {
     const loadTags = async () => {
       try {
         const data = await tagApi.get_all();
-        setTags(data.tags);
-        setTags(
-          data.tags.map((tag) => {
-            return {
-              ...tag,
-              isSelected:
-                BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
-            };
-          })
-        );
+        return data.tags.map((tag) => {
+          return {
+            ...tag,
+            isSelected:
+              BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
+          };
+        });
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch tags', err);
+        } else {
+          throw err;
         }
       }
     };
 
     const load = async () => {
-      await loadCategories();
-      await loadTags();
+      const categories = (await loadCategories()) ?? [];
+      const tags = (await loadTags()) ?? [];
+      setCategories(categories);
+      setTags(tags);
       if (BrowserFilter.value !== null) {
         setSearchText(BrowserFilter.value.nameQuery);
       }
@@ -112,16 +113,17 @@ const Browser: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    const searchQuery = {
+    const newSearchQuery = {
       nameQuery: searchText,
       categories: categories.filter((category) => category.isSelected),
       tags: tags.filter((tag) => tag.isSelected),
     };
-    if (searchQuery.nameQuery.length == 0 && categories.length == 0 && tags.length == 0) {
+
+    if (newSearchQuery.nameQuery.length == 0 && categories.length == 0 && tags.length == 0) {
       Dispatch(Clear());
     } else {
-      setSearchQuery(searchQuery);
-      Dispatch(Set(searchQuery));
+      setSearchQuery(newSearchQuery);
+      Dispatch(Set(newSearchQuery));
     }
   }, [searchText, tags, categories]);
 

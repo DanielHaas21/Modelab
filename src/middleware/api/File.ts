@@ -7,6 +7,10 @@ export class File extends Service {
   }
 
   public async get(id: number): Promise<string> {
-    return this.GET(routes.GET.File + id) as Promise<string>;
+    return this.GET(this.getURL(id)) as Promise<string>;
+  }
+
+  public getURL(id: number): string {
+    return this.baseURL + routes.GET.File + id;
   }
 }
