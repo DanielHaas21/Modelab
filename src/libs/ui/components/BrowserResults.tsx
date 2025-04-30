@@ -75,17 +75,17 @@ interface BrowserResultProps {
   searchQuery?: SearchQuery;
 }
 
+interface Results {
+  searchQuery?: SearchQuery;
+  assets: AssetResult[];
+  page: number;
+  hasMore: boolean;
+}
+
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
-  const loadPerPage = 2; // Assets loaded per page
+  const loadPerPage = 8; // Assets loaded per page
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  interface Results {
-    searchQuery?: SearchQuery;
-    assets: AssetResult[];
-    page: number;
-    hasMore: boolean;
-  }
 
   const [results, setResults] = React.useState<Results>({
     assets: [],
@@ -94,16 +94,16 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
   });
 
   React.useEffect(() => {
-    const handler = setTimeout(() => {
-      setResults({
-        searchQuery: searchQuery,
-        assets: [],
-        hasMore: true,
-        page: 0,
-      });
-    }, 200);
+    setResults({
+      searchQuery: searchQuery,
+      assets: [],
+      hasMore: true,
+      page: 0,
+    });
+    // const handler = setTimeout(() => {
+    // }, 200);
 
-    return () => clearTimeout(handler);
+    // return () => clearTimeout(handler);
   }, [searchQuery]);
 
   const fetchPage = async (
