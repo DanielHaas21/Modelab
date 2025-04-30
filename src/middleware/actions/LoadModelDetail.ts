@@ -1,5 +1,4 @@
 import { ModelFileProps } from '../../libs/types/ModelFileProps';
-import { Asset } from '../api';
 import ApiError from '../api/ApiError';
 import { ModelData } from '../types';
 import { ASSET } from '../ApiClients';

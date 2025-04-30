@@ -18,12 +18,15 @@ import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
+import { EditChanges } from '../types/EditChanges';
+import { compareObjects } from '../../libs/utils';
 
 const ModelManage: React.FC = () => {
   const { action } = useParams();
   const User = useSelector((state: RootState) => state.User);
 
-  const [refresh, setRefresh] = React.useState(0);
+  const [refresh, setRefresh] = React.useState<number>(0);
+  const [initialChanges, setInitialChanges] = React.useState<EditChanges | null>(null);
 
   const uploadAction = 'upload';
   const maxAssetNameLength = 128;
@@ -45,12 +48,10 @@ const ModelManage: React.FC = () => {
     setAssetName('');
     setAssetDescription('');
     setTags(
-      tags.map((tag) => {
-        return {
-          ...tag,
-          isSelected: false,
-        };
-      })
+      tags.map((tag) => ({
+        ...tag,
+        isSelected: false,
+      }))
     );
     setFiles([]);
   }, [action, refresh]);
@@ -60,13 +61,11 @@ const ModelManage: React.FC = () => {
       try {
         const { categories } = await categoryApi.get_all();
         setCategories(
-          categories.map((category) => {
-            return {
-              id: category.id,
-              name: category.name,
-              isSelected: category.id == asset?.category.id,
-            };
-          })
+          categories.map((category) => ({
+            id: category.id,
+            name: category.name,
+            isSelected: category.id == asset?.category.id,
+          }))
         );
       } catch (err) {
         if (err instanceof ApiError) {
@@ -81,13 +80,11 @@ const ModelManage: React.FC = () => {
       try {
         const { tags } = await tagApi.get_all();
         setTags(
-          tags.map((tag) => {
-            return {
-              id: tag.id,
-              name: tag.name,
-              isSelected: asset?.tags.find((assetTag) => tag.id == assetTag.id) !== undefined,
-            };
-          })
+          tags.map((tag) => ({
+            id: tag.id,
+            name: tag.name,
+            isSelected: asset?.tags.find((assetTag) => tag.id == assetTag.id) !== undefined,
+          }))
         );
       } catch (err) {
         if (err instanceof ApiError) {
@@ -137,11 +134,9 @@ const ModelManage: React.FC = () => {
 
       const assetFiles = (await fetchAssetFiles(assetId)) ?? [];
       setFiles(
-        assetFiles.map((file) => {
-          return {
-            ...file,
-          };
-        })
+        assetFiles.map((file) => ({
+          ...file,
+        }))
       );
 
       setIsLoadingAsset(false);
@@ -159,6 +154,36 @@ const ModelManage: React.FC = () => {
     load();
   }, []);
 
+  React.useEffect(() => {
+    if (categories.length === 0 || tags.length === 0) return;
+    if (initialChanges !== null) return; // if already set do not overrride
+
+    setInitialChanges({
+      name: assetName,
+      description: assetDescription,
+      category: categories.find((cat) => cat.isSelected) ?? categories[0],
+      tags: tags.filter((tag) => tag.isSelected),
+      files: files,
+    });
+  }, [assetName, assetDescription, categories, tags, files]);
+
+  const CheckChange = async () => {
+    if (
+      assetName !== initialChanges?.name ||
+      assetDescription !== initialChanges.description ||
+      !compareObjects(
+        categories.find((cat) => cat.isSelected) ?? categories[0],
+        initialChanges.category
+      ) ||
+      !compareObjects(
+        tags.filter((tag) => tag.isSelected),
+        initialChanges.tags
+      )
+    ) {
+      console.log('skibid');
+    }
+  };
+
   const uploadSave = async () => {
     if (action === 'upload') {
       await createModel({
@@ -173,15 +198,23 @@ const ModelManage: React.FC = () => {
       await editModel({});
     }
   };
-
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
 
   return (
     <ModelDetailLayout
-      image={null}
+      image={
+        files
+          .filter((file) => file.isMain === true)
+          .map((file) => ({
+            name: file.name,
+            bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
+            type: file.type,
+          }))[0]
+      }
       bordered={true}
       goBack={false}
       previewButtonId={asset?.id}
+      previewButtonOnCLick={CheckChange}
       uploadSaveButton={{
         id: asset?.id ?? 'upload',
         onClick: uploadSave,

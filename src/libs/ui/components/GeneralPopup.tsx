@@ -8,7 +8,7 @@ interface PopupProps {
 }
 
 export const GeneralPopup = React.forwardRef<HTMLDivElement, PopupProps>(
-  ({ className, text, isDeclinable, ...props }, ref) => {
+  ({ className, text, isDeclinable, ...props }, ref)  => {
     return (
       <div>
         <div></div>

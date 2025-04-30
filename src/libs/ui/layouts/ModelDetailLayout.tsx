@@ -21,6 +21,7 @@ interface ModelDetailProps {
   goBack?: boolean;
   editButtonId?: number;
   previewButtonId?: number;
+  previewButtonOnCLick?: () => void,
   uploadSaveButton?: UploadSaveButton;
 }
 
@@ -31,6 +32,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   goBack = true,
   editButtonId,
   previewButtonId,
+  previewButtonOnCLick,
   uploadSaveButton,
 }) => {
   const [canvasKey, setCanvasKey] = React.useState(0); // In the component it watches for context loss and triggers a re-render by changing the key
@@ -64,8 +66,8 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
               </Link>
             )}
             {previewButtonId !== undefined && (
-              <Link className="text-decoration-none col-6" to={'/models/' + previewButtonId}>
-                <Button variant="light" className="justify-content-between w-100">
+              <Link className="text-decoration-none col-6" onClick={previewButtonOnCLick} to={'/models/' + previewButtonId}>
+                <Button  variant="light" className="justify-content-between w-100">
                   <FontAwesomeIcon icon={faEye} />
                   <span className="w-100">Preview</span>
                 </Button>
