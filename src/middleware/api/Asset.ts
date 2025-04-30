@@ -3,7 +3,7 @@ import { CategoryData } from './Category';
 import Service from './Service';
 import { TagData } from './Tag';
 import { CreateModelData } from '../types';
-import  FormData  from 'form-data';
+import FormData from 'form-data';
 interface SearchQuery {
   page: number;
   count: number;
@@ -27,6 +27,7 @@ export interface FileInfoData {
   type: string;
   isHidden: boolean;
   isMain: boolean;
+  isPreview: boolean;
 }
 
 export interface AssetCreate {
@@ -68,7 +69,7 @@ export class Asset extends Service {
 
   public async create(data: CreateModelData): Promise<AssetCreate> {
     const form = new FormData();
-    console.log(form)
+    console.log(form);
     form.append('name', data.name.substring(0, 128));
     form.append('description', data.desc.substring(0, 320));
     form.append('categoryId', data.category.toString());
@@ -83,7 +84,7 @@ export class Asset extends Service {
     });
     return this.POST(routes.POST.Asset + 'create', form, {
       headers: {
-        'Content-Type':'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       },
       maxContentLength: Infinity,
       maxBodyLength: Infinity,

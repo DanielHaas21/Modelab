@@ -2,8 +2,8 @@ import axios from "axios";
 import fs from 'fs';
 import FormData from 'form-data';
 
-const createFile = (path, isHidden, isMain) => {
-    return {path, isHidden, isMain}
+const createFile = (path, isHidden, isMain, isPreview) => {
+    return {path, isHidden, isMain, isPreview}
 };
 
 const createAsset = (name, description, categoryId, tagIds, filesDir, files) => {
@@ -45,7 +45,6 @@ const load = async () => {
     for (let i = 0; i < assets.length; i++) {
         const {name, description, categoryId, tagIds, files} = assets[i];
 
-        console.log('Loading asset: ' + name);
         const form = new FormData();
 
         form.append('name', name.substring(0, 128));
@@ -55,9 +54,10 @@ const load = async () => {
             form.append('tagIds[]', tagId.toString());
         });
 
-        files.forEach(({path, isHidden, isMain}, index) => {
+        files.forEach(({path, isHidden, isMain, isPreview}, index) => {
             form.append('filesMeta[' + index.toString() + '][isHidden]', isHidden ? '1' : '0');
             form.append('filesMeta[' + index.toString() + '][isMain]', isMain ? '1' : '0');
+            form.append('filesMeta[' + index.toString() + '][isPreview]', isPreview ? '1' : '0');
             form.append('files[]', fs.createReadStream(path));
         });
 
@@ -70,9 +70,13 @@ const load = async () => {
                 maxBodyLength: Infinity,
             });
             if('cause' in response.data) {
+                console.log('Failed loading asset: ' + name);
                 console.error(response.data);
+            } else {
+                console.log('Loaded asset: ' + name + ' with id: ' + response.data.id);
             }
         } catch (error) {
+            console.log('Failed loading asset: ' + name);
             console.error(error.response?.data || error.message);
         }
     }
@@ -104,46 +108,46 @@ const TexturedTag = 6;
 
 const assets = [
     createAsset('Chram', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Chram/`, [
-        createFile('Chram.mb', false, false),
-        createFile('Chram_export.mb', false, false),
-        createFile('chram.fbx', false, true),
-        createFile('Chram_All.png', false, true),
-        createFile('Chram_Persp.png', false, true),
+        createFile('Chram.mb', false, false, false),
+        createFile('Chram_export.mb', false, false, false),
+        createFile('chram.fbx', false, true, false),
+        createFile('Chram_All.png', false, true, false),
+        createFile('Chram_Persp.png', false, true, true),
     ]),
     createAsset('Baudys', lorem, ModelCateg, [MayaTag, ShrineTag], `${dirname}/files/Baudys/`, [
-        createFile('Baudys.mb', false, false),
-        createFile('all.png', false, true),
-        createFile('persp.png', false, true),
+        createFile('Baudys.mb', false, false, false),
+        createFile('all.png', false, true, false),
+        createFile('persp.png', false, true, true),
     ]),
     createAsset('Bugaj', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag, TexturedTag], `${dirname}/files/Bugaj/`, [
-        createFile('Bugaj.mb', false, false),
-        createFile('Bugaj.fbx', false, true),
-        createFile('all.png', false, false),
-        createFile('persp.png', false, false),
+        createFile('Bugaj.mb', false, false, false),
+        createFile('Bugaj.fbx', false, true, false),
+        createFile('all.png', false, false, false),
+        createFile('persp.png', false, false, true),
     ]),
     createAsset('CP_NabytekHraoTruny', lorem, ModelCateg, [MayaTag, OBJTag, PropTag], `${dirname}/files/CP_NabytekHraoTruny/`, [
-        createFile('CP_NabytekHraoTruny.mb', false, false),
-        createFile('CP_NabytekHraoTruny.mtl', false, true),
-        createFile('CP_NabytekHraoTruny.obj', false, true),
+        createFile('CP_NabytekHraoTruny.mb', false, false, false),
+        createFile('CP_NabytekHraoTruny.mtl', false, true, false),
+        createFile('CP_NabytekHraoTruny.obj', false, true, false),
     ]),
     createAsset('Sedmihradsky', lorem, ModelCateg, [MayaTag, OBJTag, ShrineTag], `${dirname}/files/Sedmihradsky/`, [
-        createFile('Sedmihradsky.mb', false, false),
-        createFile('Sedmihradsky.obj', false, true),
-        createFile('Sedmihradsky.mtl', false, true),
-        createFile('all.png', false, false),
-        createFile('persp.png', false, false),
+        createFile('Sedmihradsky.mb', false, false, false),
+        createFile('Sedmihradsky.obj', false, true, false),
+        createFile('Sedmihradsky.mtl', false, true, false),
+        createFile('all.png', false, false, false),
+        createFile('persp.png', false, false, true),
     ]),
     createAsset('Stastka', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Stastka/`, [
-        createFile('Stastka.mb', false, false),
-        createFile('Stastka.fbx', false, true),
-        createFile('all.png', false, false),
-        createFile('persp.png', false, false),
+        createFile('Stastka.mb', false, false, false),
+        createFile('Stastka.fbx', false, true, false),
+        createFile('all.png', false, false, false),
+        createFile('persp.png', false, false, true),
     ]),
     createAsset('Tumova_TajMahal', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Tumova_TajMahal/`, [
-        createFile('Tumova_TajMahal.mb', false, false),
-        createFile('Tumova_TajMahal.fbx', false, true),
-        createFile('all.png', false, false),
-        createFile('persp.png', false, false),
+        createFile('Tumova_TajMahal.mb', false, false, false),
+        createFile('Tumova_TajMahal.fbx', false, true, false),
+        createFile('all.png', false, false, false),
+        createFile('persp.png', false, false, true),
     ]),
 ];
 

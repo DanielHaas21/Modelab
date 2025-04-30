@@ -50,7 +50,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
       const fetchPreview = async () => {
         try {
           const { files } = await ASSET.get_files(id);
-          return files.find((file) => !file.isHidden && imageTypes.includes(file.type));
+          return files.find((file) => file.isPreview && imageTypes.includes(file.type));
         } catch (err) {
           if (err instanceof ApiError) {
             console.error('Failed to fetch files', err);
