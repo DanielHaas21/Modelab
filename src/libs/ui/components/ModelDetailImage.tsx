@@ -104,13 +104,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     if (is3DFile) {
       return (
-        <div
-          className={cn(
-            'model-viewer h-100 w-90  position-relative',
-            className
-          )}
-          ref={ref}
-        >
+        <div className={cn('model-viewer h-100 w-100  position-relative', className)} ref={ref}>
           <Canvas
             scene={SceneConfig}
             key={canvasKey}
@@ -138,18 +132,21 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
           </Canvas>
           <div
             className="position-absolute d-flex flex-column"
-            style={{ right: 0, top: 0, bottom: 0 }}
+            style={{ right: 45, top: 20, bottom: 0 }}
           >
             <button
-              onClick={() => {
-                setActionsOpen(!actionsOpen);
-              }}
-              className="btn"
+              onClick={() => setActionsOpen(!actionsOpen)}
+              className={`menu-btn ${actionsOpen ? 'open' : ''}`}
             >
-              <FontAwesomeIcon icon={faBars} />
+              <span></span>
+              <span></span>
+              <span></span>
             </button>
             {actionsOpen && (
-              <div className="rounded d-flex flex-column">
+              <div
+                className="rounded d-flex flex-column fade-in-half"
+                style={{ position: 'relative', left: 10 }}
+              >
                 <button onClick={refocusCameraRef.current} className="btn">
                   <FontAwesomeIcon icon={faCameraRotate} />
                 </button>
@@ -169,7 +166,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
           ref={ref as React.RefObject<HTMLImageElement>}
           className={cn('rounded-4 w-80 h-100', className)}
           src={imageUrl}
-          alt="Preview"
+          alt="Preview" 
           {...props}
         />
       );

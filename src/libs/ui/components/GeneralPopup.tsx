@@ -35,7 +35,7 @@ export const GeneralPopup: React.FC = () => {
           </div>
         ) : (
           <Button
-            className="justify-content-center mr-2"
+            className="justify-content-center"
             variant="primary"
             onClick={() => Dispatch(resolveConfirmation(true))}
           >

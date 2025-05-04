@@ -44,7 +44,6 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     setCanvasKey((prev) => prev + 1);
   }, []);
 
-  console.log(image);
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />

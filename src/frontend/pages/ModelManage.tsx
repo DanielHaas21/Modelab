@@ -187,7 +187,8 @@ const ModelManage: React.FC = () => {
       !compareObjects(
         tags.filter((tag) => tag.isSelected),
         initialChanges.tags
-      )
+      ) ||
+      !compareObjects(files, initialChanges.files)
     ) {
       const userConfirmed = await confirm(
         'You have unsaved changes, Are you sure you want to leave ?',
@@ -207,11 +208,9 @@ const ModelManage: React.FC = () => {
 
   const uploadSave = async () => {
     if (assetName == '' || assetDescription == '' || files.length == 0) {
-      const BlockUpload = await confirm('ss', false, dispatch);
+      await confirm('Name, Description and uploading files is requiered', false, dispatch);
 
-      if (BlockUpload) {
-        return;
-      }
+      return;
     }
 
     if (action === 'upload') {
@@ -233,15 +232,11 @@ const ModelManage: React.FC = () => {
     <>
       <GeneralPopup></GeneralPopup>
       <ModelDetailLayout
-        image={
-          files
-            // .filter((file) => file.isMain === true)
-            .map((file) => ({
-              name: file.name,
-              bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
-              type: file.type,
-            }))
-        }
+        image={files.map((file) => ({
+          name: file.name,
+          bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
+          type: file.type,
+        }))}
         bordered={true}
         goBack={false}
         previewButtonId={asset?.id}
