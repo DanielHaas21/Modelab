@@ -4,6 +4,7 @@ import UserSlice from './slices/User';
 import PopupSlice from './slices/Popup';
 import MessageSlice from './slices/Message';
 import BrowserFilterSlice from './slices/BrowserFilter';
+import ConfirmationSlice from './slices/Confirmation';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     Popup: PopupSlice,
     Message: MessageSlice,
     BrowserFilter: BrowserFilterSlice,
+    ConfirmationSlice: ConfirmationSlice,
   },
 });
 

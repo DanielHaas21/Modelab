@@ -4,26 +4,29 @@ import {
   CategorySelect,
   FileOption,
   FileSelect,
+  GeneralPopup,
   Input,
   ModelInfoSection,
   Preloader,
   TagOption,
   TagSelect,
 } from '../../libs/ui/components';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Asset, AssetData, Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
-import { RootState } from '../../store/store';
-import { useSelector } from 'react-redux';
 import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
 import { EditChanges } from '../types/EditChanges';
 import { compareObjects } from '../../libs/utils';
+import { confirm } from '../../libs/ui/components';
+import { AppDispatch } from '../../store/store';
+import { useDispatch } from 'react-redux';
 
 const ModelManage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { action } = useParams();
-  const User = useSelector((state: RootState) => state.User);
 
   const [refresh, setRefresh] = React.useState<number>(0);
   const [initialChanges, setInitialChanges] = React.useState<EditChanges | null>(null);
@@ -45,6 +48,7 @@ const ModelManage: React.FC = () => {
   const [files, setFiles] = React.useState<FileOption[]>([]);
 
   React.useEffect(() => {
+    setAsset(null);
     setAssetName('');
     setAssetDescription('');
     setTags(
@@ -167,7 +171,9 @@ const ModelManage: React.FC = () => {
     });
   }, [assetName, assetDescription, categories, tags, files]);
 
-  const CheckChange = async () => {
+  const CheckChange = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
     if (
       assetName !== initialChanges?.name ||
       assetDescription !== initialChanges.description ||
@@ -180,11 +186,31 @@ const ModelManage: React.FC = () => {
         initialChanges.tags
       )
     ) {
-      console.log('skibid');
+      const userConfirmed = await confirm(
+        'You have unsaved changes, Are you sure you want to leave ?',
+        true,
+        dispatch
+      );
+
+      if (userConfirmed) {
+        navigate('/models/' + asset?.id);
+      } else {
+        return;
+      }
+    } else {
+      navigate('/models/' + asset?.id);
     }
   };
 
   const uploadSave = async () => {
+    if (assetName == '' || assetDescription == '' || files.length == 0) {
+      const BlockUpload = await confirm('ss', false, dispatch);
+
+      if (BlockUpload) {
+        return;
+      }
+    }
+
     if (action === 'upload') {
       await createModel({
         name: assetName,
@@ -201,68 +227,71 @@ const ModelManage: React.FC = () => {
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
 
   return (
-    <ModelDetailLayout
-      image={
-        files
-          .filter((file) => file.isMain === true)
-          .map((file) => ({
-            name: file.name,
-            bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
-            type: file.type,
-          }))[0]
-      }
-      bordered={true}
-      goBack={false}
-      previewButtonId={asset?.id}
-      previewButtonOnCLick={CheckChange}
-      uploadSaveButton={{
-        id: asset?.id ?? 'upload',
-        onClick: uploadSave,
-      }}
-    >
-      <div className="position-relative">
-        <Input
-          type="text"
-          className="w-100 mb-2"
-          inputClassName="fs-4"
-          size={'xl'}
-          maxLength={maxAssetNameLength}
-          placeholder="Asset name"
-          value={assetName}
-          onChange={(event) => {
-            setAssetName(event.target.value.substring(0, maxAssetNameLength));
-          }}
-        />
-        <p className="position-absolute" style={{ right: '8px', bottom: 0, zIndex: 10000 }}>
-          {assetName.length} / {maxAssetNameLength}
-        </p>
-      </div>
-      <div className="position-relative">
-        <textarea
-          className="form-control mb-2"
-          style={{ height: '200px', resize: 'none' }}
-          rows={8}
-          maxLength={maxAssetDescriptionLength}
-          placeholder="Asset description"
-          value={assetDescription}
-          onChange={(event) => {
-            setAssetDescription(event.target.value.substring(0, maxAssetDescriptionLength));
-          }}
-        />
-        <p className="position-absolute" style={{ right: '8px', bottom: 0 }}>
-          {assetDescription.length} / {maxAssetDescriptionLength}
-        </p>
-      </div>
-      <ModelInfoSection name="Category">
-        <CategorySelect categories={categories} setCategories={setCategories} isRadio={true} />
-      </ModelInfoSection>
-      <ModelInfoSection name="Tags">
-        <TagSelect tags={tags} setTags={setTags} />
-      </ModelInfoSection>
-      <ModelInfoSection name="Files">
-        <FileSelect files={files} setFiles={setFiles} />
-      </ModelInfoSection>
-    </ModelDetailLayout>
+    <>
+      <GeneralPopup></GeneralPopup>
+      <ModelDetailLayout
+        image={
+          files
+            .filter((file) => file.isMain === true)
+            .map((file) => ({
+              name: file.name,
+              bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
+              type: file.type,
+            }))[0]
+        }
+        bordered={true}
+        goBack={false}
+        previewButtonId={asset?.id}
+        previewButtonOnCLick={CheckChange}
+        uploadSaveButton={{
+          id: asset?.id ?? 'upload',
+          onClick: uploadSave,
+        }}
+      >
+        <div className="position-relative">
+          <Input
+            type="text"
+            className="w-100 mb-2"
+            inputClassName="fs-4"
+            size={'xl'}
+            maxLength={maxAssetNameLength}
+            placeholder="Asset name"
+            value={assetName}
+            onChange={(event) => {
+              setAssetName(event.target.value.substring(0, maxAssetNameLength));
+            }}
+          />
+          <p className="position-absolute" style={{ right: '8px', bottom: 0, zIndex: 10000 }}>
+            {assetName.length} / {maxAssetNameLength}
+          </p>
+        </div>
+        <div className="position-relative">
+          <textarea
+            className="form-control mb-2"
+            style={{ height: '200px', resize: 'none' }}
+            rows={8}
+            maxLength={maxAssetDescriptionLength}
+            placeholder="Asset description"
+            value={assetDescription}
+            onChange={(event) => {
+              setAssetDescription(event.target.value.substring(0, maxAssetDescriptionLength));
+            }}
+          />
+          <p className="position-absolute" style={{ right: '8px', bottom: 0 }}>
+            {assetDescription.length} / {maxAssetDescriptionLength}
+          </p>
+        </div>
+        <ModelInfoSection name="Category">
+          <CategorySelect categories={categories} setCategories={setCategories} isRadio={true} />
+        </ModelInfoSection>
+        <ModelInfoSection name="Tags">
+          <TagSelect tags={tags} setTags={setTags} />
+        </ModelInfoSection>
+        <ModelInfoSection name="Files">
+          <FileSelect files={files} setFiles={setFiles} />
+        </ModelInfoSection>
+      </ModelDetailLayout>
+    </>
   );
 };
 

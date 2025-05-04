@@ -5,6 +5,7 @@
 
 ### model detail 
 - carousel
+- orbit controls animate
 
 ### low prio
 - enhance about page

@@ -21,7 +21,7 @@ interface ModelDetailProps {
   goBack?: boolean;
   editButtonId?: number;
   previewButtonId?: number;
-  previewButtonOnCLick?: () => void,
+  previewButtonOnCLick?: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>,
   uploadSaveButton?: UploadSaveButton;
 }
 
@@ -42,6 +42,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     setCanvasKey((prev) => prev + 1);
   }, []);
 
+  console.log(previewButtonId)
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />

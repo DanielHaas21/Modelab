@@ -69,7 +69,7 @@ export class Asset extends Service {
 
   public async create(data: CreateModelData): Promise<AssetCreate> {
     const form = new FormData();
-    console.log(form);
+
     form.append('name', data.name.substring(0, 128));
     form.append('description', data.desc.substring(0, 320));
     form.append('categoryId', data.category.toString());
@@ -82,6 +82,7 @@ export class Asset extends Service {
       form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
       form.append('files[]', file.file!);
     });
+
     return this.POST(routes.POST.Asset + 'create', form, {
       headers: {
         'Content-Type': 'multipart/form-data',

@@ -19,7 +19,18 @@ $s : 0.3;
         transform: translateY(00px);
     }
 }
+@keyframes fade-in-nodir{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
 
 .fade-in{
-    animation: fade-in 1s ease-in-out !important;
+    animation: fade-in .5s ease-in-out !important;
+}
+.fade-in-nodir{
+    animation: fade-in-nodir .5s ease-in-out !important;
 }

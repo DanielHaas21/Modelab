@@ -17,7 +17,7 @@ const buttonVariants = cva(
         neutral: 'bg-neutral text-dark',
       },
       outline: {
-        true: 'border bg-transparent',
+        true: 'border-primary bg-transparent',
       },
       size: {
         xs: 'h-30-px px-1 w-150-px',

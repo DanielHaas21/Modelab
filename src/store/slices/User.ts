@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { clearance } from '../types/clearance';
+import { clearance } from '../types/';
 
 interface UserData {
   id: string | number;
