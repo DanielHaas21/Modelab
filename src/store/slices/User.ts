@@ -21,7 +21,7 @@ interface UserState {
 const initialState: UserState = {
   user: {
     id:1,
-    clearance:2,
+    clearance:1,
     email:"skibiditoilet",
     username:"test",
     first_name:"name",

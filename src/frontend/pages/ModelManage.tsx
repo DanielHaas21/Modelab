@@ -22,8 +22,11 @@ import { compareObjects } from '../../libs/utils';
 import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
+import { useValidatePermission } from '../../libs/auth';
 
 const ModelManage: React.FC = () => {
+  useValidatePermission(2, '/Browser');
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { action } = useParams();

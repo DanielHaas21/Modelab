@@ -13,8 +13,11 @@ import { AppDispatch } from '../../store/store';
 import { Add } from '../../store/slices/Message';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
+import { useValidatePermission } from '../../libs/auth';
 
 const ModelDetail: React.FC = () => {
+  useValidatePermission(1, '/Browser');
+
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
   const model = useParams();
   const User = useSelector((state: RootState) => state.User);
