@@ -106,7 +106,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       return (
         <div
           className={cn(
-            'model-viewer h-70 w-90 d-flex align-items-center justify-content-center position-relative',
+            'model-viewer h-100 w-90  position-relative',
             className
           )}
           ref={ref}
@@ -167,7 +167,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       return (
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('object-fit-contain rounded-4 w-80 wrapper', className)}
+          className={cn('rounded-4 w-80 h-100', className)}
           src={imageUrl}
           alt="Preview"
           {...props}
@@ -179,7 +179,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     return (
       <img
         ref={ref as React.RefObject<HTMLImageElement>}
-        className={cn('object-fit-contain rounded-4 wrapper w-80', className)}
+        className={cn(' rounded-4 h-80 w-100', className)}
         src={placeholder}
         alt="Unsupported format"
         {...props}

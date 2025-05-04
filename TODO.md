@@ -4,16 +4,15 @@
 - Authentification via Google Oauth
 
 ### model detail 
-- carousel
 - orbit controls animate
 
 ### low prio
 - enhance about page
-- permission redirects
 - middleware docs
 
 ### model detail edit mode
-- track history of changes,  
-- confimation popup component 
 - middleware
+- Comparing files when leaving
+
+### model detail
 - download all files zip

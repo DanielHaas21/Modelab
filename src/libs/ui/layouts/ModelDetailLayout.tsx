@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faPencil, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { ModelFileProps } from '../../types/ModelFileProps';
 import { ModelDetailImage } from '../components/ModelDetailImage';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export interface UploadSaveButton {
   id: number | 'upload';
@@ -16,12 +18,12 @@ export interface UploadSaveButton {
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  image?: ModelFileProps | null;
+  image?: ModelFileProps[] | null;
   bordered: boolean;
   goBack?: boolean;
   editButtonId?: number;
   previewButtonId?: number;
-  previewButtonOnCLick?: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>,
+  previewButtonOnCLick?: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>;
   uploadSaveButton?: UploadSaveButton;
 }
 
@@ -42,7 +44,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     setCanvasKey((prev) => prev + 1);
   }, []);
 
-  console.log(previewButtonId)
+  console.log(image);
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />
@@ -67,8 +69,12 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
               </Link>
             )}
             {previewButtonId !== undefined && (
-              <Link className="text-decoration-none col-6" onClick={previewButtonOnCLick} to={'/models/' + previewButtonId}>
-                <Button  variant="light" className="justify-content-between w-100">
+              <Link
+                className="text-decoration-none col-6"
+                onClick={previewButtonOnCLick}
+                to={'/models/' + previewButtonId}
+              >
+                <Button variant="light" className="justify-content-between w-100">
                   <FontAwesomeIcon icon={faEye} />
                   <span className="w-100">Preview</span>
                 </Button>
@@ -94,13 +100,18 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           {image === null ? (
             <div className="bg-primary rounded-4 h-70 w-90 d-flex align-items-center justify-content-center" />
           ) : (
-            <React.Suspense fallback={<Preloader />}>
-              <ModelDetailImage
-                image={image!}
-                canvasKey={canvasKey}
-                onContextLoss={handleContextLoss}
-              />
-            </React.Suspense>
+            <Carousel className="ms-6">
+              {image.map((data, index) => (
+                <React.Suspense fallback={<Preloader />}>
+                  <ModelDetailImage
+                    key={index}
+                    image={image[index]}
+                    canvasKey={canvasKey}
+                    onContextLoss={handleContextLoss}
+                  />
+                </React.Suspense>
+              ))}
+            </Carousel>
           )}
         </aside>
       </main>

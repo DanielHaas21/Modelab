@@ -14,6 +14,8 @@ import { Add } from '../../store/slices/Message';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { useValidatePermission } from '../../libs/auth';
+import JSZip from 'jszip';
+import { ModelFileProps } from '../../libs/types/ModelFileProps';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(1, '/Browser');
@@ -25,18 +27,29 @@ const ModelDetail: React.FC = () => {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const Download = (data: string, type: string) => {
-    const blob = new Blob([data], { type: type });
+  const DownloadAllAsZip = async (files: ModelFileProps[]) => {
+    const zip = new JSZip();
 
-    const url = URL.createObjectURL(blob);
+    const fetchFile = async (file: ModelFileProps) => {
+      const response = await fetch(file.bin);
+      const blob = await response.blob();
+      zip.file(file.name, blob);
+    };
+
+    await Promise.all(files.map(fetchFile));
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
 
     const link = document.createElement('a');
-    link.href = data;
-    link.download = 'task';
+    link.href = URL.createObjectURL(zipBlob);
+    link.download = modelData?.name ? modelData.name + '.zip' : 'asset.zip';
+    document.body.appendChild(link);
 
     link.click();
     Dispatch(Add({ variant: 'Success', message: 'Asset saved successfully!' }));
-    URL.revokeObjectURL(url);
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href);
   };
 
   React.useEffect(() => {
@@ -68,7 +81,7 @@ const ModelDetail: React.FC = () => {
   return (
     <ModelDetailLayout
       bordered={true}
-      image={modelData.files.mainFile}
+      image={modelData.files}
       editButtonId={
         User.isAuthenticated ? (User.user?.clearance === 2 ? modelData?.id : undefined) : undefined
       }
@@ -91,7 +104,7 @@ const ModelDetail: React.FC = () => {
       </ModelInfoSection>
       <div className="sticky-bottom mt-4 ms-4 pb-4">
         <Button
-          onClick={() => Download(modelData.files.mainFile.bin, modelData.files.mainFile.type)}
+          onClick={() => DownloadAllAsZip(modelData.files)}
           className="d-flex justify-content-center mt-6 download"
         >
           Download

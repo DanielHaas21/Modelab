@@ -12,10 +12,7 @@ export interface ModelData {
   desc?: string;
   category: ModelDataProp;
   tags?: ModelDataProp[];
-  files: {
-    mainFile: ModelFileProps;
-    other: ModelFileProps[];
-  };
+  files: ModelFileProps[]
 }
 
 export interface CreateModelData {

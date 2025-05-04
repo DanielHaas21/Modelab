@@ -235,12 +235,12 @@ const ModelManage: React.FC = () => {
       <ModelDetailLayout
         image={
           files
-            .filter((file) => file.isMain === true)
+            // .filter((file) => file.isMain === true)
             .map((file) => ({
               name: file.name,
               bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
               type: file.type,
-            }))[0]
+            }))
         }
         bordered={true}
         goBack={false}
