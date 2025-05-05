@@ -57,7 +57,7 @@ type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 type BaseButtonAttributes = Pick<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
-  'onClick' | 'className' | 'disabled' | 'children'
+  'onClick' | 'className' | 'disabled' | 'children' | 'autoFocus'
 >;
 
 export interface ButtonProps extends BaseButtonAttributes, ButtonVariants {}

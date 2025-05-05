@@ -191,9 +191,12 @@ const ModelManage: React.FC = () => {
       !compareObjects(files, initialChanges.files)
     ) {
       const userConfirmed = await confirm(
-        'You have unsaved changes, Are you sure you want to leave ?',
+        'Unsaved changes!',
         true,
-        dispatch
+        dispatch,
+        undefined,
+        undefined,
+        <p>Are you sure you want to leave?</p>
       );
 
       if (userConfirmed) {
@@ -228,7 +231,7 @@ const ModelManage: React.FC = () => {
   };
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
 
-  console.log(files)
+  console.log(files);
   return (
     <>
       <GeneralPopup></GeneralPopup>

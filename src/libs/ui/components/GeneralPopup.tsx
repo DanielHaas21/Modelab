@@ -14,23 +14,27 @@ export const GeneralPopup: React.FC = () => {
 
   return (
     <div className="d-flex align-items-center justify-content-center w-100-vw h-100-vh position-fixed blur fade-in-nodir">
-      <div className="d-flex fade-in align-items-center justify-content-between flex-column w-450-px h-200-px bg-light rounded-4 p-3">
-        <h2 className="fs-4 kanit-regular w-90 text-center">{Confirmation.text}</h2>
+      <div className="d-flex fade-in align-items-center justify-content-between flex-column w-450-px bg-light rounded-4 p-3">
+        <h2 className="fs-4 kanit-regular w-100 text-start">{Confirmation.text}</h2>
+        {Confirmation.body !== undefined && (
+          <div className="w-100 kanit-regular pb-2">{Confirmation.body}</div>
+        )}
         {Confirmation.isDeclinable ? (
-          <div className="d-flex align-items-center justify-content-between flex-row w-60 mb-5">
+          <div className="d-flex align-items-center justify-content-between flex-row w-100">
             <Button
+              autoFocus
               className="justify-content-center mr-2"
               variant="primary"
               onClick={() => Dispatch(resolveConfirmation(true))}
             >
-              Yes
+              {Confirmation.responseA ?? 'Yes'}
             </Button>
             <Button
               onClick={() => Dispatch(resolveConfirmation(false))}
               className="justify-content-center"
               variant="light"
             >
-              No
+              {Confirmation.responseB ?? 'No'}
             </Button>
           </div>
         ) : (
@@ -39,7 +43,7 @@ export const GeneralPopup: React.FC = () => {
             variant="primary"
             onClick={() => Dispatch(resolveConfirmation(true))}
           >
-            I understand
+            {Confirmation.responseA ?? 'I understand'}
           </Button>
         )}
       </div>
@@ -50,12 +54,17 @@ export const GeneralPopup: React.FC = () => {
 export const confirm = (
   text: string,
   isDeclinable = true,
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
+  responseA: string | undefined = undefined,
+  responseB: string | undefined = undefined,
+  body: React.ReactNode = undefined
 ): Promise<boolean> => {
   const id = uuidv4();
 
   return new Promise((resolve) => {
     registerResolver(id, resolve);
-    dispatch(showConfirmation({ text, isDeclinable, confirmationId: id }));
+    dispatch(
+      showConfirmation({ text, isDeclinable, confirmationId: id, responseA, responseB, body })
+    );
   });
 };

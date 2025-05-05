@@ -4,7 +4,14 @@ import { Button } from '../../libs/ui/components/Button';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { confirm, ErrorDisplay, GeneralPopup, Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
+import {
+  confirm,
+  ErrorDisplay,
+  GeneralPopup,
+  Label,
+  ModelInfoSection,
+  Preloader,
+} from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
 import { ModelData } from '../../middleware/types';
 import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
@@ -28,9 +35,26 @@ const ModelDetail: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const DownloadAllAsZip = async (files: ModelFileProps[]) => {
+    const displayFilesConfirmed = await confirm(
+      'Download',
+      true,
+      Dispatch,
+      'Downlaod',
+      'Cancel',
+      <>
+        <p>Following files will be downloaded:</p>
+        <ul className="w-100 list-group">
+          {modelData?.files.map((file, index) => (
+            <li className="list-group-item" key={index}>
+              {file.name}
+            </li>
+          ))}
+        </ul>
+      </>
+    );
 
-    const DisplayFiles = await confirm("dd",true, Dispatch);
-    
+    if (!displayFilesConfirmed) return;
+
     const zip = new JSZip();
 
     const fetchFile = async (file: ModelFileProps) => {
@@ -83,39 +107,43 @@ const ModelDetail: React.FC = () => {
 
   return (
     <>
-      <GeneralPopup></GeneralPopup>
-     <ModelDetailLayout
-      bordered={true}
-      image={modelData.files}
-      editButtonId={
-        User.isAuthenticated ? (User.user?.clearance === 2 ? modelData?.id : undefined) : undefined
-      }
-    >
-      <Label size="lg" className="kanit-regular lts-1">
-        {modelData.name}
-      </Label>
-      <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
-      <ModelInfoSection name="Category">
-        <p className="m-0 w-50" key={modelData.category.id}>
-          {modelData.category.name}
-        </p>
-      </ModelInfoSection>
-      <ModelInfoSection name="Tags">
-        <div className="w-50 mt-2 d-flex flex-wrap">
-          {modelData.tags?.map((tag) => {
-            return <AssetTag key={tag.id} name={tag.name} />;
-          })}
+      <GeneralPopup />
+      <ModelDetailLayout
+        bordered={true}
+        image={modelData.files}
+        editButtonId={
+          User.isAuthenticated
+            ? User.user?.clearance === 2
+              ? modelData?.id
+              : undefined
+            : undefined
+        }
+      >
+        <Label size="lg" className="kanit-regular lts-1">
+          {modelData.name}
+        </Label>
+        <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
+        <ModelInfoSection name="Category">
+          <p className="m-0 w-50" key={modelData.category.id}>
+            {modelData.category.name}
+          </p>
+        </ModelInfoSection>
+        <ModelInfoSection name="Tags">
+          <div className="w-50 mt-2 d-flex flex-wrap">
+            {modelData.tags?.map((tag) => {
+              return <AssetTag key={tag.id} name={tag.name} />;
+            })}
+          </div>
+        </ModelInfoSection>
+        <div className="sticky-bottom mt-4 ms-4 pb-4">
+          <Button
+            onClick={() => DownloadAllAsZip(modelData.files)}
+            className="d-flex justify-content-center mt-6 download"
+          >
+            Download
+          </Button>
         </div>
-      </ModelInfoSection>
-      <div className="sticky-bottom mt-4 ms-4 pb-4">
-        <Button
-          onClick={() => DownloadAllAsZip(modelData.files)}
-          className="d-flex justify-content-center mt-6 download"
-        >
-          Download
-        </Button>
-      </div>
-    </ModelDetailLayout>
+      </ModelDetailLayout>
     </>
   );
 };

@@ -6,6 +6,9 @@ interface ConfirmationState {
   text: string;
   isDeclinable: boolean;
   confirmationId?: string;
+  body?: React.ReactNode;
+  responseA?: string;
+  responseB?: string;
 }
 
 const initialState: ConfirmationState = {
@@ -24,10 +27,16 @@ const ConfirmationSlice = createSlice({
         text: string;
         isDeclinable?: boolean;
         confirmationId: string;
+        responseA?: string;
+        responseB?: string;
+        body?: React.ReactNode;
       }>
     ) => {
       state.isVisible = true;
+      state.body = action.payload.body;
       state.text = action.payload.text;
+      state.responseA = action.payload.responseA;
+      state.responseB = action.payload.responseB;
       state.isDeclinable = action.payload.isDeclinable ?? true;
       state.confirmationId = action.payload.confirmationId;
     },
