@@ -4,7 +4,7 @@ import { Button } from '../../libs/ui/components/Button';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { ErrorDisplay, Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
+import { confirm, ErrorDisplay, GeneralPopup, Label, ModelInfoSection, Preloader } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
 import { ModelData } from '../../middleware/types';
 import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
@@ -28,6 +28,9 @@ const ModelDetail: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const DownloadAllAsZip = async (files: ModelFileProps[]) => {
+
+    const DisplayFiles = await confirm("dd",true, Dispatch);
+    
     const zip = new JSZip();
 
     const fetchFile = async (file: ModelFileProps) => {
@@ -79,7 +82,9 @@ const ModelDetail: React.FC = () => {
     );
 
   return (
-    <ModelDetailLayout
+    <>
+      <GeneralPopup></GeneralPopup>
+     <ModelDetailLayout
       bordered={true}
       image={modelData.files}
       editButtonId={
@@ -111,6 +116,7 @@ const ModelDetail: React.FC = () => {
         </Button>
       </div>
     </ModelDetailLayout>
+    </>
   );
 };
 
