@@ -40,20 +40,16 @@ const Browser: React.FC = () => {
   const resetFilters = () => {
     setSearchText('');
 
-    const updatedCategories = [...categories].map((category) => {
-      return {
-        ...category,
-        isSelected: false,
-      };
-    });
+    const updatedCategories = [...categories].map((category) => ({
+      ...category,
+      isSelected: false,
+    }));
     setCategories(updatedCategories);
 
-    const updatedTags = [...tags].map((tag) => {
-      return {
-        ...tag,
-        isSelected: false,
-      };
-    });
+    const updatedTags = [...tags].map((tag) => ({
+      ...tag,
+      isSelected: false,
+    }));
     setTags(updatedTags);
 
     Dispatch(Clear());
@@ -63,15 +59,13 @@ const Browser: React.FC = () => {
     const loadCategories = async () => {
       try {
         const data = await categoryApi.get_all();
-        return data.categories.map((category) => {
-          return {
-            ...category,
-            isSelected:
-              BrowserFilter.value?.categories.find(
-                (otherCategory) => category.id == otherCategory.id
-              ) !== undefined,
-          };
-        });
+        return data.categories.map((category) => ({
+          ...category,
+          isSelected:
+            BrowserFilter.value?.categories.find(
+              (otherCategory) => category.id == otherCategory.id
+            ) !== undefined,
+        }));
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch categories', err);
@@ -84,13 +78,11 @@ const Browser: React.FC = () => {
     const loadTags = async () => {
       try {
         const data = await tagApi.get_all();
-        return data.tags.map((tag) => {
-          return {
-            ...tag,
-            isSelected:
-              BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
-          };
-        });
+        return data.tags.map((tag) => ({
+          ...tag,
+          isSelected:
+            BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
+        }));
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch tags', err);

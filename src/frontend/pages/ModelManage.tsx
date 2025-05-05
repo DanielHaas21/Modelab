@@ -23,6 +23,7 @@ import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { useValidatePermission } from '../../libs/auth';
+import { useModelFromUpload } from '../../libs/hooks/useModelFromUpload';
 
 const ModelManage: React.FC = () => {
   useValidatePermission(2, '/Browser');
@@ -210,8 +211,17 @@ const ModelManage: React.FC = () => {
   };
 
   const uploadSave = async () => {
-    if (assetName == '' || assetDescription == '' || files.length == 0) {
-      await confirm('Name, Description and uploading files is requiered', false, dispatch);
+    if (
+      assetName == '' ||
+      assetDescription == '' ||
+      files.length == 0 ||
+      tags.filter((tag) => tag.isSelected == true).length == 0
+    ) {
+      await confirm(
+        'Name, Description, uploading files, and min. 1 tag is requiered',
+        false,
+        dispatch
+      );
 
       return;
     }
@@ -231,14 +241,13 @@ const ModelManage: React.FC = () => {
   };
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
 
-  console.log(files);
   return (
     <>
       <GeneralPopup></GeneralPopup>
       <ModelDetailLayout
         image={files.map((file) => ({
           name: file.name,
-          bin: import.meta.env.VITE_API_PATH + `file/${file.id}`,
+          bin: useModelFromUpload(file),
           type: file.type,
         }))}
         bordered={true}

@@ -44,7 +44,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     setCanvasKey((prev) => prev + 1);
   }, []);
 
-  image = image!.filter((data) => data.name.search('.mb') == -1);
+  image = image!.filter((data) => data.name.search('.mb') == -1 || data.name.search('.zip') == -1);
 
   return (
     <>
