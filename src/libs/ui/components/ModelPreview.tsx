@@ -81,7 +81,10 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
           ref={ref}
           {...props}
         >
-          <img src={imageUrl === null ? placeholder : imageUrl} className="rounded-2 w-90 mt-2" />
+          <img
+            src={imageUrl === null ? placeholder : imageUrl}
+            className="object-fit-cover rounded-2 w-90 mt-2 h-100"
+          />
           <div className="w-85">
             <ScrollLabel size="sm" className="text-left kanit-regular fw-bold">
               {name}
