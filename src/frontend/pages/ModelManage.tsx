@@ -228,6 +228,7 @@ const ModelManage: React.FC = () => {
   };
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
 
+  console.log(files)
   return (
     <>
       <GeneralPopup></GeneralPopup>

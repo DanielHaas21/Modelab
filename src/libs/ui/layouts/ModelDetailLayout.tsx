@@ -44,6 +44,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     setCanvasKey((prev) => prev + 1);
   }, []);
 
+  image = image!.filter((data) => data.name.search(".mb") == -1)
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />
