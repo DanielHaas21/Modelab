@@ -9,4 +9,6 @@
 
 ### model detail edit mode
 - middleware
-- Comparing files when leaving
+
+### model detail layout 
+- filter all unsupported filetypes from images

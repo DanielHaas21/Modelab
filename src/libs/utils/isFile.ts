@@ -8,7 +8,7 @@ export class isFile {
    * @returns boolean
    */
   public static _3D(file: string): boolean {
-    return /\.(fbx|obj)$/i.test(file);
+    return /\.(fbx|obj|glb)$/i.test(file);
   }
 
   /**
@@ -17,6 +17,6 @@ export class isFile {
    * @returns boolean
    */
   public static _img(file: string): boolean {
-    return /\.(png|jpe?g|gif)$/i.test(file);
+    return /\.(png|jpe?g|gif|svg)$/i.test(file);
   }
 }

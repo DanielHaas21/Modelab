@@ -40,20 +40,16 @@ const Browser: React.FC = () => {
   const resetFilters = () => {
     setSearchText('');
 
-    const updatedCategories = [...categories].map((category) => {
-      return {
-        ...category,
-        isSelected: false,
-      };
-    });
+    const updatedCategories = [...categories].map((category) => ({
+      ...category,
+      isSelected: false,
+    }));
     setCategories(updatedCategories);
 
-    const updatedTags = [...tags].map((tag) => {
-      return {
-        ...tag,
-        isSelected: false,
-      };
-    });
+    const updatedTags = [...tags].map((tag) => ({
+      ...tag,
+      isSelected: false,
+    }));
     setTags(updatedTags);
 
     Dispatch(Clear());
@@ -63,15 +59,13 @@ const Browser: React.FC = () => {
     const loadCategories = async () => {
       try {
         const data = await categoryApi.get_all();
-        return data.categories.map((category) => {
-          return {
-            ...category,
-            isSelected:
-              BrowserFilter.value?.categories.find(
-                (otherCategory) => category.id == otherCategory.id
-              ) !== undefined,
-          };
-        });
+        return data.categories.map((category) => ({
+          ...category,
+          isSelected:
+            BrowserFilter.value?.categories.find(
+              (otherCategory) => category.id == otherCategory.id
+            ) !== undefined,
+        }));
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch categories', err);
@@ -84,13 +78,11 @@ const Browser: React.FC = () => {
     const loadTags = async () => {
       try {
         const data = await tagApi.get_all();
-        return data.tags.map((tag) => {
-          return {
-            ...tag,
-            isSelected:
-              BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
-          };
-        });
+        return data.tags.map((tag) => ({
+          ...tag,
+          isSelected:
+            BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
+        }));
       } catch (err) {
         if (err instanceof ApiError) {
           console.error('Failed to fetch tags', err);
@@ -128,62 +120,62 @@ const Browser: React.FC = () => {
     }
   }, [searchText, tags, categories]);
 
-  return (   
+  return (
     <BaseLayout bordered={true}>
-    <main className="w-100 h-100 ps-8 d-flex flex-column">
-      <div className="row w-100 pt-5 pb-4 bg-light">
-        <section className="col-xl-10 col-8 px-0 d-flex align-items-center justify-content-center">
-          <Input
-            size="xl"
-            placeholder="Search"
-            value={searchText}
-            onChange={(event) => {
-              setSearchText(event.target.value);
-            }}
-            inputGroupBefore={
-              <span className="input-group-text">
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
-              </span>
-            }
-          />
-        </section>
-      </div>
-      <div className="row w-100 flex-grow-1 overflow-y-hidden">
-        <BrowserResults searchQuery={searchQuery} />
-        <aside className="sticky-top h-min-content col-xl-2 col-4 d-flex flex-column">
-          <div className="w-100">
-            <Label size="xs">Category</Label>
+      <main className="w-100 h-100 ps-8 d-flex flex-column">
+        <div className="row w-100 pt-5 pb-4 bg-light">
+          <section className="col-xl-10 col-8 px-0 d-flex align-items-center justify-content-center">
+            <Input
+              size="xl"
+              placeholder="Search"
+              value={searchText}
+              onChange={(event) => {
+                setSearchText(event.target.value);
+              }}
+              inputGroupBefore={
+                <span className="input-group-text">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
+                </span>
+              }
+            />
+          </section>
+        </div>
+        <div className="row w-100 flex-grow-1 overflow-y-hidden">
+          <BrowserResults searchQuery={searchQuery} />
+          <aside className="sticky-top h-min-content col-xl-2 col-4 d-flex flex-column">
             <div className="w-100">
-              <CategorySelect
-                categories={categories}
-                setCategories={setCategories}
-                isRadio={false}
-              />
+              <Label size="xs">Category</Label>
+              <div className="w-100">
+                <CategorySelect
+                  categories={categories}
+                  setCategories={setCategories}
+                  isRadio={false}
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="w-100 mt-4">
-            <Label size="xs">Tags</Label>
-            <div className="w-100">
-              <TagSelect tags={tags} setTags={setTags} />
+            <div className="w-100 mt-4">
+              <Label size="xs">Tags</Label>
+              <div className="w-100">
+                <TagSelect tags={tags} setTags={setTags} />
+              </div>
             </div>
-          </div>
 
-          <div className="w-100 mt-4">
-            <Button
-              onClick={resetFilters}
-              className="w-100 justify-content-center"
-              size={'sm'}
-              variant="light"
-              outline
-            >
-              Clear Filters
-            </Button>
-          </div>
-        </aside>
-      </div>
-    </main>
-  </BaseLayout>   
+            <div className="w-100 mt-4">
+              <Button
+                onClick={resetFilters}
+                className="w-100 justify-content-center"
+                size={'sm'}
+                variant="light"
+                outline
+              >
+                Clear Filters
+              </Button>
+            </div>
+          </aside>
+        </div>
+      </main>
+    </BaseLayout>
   );
 };
 
