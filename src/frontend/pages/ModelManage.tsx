@@ -218,9 +218,12 @@ const ModelManage: React.FC = () => {
       tags.filter((tag) => tag.isSelected == true).length == 0
     ) {
       await confirm(
-        'Name, Description, uploading files, and min. 1 tag is requiered',
+        'Not enough data!',
         false,
-        dispatch
+        dispatch,
+        undefined,
+        undefined,
+        <p>name, description, files, and a tag is requiered</p>
       );
 
       return;
