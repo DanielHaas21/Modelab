@@ -44,7 +44,12 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
     setCanvasKey((prev) => prev + 1);
   }, []);
 
-  image = image!.filter((data) => data.name.search('.mb') == -1 || data.name.search('.zip') == -1);
+  const hiddenTypes = [
+    'application/mathematica',
+    'model/mtl',
+    'application/zip'
+  ];
+  image = image!.filter((data) => !hiddenTypes.includes(data.type));
 
   return (
     <>
@@ -102,16 +107,18 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
             <div className="bg-primary rounded-4 h-70 w-90 d-flex align-items-center justify-content-center" />
           ) : (
             <Carousel className="ms-6">
-              {image.map((data, index) => (
-                <React.Suspense fallback={<Preloader />}>
-                  <ModelDetailImage
-                    key={index}
-                    image={image[index]}
-                    canvasKey={canvasKey}
-                    onContextLoss={handleContextLoss}
-                  />
-                </React.Suspense>
-              ))}
+              {image.map((data, index) => {
+                return (
+                  <React.Suspense key={data.name} fallback={<Preloader />}>
+                    <ModelDetailImage
+                      key={data.name}
+                      image={data}
+                      canvasKey={canvasKey}
+                      onContextLoss={handleContextLoss}
+                    />
+                  </React.Suspense>
+                );
+              })}
             </Carousel>
           )}
         </aside>
