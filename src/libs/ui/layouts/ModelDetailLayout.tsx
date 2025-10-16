@@ -12,7 +12,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 export interface UploadSaveButton {
-  id: number | 'upload';
+  type: 'save' | 'upload';
   onClick: () => void;
 }
 
@@ -93,9 +93,9 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
                   className="justify-content-between w-100"
                   onClick={uploadSaveButton.onClick}
                 >
-                  <FontAwesomeIcon icon={uploadSaveButton.id == 'upload' ? faUpload : faSave} />
+                  <FontAwesomeIcon icon={uploadSaveButton.type == 'upload' ? faUpload : faSave} />
                   <span className="w-100">
-                    {uploadSaveButton.id == 'upload' ? 'Upload' : 'Save'}
+                    {uploadSaveButton.type == 'upload' ? 'Upload' : 'Save'}
                   </span>
                 </Button>
               </div>
@@ -106,7 +106,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           {image === null ? (
             <div className="bg-primary rounded-4 h-70 w-90 d-flex align-items-center justify-content-center" />
           ) : (
-            <Carousel className="ms-6">
+            <Carousel className="ms-6" showThumbs={false}>
               {image.map((data, index) => {
                 return (
                   <React.Suspense key={data.name} fallback={<Preloader />}>

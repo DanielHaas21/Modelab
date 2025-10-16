@@ -1,8 +1,6 @@
 import { CreateModelData } from "../types";
 
-interface modelData{
-
-}
-export default function editModel(data:CreateModelData):Promise<number>{
-
+export default async function editModel(data: CreateModelData): Promise<number> {
+    console.log(data);
+    return 0;
 }

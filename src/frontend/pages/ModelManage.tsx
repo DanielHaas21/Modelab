@@ -264,7 +264,7 @@ const ModelManage: React.FC = () => {
         previewButtonId={asset?.id}
         previewButtonOnCLick={CheckChange}
         uploadSaveButton={{
-          id: asset?.id ?? 'upload',
+          type: asset?.id ? 'save' : 'upload',
           onClick: uploadSave,
         }}
       >
