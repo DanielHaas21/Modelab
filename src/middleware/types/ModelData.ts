@@ -22,3 +22,4 @@ export interface CreateModelData {
   tags: number[];
   files: FileOption[];
 }
+

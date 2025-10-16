@@ -1,6 +1,8 @@
+import { CreateModelData } from "../types";
+
 interface modelData{
 
 }
-export default function editModel(data:modelData):Promise<number>{
-    
+export default function editModel(data:CreateModelData):Promise<number>{
+
 }

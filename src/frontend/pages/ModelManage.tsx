@@ -239,7 +239,13 @@ const ModelManage: React.FC = () => {
       });
       setRefresh((prev) => prev + 1);
     } else {
-      await editModel({});
+      await editModel({
+        name: assetName,
+        desc: assetDescription,
+        category: categories.find((cat) => cat.isSelected == true)?.id ?? 1,
+        tags: tags.filter((tag) => tag.isSelected == true).map((tag) => tag.id),
+        files: files.filter((file) => file.file !== undefined),
+      });
     }
   };
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;

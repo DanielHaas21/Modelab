@@ -67,6 +67,9 @@ export class Asset extends Service {
     super(baseURL);
   }
 
+  public async update(){
+    
+  }
   public async create(data: CreateModelData): Promise<AssetCreate> {
     const form = new FormData();
 
