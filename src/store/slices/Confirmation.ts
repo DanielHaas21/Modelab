@@ -6,7 +6,6 @@ interface ConfirmationState {
   text: string;
   isDeclinable: boolean;
   confirmationId?: string;
-  body?: React.ReactNode;
   responseA?: string;
   responseB?: string;
 }
