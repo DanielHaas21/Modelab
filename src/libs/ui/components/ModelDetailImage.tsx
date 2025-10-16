@@ -13,174 +13,174 @@ import { faArrowsSpin, faBars, faCameraRotate, faRotate } from '@fortawesome/fre
 
 // Helper component for the canvas model
 interface ModelProps {
-  file: ModelFileProps;
-  onLoad?: (model: Object3D) => void;
+    file: ModelFileProps;
+    onLoad?: (model: Object3D) => void;
 }
 
 const Model: React.FC<ModelProps> = ({ file, onLoad, ...props }) => {
-  const File = useModelFromFile(file);
-  const ref = React.useRef<Object3D>(null);
+    const File = useModelFromFile(file);
+    const ref = React.useRef<Object3D>(null);
 
-  React.useEffect(() => {
-    if (!ref.current) return;
-    onLoad && onLoad(ref.current);
-  }, [File]);
+    React.useEffect(() => {
+        if (!ref.current) return;
+        onLoad && onLoad(ref.current);
+    }, [File]);
 
-  if (!File) return null;
+    if (!File) return null;
 
-  return <primitive ref={ref} scale={0.1} {...props} object={File}></primitive>;
+    return <primitive ref={ref} scale={0.1} {...props} object={File}></primitive>;
 };
 
 interface ModelDetailImageProps {
-  className?: string;
-  image: ModelFileProps;
-  canvasKey?: number;
-  onContextLoss?: (e: Event) => void;
+    className?: string;
+    image: ModelFileProps;
+    canvasKey?: number;
+    onContextLoss?: (e: Event) => void;
 }
 
 export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImageProps>(
-  ({ className, image, canvasKey, onContextLoss, ...props }, ref) => {
-    const [imageUrl, setImageUrl] = React.useState<string | null>(null);
-    const is3DFile = isFile._3D(image.name);
-    const isImageFile = isFile._img(image.name);
+    ({ className, image, canvasKey, onContextLoss, ...props }, ref) => {
+        const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+        const is3DFile = isFile._3D(image.name);
+        const isImageFile = isFile._img(image.name);
 
-    const modelRef = React.useRef<Object3D | null>(null);
-    const orbitControlsRef = React.createRef<any>(); // this is bad, but there is no type for this
-    const refocusCameraRef = React.useRef<() => void>(() => {});
+        const modelRef = React.useRef<Object3D | null>(null);
+        const orbitControlsRef = React.createRef<any>(); // this is bad, but there is no type for this
+        const refocusCameraRef = React.useRef<() => void>(() => { });
 
-    const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
-    const [autoRotate, setAutoRotate] = React.useState<boolean>(false);
+        const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
+        const [autoRotate, setAutoRotate] = React.useState<boolean>(false);
 
-    const SceneConfig: Scene = new Scene();
-    SceneConfig.backgroundBlurriness = 1;
+        const SceneConfig: Scene = new Scene();
+        SceneConfig.backgroundBlurriness = 1;
 
-    React.useEffect(() => {
-      if (isImageFile) {
-        setImageUrl(image.bin);
-      } else {
-        setImageUrl(null);
-      }
-    }, [image]);
+        React.useEffect(() => {
+            if (isImageFile) {
+                setImageUrl(image.bin);
+            } else {
+                setImageUrl(null);
+            }
+        }, [image]);
 
-    const modelLoaded = (model: Object3D) => {
-      modelRef.current = model;
-      refocusCameraRef.current();
-    };
+        const modelLoaded = (model: Object3D) => {
+            modelRef.current = model;
+            refocusCameraRef.current();
+        };
 
-    const toggleAutoRotate = () => {
-      setAutoRotate(!autoRotate);
-    };
+        const toggleAutoRotate = () => {
+            setAutoRotate(!autoRotate);
+        };
 
-    const FocusCamera = () => {
-      const { camera } = useThree();
+        const FocusCamera = () => {
+            const { camera } = useThree();
 
-      const refocusCamera = () => {
-        if (!modelRef.current) return;
+            const refocusCamera = () => {
+                if (!modelRef.current) return;
 
-        const box = new Box3().setFromObject(modelRef.current);
-        const center = new Vector3();
-        const size = new Vector3();
-        box.getCenter(center);
-        box.getSize(size);
+                const box = new Box3().setFromObject(modelRef.current);
+                const center = new Vector3();
+                const size = new Vector3();
+                box.getCenter(center);
+                box.getSize(size);
 
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const fov = 50 * (Math.PI / 180); // vertical fov in radians
-        const distance = maxDim / (2 * Math.tan(fov / 2));
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const fov = 50 * (Math.PI / 180); // vertical fov in radians
+                const distance = maxDim / (2 * Math.tan(fov / 2));
 
-        camera.position.set(center.x, center.y, center.z + distance);
-        camera.lookAt(center.x, center.y, center.z);
-        camera.updateProjectionMatrix();
+                camera.position.set(center.x, center.y, center.z + distance);
+                camera.lookAt(center.x, center.y, center.z);
+                camera.updateProjectionMatrix();
 
-        if (orbitControlsRef.current) {
-          orbitControlsRef.current.target.copy(center);
-          orbitControlsRef.current.autoRotate = true;
-          orbitControlsRef.current.autoRotateSpeed = 0;
+                if (orbitControlsRef.current) {
+                    orbitControlsRef.current.target.copy(center);
+                    orbitControlsRef.current.autoRotate = true;
+                    orbitControlsRef.current.autoRotateSpeed = 0;
+                }
+            };
+
+            refocusCameraRef.current = refocusCamera;
+            return null;
+        };
+
+        if (is3DFile) {
+            return (
+                <div className={cn('model-viewer h-100 w-100  position-relative', className)} ref={ref}>
+                    <Canvas
+                        scene={SceneConfig}
+                        key={canvasKey}
+                        className="h-80 w-90 rounded-4"
+                        onCreated={({ gl }) => {
+                            // We prevent dismounting and trigger a rerender
+                            gl.domElement.addEventListener('webglcontextlost', (e) => {
+                                e.preventDefault();
+                                onContextLoss && onContextLoss(e);
+                            });
+                        }}
+                    >
+                        <Model onLoad={modelLoaded} file={image} />
+                        <OrbitControls
+                            ref={(ctrl) => {
+                                orbitControlsRef.current = ctrl;
+                                if (orbitControlsRef.current)
+                                    orbitControlsRef.current.autoRotateSpeed = autoRotate ? 4 : 0;
+                            }}
+                        />
+                        <FocusCamera />
+                        <directionalLight position={[5, 5, 5]} intensity={3} />
+                        <ambientLight intensity={1} />
+                        <Environment background preset="sunset" />
+                    </Canvas>
+                    <div
+                        className="position-absolute d-flex flex-column"
+                        style={{ right: 45, top: 20, bottom: 0 }}
+                    >
+                        <button
+                            onClick={() => setActionsOpen(!actionsOpen)}
+                            className={`menu-btn ${actionsOpen ? 'open' : ''}`}
+                        >
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        {actionsOpen && (
+                            <div
+                                className="rounded d-flex flex-column fade-in-half"
+                                style={{ position: 'relative', left: 10 }}
+                            >
+                                <button onClick={refocusCameraRef.current} className="btn">
+                                    <FontAwesomeIcon icon={faCameraRotate} />
+                                </button>
+                                <button onClick={toggleAutoRotate} className="btn">
+                                    <FontAwesomeIcon className={autoRotate ? 'auto-spin' : ''} icon={faArrowsSpin} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
         }
-      };
 
-      refocusCameraRef.current = refocusCamera;
-      return null;
-    };
+        if (imageUrl) {
+            return (
+                <img
+                    ref={ref as React.RefObject<HTMLImageElement>}
+                    className={cn('rounded-4 w-80 h-100', className)}
+                    src={imageUrl}
+                    alt="Preview"
+                    {...props}
+                />
+            );
+        }
 
-    if (is3DFile) {
-      return (
-        <div className={cn('model-viewer h-100 w-100  position-relative', className)} ref={ref}>
-          <Canvas
-            scene={SceneConfig}
-            key={canvasKey}
-            className="h-80 w-90 rounded-4"
-            onCreated={({ gl }) => {
-              // We prevent dismounting and trigger a rerender
-              gl.domElement.addEventListener('webglcontextlost', (e) => {
-                e.preventDefault();
-                onContextLoss && onContextLoss(e);
-              });
-            }}
-          >
-            <Model onLoad={modelLoaded} file={image} />
-            <OrbitControls
-              ref={(ctrl) => {
-                orbitControlsRef.current = ctrl;
-                if (orbitControlsRef.current)
-                  orbitControlsRef.current.autoRotateSpeed = autoRotate ? 4 : 0;
-              }}
+        // Fallback for unsupported types
+        return (
+            <img
+                ref={ref as React.RefObject<HTMLImageElement>}
+                className={cn(' rounded-4 h-80 w-100', className)}
+                src={placeholder}
+                alt="Unsupported format"
+                {...props}
             />
-            <FocusCamera />
-            <directionalLight position={[5, 5, 5]} intensity={3} />
-            <ambientLight intensity={1} />
-            <Environment background preset="sunset" />
-          </Canvas>
-          <div
-            className="position-absolute d-flex flex-column"
-            style={{ right: 45, top: 20, bottom: 0 }}
-          >
-            <button
-              onClick={() => setActionsOpen(!actionsOpen)}
-              className={`menu-btn ${actionsOpen ? 'open' : ''}`}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-            {actionsOpen && (
-              <div
-                className="rounded d-flex flex-column fade-in-half"
-                style={{ position: 'relative', left: 10 }}
-              >
-                <button onClick={refocusCameraRef.current} className="btn">
-                  <FontAwesomeIcon icon={faCameraRotate} />
-                </button>
-                <button onClick={toggleAutoRotate} className="btn">
-                  <FontAwesomeIcon className={autoRotate ? 'auto-spin' : ''} icon={faArrowsSpin} />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      );
+        );
     }
-
-    if (imageUrl) {
-      return (
-        <img
-          ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('rounded-4 w-80 h-100', className)}
-          src={imageUrl}
-          alt="Preview" 
-          {...props}
-        />
-      );
-    }
-
-    // Fallback for unsupported types
-    return (
-      <img
-        ref={ref as React.RefObject<HTMLImageElement>}
-        className={cn(' rounded-4 h-80 w-100', className)}
-        src={placeholder}
-        alt="Unsupported format"
-        {...props}
-      />
-    );
-  }
 );
