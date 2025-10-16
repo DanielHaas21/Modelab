@@ -2,7 +2,7 @@ import { routes } from '../routes';
 import { CategoryData } from './Category';
 import Service from './Service';
 import { TagData } from './Tag';
-import { CreateModelData } from '../types';
+import { CreateModelData, UpdateModelData } from '../types';
 import FormData from 'form-data';
 interface SearchQuery {
   page: number;
@@ -28,6 +28,10 @@ export interface FileInfoData {
   isHidden: boolean;
   isMain: boolean;
   isPreview: boolean;
+}
+
+export interface AssetUpdate {
+  id: number;
 }
 
 export interface AssetCreate {
@@ -67,9 +71,31 @@ export class Asset extends Service {
     super(baseURL);
   }
 
-  public async update(){
-    
+  public async update(data: UpdateModelData): Promise<AssetUpdate> { 
+    const form = new FormData();
+
+    form.append('name', data.name.substring(0, 128));
+    form.append('description', data.desc.substring(0, 320));
+    form.append('categoryId', data.category.toString());
+    data.tags.forEach((tagId) => {
+      form.append('tagIds[]', tagId.toString());
+    });
+
+    data.files.forEach((file, index) => {
+      form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
+      form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
+      form.append('files[]', file.file!);
+    });
+
+    return this.POST(routes.POST.Asset + data.id + '/update', form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity
+    }) as Promise<AssetUpdate>;
   }
+
   public async create(data: CreateModelData): Promise<AssetCreate> {
     const form = new FormData();
 

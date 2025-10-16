@@ -23,3 +23,12 @@ export interface CreateModelData {
   files: FileOption[];
 }
 
+export interface UpdateModelData {
+  id: number;
+  name: string;
+  desc: string;
+  category: number;
+  tags: number[];
+  files: FileOption[];
+}
+

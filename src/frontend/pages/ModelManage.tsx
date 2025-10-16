@@ -24,6 +24,7 @@ import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { useValidatePermission } from '../../libs/auth';
 import { useModelFromUpload } from '../../libs/hooks/useModelFromUpload';
+import { Add } from '../../store/slices/Message';
 
 const ModelManage: React.FC = () => {
   useValidatePermission(2, '/Browser');
@@ -240,12 +241,24 @@ const ModelManage: React.FC = () => {
       setRefresh((prev) => prev + 1);
     } else {
       await editModel({
+        id: asset!.id,
         name: assetName,
         desc: assetDescription,
         category: categories.find((cat) => cat.isSelected == true)?.id ?? 1,
         tags: tags.filter((tag) => tag.isSelected == true).map((tag) => tag.id),
         files: files.filter((file) => file.file !== undefined),
       });
+      setInitialChanges({
+        name: assetName,
+        description: assetDescription,
+        category: categories.find((cat) => cat.isSelected) ?? categories[0],
+        tags: tags.filter((tag) => tag.isSelected),
+        files: files,
+      });
+      dispatch(Add({
+        message: 'Saved!',
+        variant: 'Success'
+      }))
     }
   };
   if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
