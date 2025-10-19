@@ -1,5 +1,6 @@
 @import '../bootstrap';
-.middle-link{
+
+.middle-link {
     margin-left: 10px;
     margin-right: 10px;
     padding-left: 10px;
@@ -11,7 +12,8 @@
 .hover-underline-animation {
     display: inline-block;
     position: relative;
-    &:hover{
+
+    &:hover {
         transition: text-shadow .5s;
         text-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
     }
@@ -25,27 +27,30 @@
     height: 1.5px;
     bottom: 0;
     left: 5%;
-    background-color: map-get($theme-colors, 'dark'); /* Replace with actual color or variable */
+    background-color: map-get($theme-colors, 'dark');
+    /* Replace with actual color or variable */
     transition: transform 0.5s ease-out;
 }
 
 .hover-underline-animation:hover::after {
-    transform: scaleX(1); /* Scale up to reveal underline on hover */
+    transform: scaleX(1);
+    /* Scale up to reveal underline on hover */
     transform-origin: bottom center;
 }
 
-.bordered-h{
+.bordered-h {
     $b: 40px;
     width: calc(100% - $b * 2) !important;
-    border-bottom: 1px solid darken(map-get($theme-colors, 'neutral'),20%) !important;
+    border-bottom: 1px solid darken(map-get($theme-colors, 'neutral'), 20%) !important;
     margin-left: $b ;
     margin-right: $b;
 }
-.bordered-f{
-    >nav{
-        border-top: 1px solid darken(map-get($theme-colors, 'neutral'),20%) !important;
-        padding: 20px;
-        padding-left: 40px;
-        padding-right: 10px;
+
+.bordered-f {
+    >nav {
+        border-top: 1px solid darken(map-get($theme-colors, 'neutral'), 20%) !important;
+        // padding: 20px;
+        // padding-left: 40px;
+        // padding-right: 10px;
     }
 }

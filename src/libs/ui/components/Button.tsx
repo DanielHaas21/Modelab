@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         primary: 'bg-primary btn-primary text-light border-0',
         secondary: 'bg-secondary text-light border-0',
-        light: 'bg-light btn-primary text-dark border-dark',
+        light: 'bg-light btn-primary text-dark border',
         dark: 'bg-dark text-light border-0',
         accent: 'bg-accent  text-light border-0',
         neutral: 'bg-neutral text-dark',
@@ -60,7 +60,7 @@ type BaseButtonAttributes = Pick<
   'onClick' | 'className' | 'disabled' | 'children' | 'autoFocus'
 >;
 
-export interface ButtonProps extends BaseButtonAttributes, ButtonVariants {}
+export interface ButtonProps extends BaseButtonAttributes, ButtonVariants { }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const { variant, size, rounding, font, className, outline, font_size, ...restProps } = props;

@@ -15,6 +15,8 @@ interface ModelPreviewProps {
   className?: string;
   id: number;
   name: string;
+  width: number;
+  height: number;
   tags?: string[];
 }
 
@@ -34,7 +36,7 @@ const imageTypes = [
  * tags are limited to 8, if more is passed there will be ...and tags.length-8 more shown instead
  */
 export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
-  ({ className, name, id, tags, ...props }, ref) => {
+  ({ className, name, id, tags, width, height, ...props }, ref) => {
     const User = useSelector((state: RootState) => state.User);
     const Dispatch = useDispatch<AppDispatch>();
 
@@ -77,7 +79,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
         className="darken text-decoration-none fade-in-left text-dark rounded-3"
       >
         <div
-          className={cn(className, 'd-flex flex-column align-items-center w-350-px h-250-px mb-2')}
+          className={cn(className, 'd-flex flex-column align-items-center mb-2', `w-${width}-px h-${height}-px`)}
           ref={ref}
           {...props}
         >

@@ -25,16 +25,16 @@ $body-color: $text;
 
 // Now define custom colors
 $color-scheme: (
-  'primary': $primary,
-  'secondary': $secondary,
-  'accent': $accent,
-  'success': $success,
-  'warning': $warning,
-  'danger': $danger,
-  'info': $info,
-  'light': $light,
-  'dark': $dark,
-  'neutral': $neutral,
+    'primary': $primary,
+    'secondary': $secondary,
+    'accent': $accent,
+    'success': $success,
+    'warning': $warning,
+    'danger': $danger,
+    'info': $info,
+    'light': $light,
+    'dark': $dark,
+    'neutral': $neutral,
 );
 
 // Merge custom colors with Bootstrap’s `$theme-colors`
@@ -67,30 +67,37 @@ $theme-colors: map-merge($theme-colors, $color-scheme);
 
 // Global styles
 * {
-  font-family: 'Kanit', sans-serif;
+    font-family: 'Kanit', sans-serif;
 }
 
 #root {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 .btn-primary:hover {
-  transition: filter 0.5s;
-  filter: brightness(90%);
+    transition: filter 0.5s;
+    filter: brightness(90%);
 }
 
 .pe-8 {
-  padding-right: 8rem;
+    padding-right: 8rem;
 }
 
 .px-8 {
-  padding-left: 8rem;
-  padding-right: 8rem;
+    padding-left: 8rem;
+    padding-right: 8rem;
 }
 
 i {
-  font-size: 26px !important;
+    font-size: 26px !important;
 }
+
 .cursor-pointer {
-  cursor: pointer;
+    cursor: pointer;
+}
+
+.offcanvas-bottom.offcanvas-fullscreen {
+    height: 100vh;
+    border-top: none;
+    border-radius: 0;
 }

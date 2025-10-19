@@ -7,6 +7,7 @@ import { RootState } from '../../../store/store';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { Add } from '../../../store/slices/Message';
+import { useResponsive } from '../../hooks/useResponsive';
 
 const FooterVariants = cva('', {
   variants: {
@@ -30,16 +31,17 @@ interface FooterProps extends FooterVariantProps {
 export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
   const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
+  const { isDesktop } = useResponsive();
 
   const NotifyUser = () => {
     User.isAuthenticated
       ? User.user?.clearance == 1
         ? Dispatch(
-            Add({
-              variant: 'Error',
-              message: 'You dont have the requiered clearance for this function',
-            })
-          )
+          Add({
+            variant: 'Error',
+            message: 'You dont have the requiered clearance for this function',
+          })
+        )
         : null
       : Dispatch(Add({ variant: 'Info', message: 'You must log in order to use this function' }));
   };
@@ -49,12 +51,14 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
       className={cn(
         variant,
         className,
-        'd-flex flex-row justify-content-end align-items-center bg-light'
+        'd-flex flex-row align-items-center bg-light',
+        isDesktop ? 'justify-content-end' : 'justify-content-center',
+        'py-3'
       )}
       {...props}
     >
       {children}
-      <nav className="d-flex flex-row justify-content-center  mr-8">
+      <nav className={cn("d-flex flex-row justify-content-center", isDesktop && "mr-8")}>
         <Link to="/about" className="fs-2 hover-underline-animation text-decoration-none text-dark">
           About
         </Link>

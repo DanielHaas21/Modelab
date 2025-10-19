@@ -9,6 +9,3 @@
 
 ### model detail edit mode
 - middleware
-
-### model detail layout 
-- filter all unsupported filetypes from images

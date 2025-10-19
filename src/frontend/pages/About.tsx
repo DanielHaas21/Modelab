@@ -2,14 +2,18 @@ import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { Label } from '../../libs/ui/components';
 import { AboutSection } from '../../libs/ui/components/AboutSection';
+import { useResponsive } from '../../libs/hooks/useResponsive';
+import { cn } from '../../libs/utils';
 
 /**
  * @todo Add more info
  */
 const About: React.FC = () => {
+  const { isDesktop } = useResponsive();
+
   return (
     <BaseLayout bordered={true}>
-      <main className="w-100 h-100 ps-8">
+      <main className={cn("w-100 h-100", isDesktop ? "ps-8" : "px-2")}>
         <Label size={'md'}>About</Label>
         <div className="ps-2">
           <AboutSection title="What is Modelab?">

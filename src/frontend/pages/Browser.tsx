@@ -8,16 +8,18 @@ import {
   CategoryOption,
   TagOption,
   Button,
-  GeneralPopup,
 } from '../../libs/ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
 import { Category, Tag } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clear, Set } from '../../store/slices/BrowserFilter';
+import { useResponsive } from '../../libs/hooks/useResponsive';
+import { cn } from '../../libs/utils';
+import Offcanvas from 'bootstrap/js/dist/offcanvas';
 
 const Browser: React.FC = () => {
   const categoryApi = new Category(import.meta.env.VITE_API_PATH);
@@ -36,6 +38,8 @@ const Browser: React.FC = () => {
     categories: categories.filter((category) => category.isSelected),
     tags: tags.filter((tag) => tag.isSelected),
   });
+
+  const { isDesktop } = useResponsive();
 
   const resetFilters = () => {
     setSearchText('');
@@ -120,11 +124,53 @@ const Browser: React.FC = () => {
     }
   }, [searchText, tags, categories]);
 
+  const offcanvasRef = React.useRef<HTMLDivElement>(null);
+
+  const openFiltersDrawer = () => {
+    if (!offcanvasRef.current) return;
+
+    const offcanvas = new Offcanvas(offcanvasRef.current);
+    offcanvas.show();
+  };
+
+  const BrowserFilters = (
+    <>
+      <div className="w-100">
+        <Label size="xs">Category</Label>
+        <div className="w-100">
+          <CategorySelect
+            categories={categories}
+            setCategories={setCategories}
+            isRadio={false}
+          />
+        </div>
+      </div>
+
+      <div className="w-100 mt-4">
+        <Label size="xs">Tags</Label>
+        <div className="w-100">
+          <TagSelect tags={tags} setTags={setTags} />
+        </div>
+      </div>
+
+      <div className="w-100 mt-4">
+        <Button
+          onClick={resetFilters}
+          className="w-100 justify-content-center"
+          size={'sm'}
+          variant="light"
+        >
+          Clear Filters
+        </Button>
+      </div>
+    </>
+  );
+
   return (
     <BaseLayout bordered={true}>
-      <main className="w-100 h-100 ps-8 d-flex flex-column">
-        <div className="row w-100 pt-5 pb-4 bg-light">
-          <section className="col-xl-10 col-8 px-0 d-flex align-items-center justify-content-center">
+      <main className="w-100 h-100 d-flex flex-column">
+        <div className={cn("w-100 py-4 bg-light row mx-0 px-2")}>
+          <section className={cn("px-0 d-flex align-items-center justify-content-center", isDesktop ? "col-10" : "col-10")}>
             <Input
               size="xl"
               placeholder="Search"
@@ -139,42 +185,39 @@ const Browser: React.FC = () => {
               }
             />
           </section>
+          {!isDesktop && (
+            <div className='col-2'>
+              <Button
+                variant="light"
+                className='w-100 p-0 justify-content-center'
+                onClick={openFiltersDrawer}
+              >
+                <FontAwesomeIcon icon={faFilter} className="fs-2" />
+              </Button>
+            </div>
+          )}
         </div>
         <div className="row w-100 flex-grow-1 overflow-y-hidden">
           <BrowserResults searchQuery={searchQuery} />
-          <aside className="sticky-top h-min-content col-xl-2 col-4 d-flex flex-column">
-            <div className="w-100">
-              <Label size="xs">Category</Label>
-              <div className="w-100">
-                <CategorySelect
-                  categories={categories}
-                  setCategories={setCategories}
-                  isRadio={false}
-                />
-              </div>
-            </div>
-
-            <div className="w-100 mt-4">
-              <Label size="xs">Tags</Label>
-              <div className="w-100">
-                <TagSelect tags={tags} setTags={setTags} />
-              </div>
-            </div>
-
-            <div className="w-100 mt-4">
-              <Button
-                onClick={resetFilters}
-                className="w-100 justify-content-center"
-                size={'sm'}
-                variant="light"
-              >
-                Clear Filters
-              </Button>
-            </div>
-          </aside>
+          {isDesktop && (
+            <aside className="sticky-top h-min-content col-xl-2 col-4 d-flex flex-column">
+              {BrowserFilters}
+            </aside>
+          )}
         </div>
       </main>
-    </BaseLayout>
+      {!isDesktop && (
+        <div ref={offcanvasRef} className="offcanvas offcanvas-bottom offcanvas-fullscreen" tabIndex={-1} id="fullscreenSidebar">
+          <div className="offcanvas-header">
+            <h5 className="offcanvas-title">Filters</h5>
+            <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
+          </div>
+          <div className="offcanvas-body">
+            {BrowserFilters}
+          </div>
+        </div>
+      )}
+    </BaseLayout >
   );
 };
 

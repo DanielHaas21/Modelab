@@ -84,6 +84,9 @@ interface Results {
 
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
   const loadPerPage = 8; // Assets loaded per page
+  const gap = 8;
+  const previewWidth = 350;
+  const previewHeight = 250;
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -154,11 +157,25 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       {results.assets.length == 0 && !isLoading && (
         <Label className="w-100 text-center">No assets found.</Label>
       )}
-      <section className="d-flex flex-wrap previews mx-0">
+      <section
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(auto-fit, minmax(${previewWidth}px, 1fr))`,
+          justifyContent: 'center',
+          justifyItems: 'center',
+          gap: `${gap}px`,
+        }}
+      >
         {...results.assets.map((result) => {
           return (
             <React.Suspense fallback={<Preloader />}>
-              <ModelPreview name={result.name} tags={result.tags} id={result.id} />
+              <ModelPreview
+                name={result.name}
+                tags={result.tags}
+                id={result.id}
+                width={previewWidth}
+                height={previewHeight}
+              />
             </React.Suspense>
           );
         })}
