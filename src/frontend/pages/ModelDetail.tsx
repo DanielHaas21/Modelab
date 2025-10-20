@@ -23,6 +23,10 @@ import { BaseLayout } from '../../libs/ui/layouts';
 import { useValidatePermission } from '../../libs/auth';
 import JSZip from 'jszip';
 import { ModelFileProps } from '../../libs/types/ModelFileProps';
+import { useResponsive } from '../../libs/hooks/useResponsive';
+import { cn } from '../../libs/utils';
+import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
+import { ModelDetailImageCarousel } from '../../libs/ui/components/ModelDetailImageCarousel';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(1, '/Browser');
@@ -32,9 +36,13 @@ const ModelDetail: React.FC = () => {
   const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
 
+  const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const DownloadAllAsZip = async (files: ModelFileProps[]) => {
+  const { isDesktop } = useResponsive();
+
+  const downloadAllAsZip = async (files: ModelFileProps[]) => {
     const displayFilesConfirmed = await confirm(
       'Download',
       true,
@@ -119,30 +127,44 @@ const ModelDetail: React.FC = () => {
             : undefined
         }
       >
-        <Label size="lg" className="kanit-regular lts-1">
+        <Label size="lg" className={"kanit-regular lts-1 overflow-y-auto"}>
           {modelData.name}
         </Label>
         <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
         <ModelInfoSection name="Category">
-          <p className="m-0 w-50" key={modelData.category.id}>
+          <p className="m-0" key={modelData.category.id}>
             {modelData.category.name}
           </p>
         </ModelInfoSection>
         <ModelInfoSection name="Tags">
-          <div className="w-50 mt-2 d-flex flex-wrap">
+          <div className="mt-2 d-flex flex-wrap">
             {modelData.tags?.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>
         </ModelInfoSection>
-        <div className="sticky-bottom mt-4 ms-4 pb-4">
+        <div className={cn("sticky-bottom mt-6 pb-4 d-flex flex-column gap-2", isDesktop && "ms-4")}>
           <Button
-            onClick={() => DownloadAllAsZip(modelData.files)}
-            className="d-flex justify-content-center mt-6 download"
+            onClick={() => downloadAllAsZip(modelData.files)}
+            className={cn("d-flex justify-content-center", !isDesktop && "w-100")}
           >
             Download
           </Button>
+          {!isDesktop && (
+            <Button
+              variant="secondary"
+              onClick={() => offcanvasHandleRef.current?.open()}
+              className="d-flex justify-content-center w-100"
+            >
+              Preview
+            </Button>
+          )}
         </div>
+        {!isDesktop && (
+          <OffcanvasModal ref={offcanvasHandleRef} title='Preview' >
+            <ModelDetailImageCarousel image={modelData.files} />
+          </OffcanvasModal>
+        )}
       </ModelDetailLayout>
     </>
   );

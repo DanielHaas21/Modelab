@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
-import Offcanvas from 'bootstrap/js/dist/offcanvas';
+import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 
 const Browser: React.FC = () => {
   const categoryApi = new Category(import.meta.env.VITE_API_PATH);
@@ -27,6 +27,8 @@ const Browser: React.FC = () => {
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
+
+  const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
   const BrowserFilter = useSelector((state: RootState) => state.BrowserFilter);
   const Dispatch = useDispatch<AppDispatch>();
@@ -124,14 +126,6 @@ const Browser: React.FC = () => {
     }
   }, [searchText, tags, categories]);
 
-  const offcanvasRef = React.useRef<HTMLDivElement>(null);
-
-  const openFiltersDrawer = () => {
-    if (!offcanvasRef.current) return;
-
-    const offcanvas = new Offcanvas(offcanvasRef.current);
-    offcanvas.show();
-  };
 
   const BrowserFilters = (
     <>
@@ -190,7 +184,7 @@ const Browser: React.FC = () => {
               <Button
                 variant="light"
                 className='w-100 p-0 justify-content-center'
-                onClick={openFiltersDrawer}
+                onClick={() => offcanvasHandleRef?.current?.open()}
               >
                 <FontAwesomeIcon icon={faFilter} className="fs-2" />
               </Button>
@@ -207,15 +201,9 @@ const Browser: React.FC = () => {
         </div>
       </main>
       {!isDesktop && (
-        <div ref={offcanvasRef} className="offcanvas offcanvas-bottom offcanvas-fullscreen" tabIndex={-1} id="fullscreenSidebar">
-          <div className="offcanvas-header">
-            <h5 className="offcanvas-title">Filters</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
-          </div>
-          <div className="offcanvas-body">
-            {BrowserFilters}
-          </div>
-        </div>
+        <OffcanvasModal ref={offcanvasHandleRef} title='Filters' >
+          {BrowserFilters}
+        </OffcanvasModal>
       )}
     </BaseLayout >
   );

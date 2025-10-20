@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
-import { Footer, Preloader } from '../components';
+import { Footer } from '../components';
 import { MessageWrapper } from '../components';
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faPencil, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { ModelFileProps } from '../../types/ModelFileProps';
-import { ModelDetailImage } from '../components/ModelDetailImage';
-import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { useResponsive } from '../../hooks/useResponsive';
+import { cn } from '../../utils';
+import { ModelDetailImageCarousel } from '../components/ModelDetailImageCarousel';
 
 export interface UploadSaveButton {
   type: 'save' | 'upload';
@@ -37,27 +38,15 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   previewButtonOnCLick,
   uploadSaveButton,
 }) => {
-  const [canvasKey, setCanvasKey] = React.useState(0); // In the component it watches for context loss and triggers a re-render by changing the key
-
-  const handleContextLoss = React.useCallback((e: Event) => {
-    e.preventDefault();
-    setCanvasKey((prev) => prev + 1);
-  }, []);
-
-  const hiddenTypes = [
-    'application/mathematica',
-    'model/mtl',
-    'application/zip'
-  ];
-  image = image!.filter((data) => !hiddenTypes.includes(data.type));
+  const { isDesktop } = useResponsive();
 
   return (
     <>
       <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />
-      <main className="w-100 h-86-vh d-flex ps-8 pe-8 pt-5">
-        <div className="d-flex flex-column w-50">
-          <section className="d-flex flex-column mt-5">{children}</section>
-          <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1 row">
+      <main className={cn("w-100 h-86-vh d-flex pt-5", isDesktop ? "ps-8 pe-8" : "px-4")}>
+        <div className={cn("d-flex flex-column", isDesktop ? "w-50" : "w-100")}>
+          <section className="d-flex flex-column">{children}</section>
+          <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1 row mx-0">
             {goBack && (
               <Link className="text-decoration-none col-6" to="/browser">
                 <Button variant="light" className="justify-content-between w-100">
@@ -102,27 +91,12 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
             )}
           </section>
         </div>
-        <aside className="d-flex flex-column align-items-center justify-content-center w-50 min-h-70-vh overflow-hidden">
-          {image === null ? (
-            <div className="bg-primary rounded-4 h-70 w-90 d-flex align-items-center justify-content-center" />
-          ) : (
-            <Carousel className="ms-6" showThumbs={false}>
-              {image.map((data, index) => {
-                return (
-                  <React.Suspense key={data.name} fallback={<Preloader />}>
-                    <ModelDetailImage
-                      key={data.name}
-                      image={data}
-                      canvasKey={canvasKey}
-                      onContextLoss={handleContextLoss}
-                    />
-                  </React.Suspense>
-                );
-              })}
-            </Carousel>
-          )}
-        </aside>
-      </main>
+        {isDesktop && (
+          <aside className={cn("d-flex flex-column align-items-center justify-content-center min-h-70-vh overflow-hidden w-50 ms-5")}>
+            <ModelDetailImageCarousel image={image ?? []} />
+          </aside>
+        )}
+      </main >
       <Footer className={bordered ? 'bordered-f' : 'w-100'} />
       <MessageWrapper />
     </>
