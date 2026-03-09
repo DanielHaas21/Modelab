@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Three from 'three';
 import { cn } from '../../utils';
 import placeholder from '../assets/placeholder.png';
 import { Canvas } from '@react-three/fiber';
@@ -6,29 +7,55 @@ import { Environment, OrbitControls } from '@react-three/drei';
 import { useModelFromFile } from '../../hooks/useModelFromFile';
 import { ModelFileProps } from '../../types/ModelFileProps';
 import { isFile } from '../../utils';
-import { Box3, Euler, Object3D, Scene, Vector3 } from 'three';
+import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowsSpin, faBars, faCameraRotate, faRotate } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsSpin, faCameraRotate, faWrench } from '@fortawesome/free-solid-svg-icons';
+
+interface ModelVisualConfig {
+  materialColor: string;
+  showWireframe: boolean;
+  wireframeColor: string;
+}
 
 // Helper component for the canvas model
 interface ModelProps {
   file: ModelFileProps;
-  onLoad?: (model: Object3D) => void;
+  onModelLoaded?: (model: Three.Object3D) => void;
+  modelVisualConfig: ModelVisualConfig;
 }
 
-const Model: React.FC<ModelProps> = ({ file, onLoad, ...props }) => {
-  const File = useModelFromFile(file);
-  const ref = React.useRef<Object3D>(null);
+const Model: React.FC<ModelProps> = ({ file, onModelLoaded, modelVisualConfig, ...props }) => {
+  const loadedModel = useModelFromFile(file);
+  const modelRef = React.useRef<THREE.Object3D>(null);
 
   React.useEffect(() => {
-    if (!ref.current) return;
-    onLoad && onLoad(ref.current);
-  }, [File]);
+    if (!modelRef.current) return;
+    onModelLoaded && onModelLoaded(modelRef.current);
+  }, [loadedModel]);
 
-  if (!File) return null;
+  if (!loadedModel) return null;
 
-  return <primitive ref={ref} scale={0.1} {...props} object={File}></primitive>;
+  const clonedModel = loadedModel.clone();
+
+  clonedModel.traverse((child) => {
+    if ((child as THREE.Mesh).isMesh) {
+      const mesh = child as THREE.Mesh;
+
+      mesh.material = new THREE.MeshBasicMaterial({ color: modelVisualConfig.materialColor });
+
+      if (modelVisualConfig.showWireframe) {
+        const wireframeGeometry = new THREE.WireframeGeometry(mesh.geometry);
+        const wireframeMaterial = new THREE.LineBasicMaterial({ color: modelVisualConfig.wireframeColor });
+        const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+        mesh.add(wireframe);
+      }
+    }
+  });
+
+  if (!clonedModel) return null;
+
+  return <primitive ref={modelRef} scale={0.1} {...props} object={clonedModel}></primitive>;
 };
 
 interface ModelDetailImageProps {
@@ -44,14 +71,19 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     const is3DFile = isFile._3D(image.name);
     const isImageFile = isFile._img(image.name);
 
-    const modelRef = React.useRef<Object3D | null>(null);
+    const modelRef = React.useRef<Three.Object3D | null>(null);
     const orbitControlsRef = React.createRef<any>(); // this is bad, but there is no type for this
     const refocusCameraRef = React.useRef<() => void>(() => { });
 
     const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
     const [autoRotate, setAutoRotate] = React.useState<boolean>(false);
+    const [modelVisualConfig, setModelVisualConfig] = React.useState<ModelVisualConfig>({
+      materialColor: '#ffffff',
+      wireframeColor: '#000000',
+      showWireframe: true
+    });
 
-    const SceneConfig: Scene = new Scene();
+    const SceneConfig: Three.Scene = new Three.Scene();
     SceneConfig.backgroundBlurriness = 1;
 
     React.useEffect(() => {
@@ -62,13 +94,24 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       }
     }, [image]);
 
-    const modelLoaded = (model: Object3D) => {
+    const modelLoaded = (model: Three.Object3D) => {
       modelRef.current = model;
       refocusCameraRef.current();
     };
 
-    const toggleAutoRotate = () => {
+    const handleCameraRefocusButton = () => {
+      refocusCameraRef.current();
+    }
+
+    const handleAutoRotateButton = () => {
       setAutoRotate(!autoRotate);
+    };
+
+    const handleWireframeButton = () => {
+      setModelVisualConfig({
+        ...modelVisualConfig,
+        showWireframe: !modelVisualConfig.showWireframe
+      });
     };
 
     const FocusCamera = () => {
@@ -77,9 +120,9 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       const refocusCamera = () => {
         if (!modelRef.current) return;
 
-        const box = new Box3().setFromObject(modelRef.current);
-        const center = new Vector3();
-        const size = new Vector3();
+        const box = new Three.Box3().setFromObject(modelRef.current);
+        const center = new Three.Vector3();
+        const size = new Three.Vector3();
         box.getCenter(center);
         box.getSize(size);
 
@@ -94,7 +137,6 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
         if (orbitControlsRef.current) {
           orbitControlsRef.current.target.copy(center);
           orbitControlsRef.current.autoRotate = true;
-          orbitControlsRef.current.autoRotateSpeed = 0;
         }
       };
 
@@ -114,10 +156,14 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
               gl.domElement.addEventListener('webglcontextlost', (e) => {
                 e.preventDefault();
                 onContextLoss && onContextLoss(e);
-              });
+              }, false);
             }}
           >
-            <Model onLoad={modelLoaded} file={image} />
+            <Model
+              onModelLoaded={modelLoaded}
+              file={image}
+              modelVisualConfig={modelVisualConfig}
+            />
             <OrbitControls
               ref={(ctrl) => {
                 orbitControlsRef.current = ctrl;
@@ -147,11 +193,14 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
                 className="rounded d-flex flex-column fade-in-half"
                 style={{ position: 'relative', left: 10 }}
               >
-                <button onClick={refocusCameraRef.current} className="btn">
+                <button onClick={handleCameraRefocusButton} className='btn'>
                   <FontAwesomeIcon icon={faCameraRotate} />
                 </button>
-                <button onClick={toggleAutoRotate} className="btn">
+                <button onClick={handleAutoRotateButton} className='btn'>
                   <FontAwesomeIcon className={autoRotate ? 'auto-spin' : ''} icon={faArrowsSpin} />
+                </button>
+                <button onClick={handleWireframeButton} className='btn'>
+                  <FontAwesomeIcon icon={faWrench} />
                 </button>
               </div>
             )}
