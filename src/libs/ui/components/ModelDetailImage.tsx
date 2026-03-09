@@ -10,10 +10,21 @@ import { isFile } from '../../utils';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowsSpin, faCameraRotate, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/free-solid-svg-icons';
+
+interface ColorPalette {
+  meshColor: string | null;
+  wireframeColor: string;
+}
+
+const palettes: ColorPalette[] = [
+  { meshColor: null, wireframeColor: '#00ff00' },
+  { meshColor: '#ffffff', wireframeColor: '#000000' },
+  { meshColor: '#000000', wireframeColor: '#ffffff' },
+] as const;
 
 interface ModelVisualConfig {
-  materialColor: string;
+  meshColor: string | null;
   showWireframe: boolean;
   wireframeColor: string;
 }
@@ -42,7 +53,9 @@ const Model: React.FC<ModelProps> = ({ file, onModelLoaded, modelVisualConfig, .
     if ((child as THREE.Mesh).isMesh) {
       const mesh = child as THREE.Mesh;
 
-      mesh.material = new THREE.MeshBasicMaterial({ color: modelVisualConfig.materialColor });
+      if (modelVisualConfig.meshColor) {
+        mesh.material = new THREE.MeshBasicMaterial({ color: modelVisualConfig.meshColor });
+      }
 
       if (modelVisualConfig.showWireframe) {
         const wireframeGeometry = new THREE.WireframeGeometry(mesh.geometry);
@@ -77,8 +90,11 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
     const [autoRotate, setAutoRotate] = React.useState<boolean>(false);
+
+    const [showWireframe, setShowWireframe] = React.useState<boolean>(false);
+    const [currentPaletteIndex, setCurrentPaletteIndex] = React.useState<number>(0);
     const [modelVisualConfig, setModelVisualConfig] = React.useState<ModelVisualConfig>({
-      materialColor: '#ffffff',
+      meshColor: '#ffffff',
       wireframeColor: '#000000',
       showWireframe: true
     });
@@ -94,6 +110,16 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
       }
     }, [image]);
 
+    React.useEffect(() => {
+      const palette = palettes[currentPaletteIndex];
+
+      setModelVisualConfig({
+        ...modelVisualConfig,
+        showWireframe: showWireframe,
+        ...palette
+      });
+    }, [showWireframe, currentPaletteIndex]);
+
     const modelLoaded = (model: Three.Object3D) => {
       modelRef.current = model;
       refocusCameraRef.current();
@@ -108,11 +134,16 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     };
 
     const handleWireframeButton = () => {
-      setModelVisualConfig({
-        ...modelVisualConfig,
-        showWireframe: !modelVisualConfig.showWireframe
-      });
+      // setModelVisualConfig({
+      //   ...modelVisualConfig,
+      //   showWireframe: !modelVisualConfig.showWireframe,
+      // });
+      setShowWireframe((show) => !show);
     };
+
+    const handlePaletteChange = () => {
+      setCurrentPaletteIndex((i) => (i + 1) % palettes.length);
+    }
 
     const FocusCamera = () => {
       const { camera } = useThree();
@@ -201,6 +232,9 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
                 </button>
                 <button onClick={handleWireframeButton} className='btn'>
                   <FontAwesomeIcon icon={faWrench} />
+                </button>
+                <button onClick={handlePaletteChange} className='btn'>
+                  <FontAwesomeIcon icon={faPalette} />
                 </button>
               </div>
             )}
