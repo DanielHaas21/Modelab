@@ -26,6 +26,14 @@ const About: React.FC = () => {
           </AboutSection>
           <AboutSection title="How to credit?">No need</AboutSection>
         </div>
+        <Label size={'lg'}>To-Do</Label>
+        <ol>
+          <li>Migrate to tailwaind</li>
+          <li>Full mobile support</li>
+          <li>Frontend user pages Login + Signup + Admin Panel</li>
+          <li>Backend user endpoints</li>
+          <li>Refactor?</li>
+        </ol>
       </main>
     </BaseLayout>
   );
