@@ -10,6 +10,7 @@ import { RootState } from '../../../store/store';
 import { ScrollLabel } from './ScrollLabel';
 import { ASSET, FILE } from '../../../middleware/ApiClients';
 import ApiError from '../../../middleware/api/ApiError';
+import { AssetTag } from './AssetTag';
 
 interface ModelPreviewProps {
   className?: string;
@@ -97,9 +98,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
             </ScrollLabel>
             <div className="flex flex-row flex-wrap justify-start kanit-light text-xs text-text-500 mt-1">
               {tags?.slice(0, 8).map((tag, index) => (
-                <span className="mr-2" key={index}>
-                  #{tag}
-                </span>
+                <AssetTag key={index} name={tag} />
               ))}
               {Array.isArray(tags) && tags.length > 8 && <span>...and {tags.length - 8} more</span>}
             </div>

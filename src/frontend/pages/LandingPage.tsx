@@ -30,7 +30,7 @@ const LandingPage: React.FC = () => {
           <Label className={cn("slide-in-text text-ui-text kanit-light text-center w-full fs-10 glowing lts-3 mt-10")}>
             Welcome to Modelab
           </Label>
-          <div className="flex flex-row w-full h-[84vh] justify-center items-center">
+          <div className="flex flex-row w-full h-[84vh] justify-center items-end">
             {isDesktop && (
               <section className="flex flex-row justify-center overflow-hidden w-1/2">
                 <div className="w-full h-full flex justify-center items-center">

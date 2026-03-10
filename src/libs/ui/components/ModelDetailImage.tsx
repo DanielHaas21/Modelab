@@ -218,18 +218,18 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
             {actionsOpen && (
               <div
                 className="rounded d-flex flex-column fade-in-half"
-                style={{ position: 'relative', left: 10 }}
+                style={{ position: 'relative' }}
               >
-                <button onClick={handleCameraRefocusButton} className='btn'>
+                <button onClick={handleCameraRefocusButton}>
                   <FontAwesomeIcon icon={faCameraRotate} />
                 </button>
-                <button onClick={handleAutoRotateButton} className='btn'>
+                <button onClick={handleAutoRotateButton}>
                   <FontAwesomeIcon className={autoRotate ? 'auto-spin' : ''} icon={faArrowsSpin} />
                 </button>
-                <button onClick={handleWireframeButton} className='btn'>
+                <button onClick={handleWireframeButton}>
                   <FontAwesomeIcon icon={faWrench} />
                 </button>
-                <button onClick={handlePaletteChange} className='btn'>
+                <button onClick={handlePaletteChange}>
                   <FontAwesomeIcon icon={faPalette} />
                 </button>
               </div>
