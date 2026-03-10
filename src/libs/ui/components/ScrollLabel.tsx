@@ -29,17 +29,21 @@ export const ScrollLabel: React.FC<ScrollLabelProps> = ({ className, children, .
   }, []);
 
   return (
-    <div ref={containerRef} className={cn('relative overflow-hidden w-full flex items-center', className)}>
-      <div className={cn(isScrollable ? 'animate-scroll-label' : 'w-full')}>
-        <Label {...props} ref={labelRef} className={cn('pr-8 whitespace-nowrap mb-0 block')}>
-          {children}
-        </Label>
-        {isScrollable && (
-          <Label {...props} className={cn('pr-8 whitespace-nowrap mb-0 block')}>
+    <div ref={containerRef} className={cn('scroll-label', className)}>
+      {isScrollable ? (
+        <>
+          <Label {...props} ref={labelRef} className={cn('pe-4 mb-0 scrollable')}>
             {children}
           </Label>
-        )}
-      </div>
+          <Label {...props} className={cn('pe-4 mb-0 scrollable')}>
+            {children}
+          </Label>
+        </>
+      ) : (
+        <Label {...props} ref={labelRef} className={cn('mb-0')}>
+          {children}
+        </Label>
+      )}
     </div>
   );
 };

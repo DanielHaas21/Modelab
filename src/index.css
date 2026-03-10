@@ -189,7 +189,7 @@
 
     @keyframes scroll-label {
         0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+        100% { transform: translateX(-100%); }
     }
 
     .animate-spinner-grow {
@@ -199,6 +199,16 @@
     .animate-scroll-label {
         display: flex;
         width: max-content;
+        animation: scroll-label 10s linear infinite;
+    }
+
+    .scroll-label {
+        @apply relative overflow-hidden flex items-center w-full;
+        /* mask-image: linear-gradient(to right, transparent 0%, black 15px, black calc(100% - 15px), transparent 100%); */
+    }
+
+    .scrollable {
+        @apply whitespace-nowrap flex-shrink-0;
         animation: scroll-label 10s linear infinite;
     }
 
@@ -282,6 +292,7 @@
     .ms-4 { margin-left: 1.5rem; }
     .ps-2 { padding-left: 0.5rem; }
     .ps-8 { padding-left: 2rem; }
+    .pe-4 { padding-right: 1.5rem; }
     .mt-4 { margin-top: 1.5rem; }
     .mt-6 { margin-top: 2rem; }
     .pb-4 { padding-bottom: 1.5rem; }
