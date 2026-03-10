@@ -1,5 +1,3 @@
-import { Typeahead } from 'react-bootstrap-typeahead';
-import { Option } from 'react-bootstrap-typeahead/types/types';
 import { AssetTag } from './AssetTag';
 import React from 'react';
 
@@ -15,16 +13,11 @@ interface TagSelectProps {
 }
 
 export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
-  const [typeaheadSelected, setTypeaheadSelected] = React.useState<Option[]>([]);
+  const [searchValue, setSearchValue] = React.useState('');
 
-  const onTagsSelected = (selected: Option[]) => {
-    setTypeaheadSelected(selected);
-    if (selected.length != 1) return;
-    const option = selected[0] as { label: string; value: number };
-
-    const tagIndex = tags.findIndex((tag) => tag.id == option.value);
-    if (tagIndex == -1) return;
-    setTypeaheadSelected([]);
+  const onTagSelected = (tagId: number) => {
+    const tagIndex = tags.findIndex((tag) => tag.id === tagId);
+    if (tagIndex === -1) return;
 
     const updatedTags = [...tags];
     updatedTags[tagIndex] = {
@@ -32,6 +25,7 @@ export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
       isSelected: true,
     };
     setTags(updatedTags);
+    setSearchValue('');
   };
 
   const onTagClosed = (tag: TagOption) => {
@@ -46,34 +40,46 @@ export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
     setTags(updatedTags);
   };
 
+  const availableTags = tags.filter(({ isSelected }) => !isSelected);
+
   return (
-    <>
-      <Typeahead
-        id="test"
-        placeholder="Search"
-        options={tags
-          .filter(({ isSelected }) => !isSelected)
-          .map(({ name, id }) => {
-            return { label: name, value: id };
-          })}
-        selected={typeaheadSelected}
-        onChange={onTagsSelected}
-        className="min-h-40-px w-100"
-      />
-      <div className="w-100 mt-2 d-flex flex-wrap">
-        {...tags
+    <div className="w-full">
+      <div className="relative">
+        <input
+          list="tag-options"
+          placeholder="Search and select tags..."
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+            const selectedTag = availableTags.find(t => t.name === e.target.value);
+            if (selectedTag) {
+                onTagSelected(selectedTag.id);
+            }
+          }}
+          className="w-full bg-bg-100 border border-ui-border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm kanit-regular"
+        />
+        <datalist id="tag-options">
+          {availableTags.map((tag) => (
+            <option key={tag.id} value={tag.name} />
+          ))}
+        </datalist>
+      </div>
+      
+      <div className="w-full mt-3 flex flex-wrap gap-1">
+        {tags
           .filter(({ isSelected }) => isSelected)
           .map((tag) => {
             return (
               <AssetTag
+                key={tag.id}
                 name={tag.name}
-                onClose={(_) => {
+                onClose={() => {
                   onTagClosed(tag);
                 }}
               />
             );
           })}
       </div>
-    </>
+    </div>
   );
 };

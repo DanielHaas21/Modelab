@@ -3,7 +3,7 @@ import { cn } from '../../utils';
 import darkIcon from '../assets/icon/black/black_logo.svg';
 import lightIcon from '../assets/icon/white/white_logo@0.5x.png';
 import userIconLight from '../assets/user-circle-light.svg';
-import userIconDark from '../assets/user-circle-light.svg';
+import userIconDark from '../assets/user-circle-dark.svg';
 import { UserPopup } from './UserPopup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
@@ -56,29 +56,30 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
       <header
         className={cn(
           className,
-          'd-flex flex-row justify-content-between align-items-center lts-2 bg-light pb-1'
+          'flex flex-row justify-between items-center tracking-wider bg-bg-100 pb-1 border-b border-ui-border'
         )}
         {...props}
       >
-        <div className="d-flex flex-row">
+        <div className="flex flex-row items-center">
           <img
             src={Mode === 'dark' ? lightIcon : darkIcon}
-            className="ms-3  w-60-px"
+            className="ml-3 w-[60px]"
             alt="logo"
-          ></img>
-          <h1 className="ms-1 mt-3 kanit-extralight">Modelab</h1>
+          />
+          <h1 className="ml-1 mt-1 fs-5 kanit-extralight">Modelab</h1>
         </div>
         {children}
         {UserAuthenticated ? (
           <img
             ref={userImageRef}
             onClick={TogglePopup}
-            src={Mode === 'dark' ? userIconLight : userIconDark}
+            src={Mode === 'dark' ? userIconDark : userIconLight}
             id="userIcon"
-            className="w-60-px mr-5 cursor-pointer"
+            className="w-[60px] mr-5 cursor-pointer hover:opacity-80 transition-opacity"
+            alt="user"
           />
         ) : (
-          ''
+          <div className="w-[60px] mr-5" />
         )}
       </header>
       {Popup ? <UserPopup ref={popupRef} /> : null}

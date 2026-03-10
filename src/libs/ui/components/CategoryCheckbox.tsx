@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { cn } from '../../utils';
 
 interface CategoryCheckboxProps {
   id: string;
@@ -11,20 +12,26 @@ interface CategoryCheckboxProps {
 export const CategoryCheckbox = React.forwardRef<HTMLInputElement, CategoryCheckboxProps>(
   ({ id, checked, label, labelClassName, onChanged }, ref) => {
     return (
-      <>
+      <div className="inline-block">
         <input
           type="checkbox"
-          className="btn-check"
+          className="peer hidden"
           ref={ref}
           id={id}
           autoComplete="off"
           checked={checked}
           onChange={onChanged}
         />
-        <label className={'btn ' + labelClassName} htmlFor={id}>
+        <label
+          className={cn(
+            'inline-flex items-center px-3 py-1.5 rounded-md border border-ui-border cursor-pointer transition-all duration-200 peer-checked:bg-primary-500 peer-checked:text-white peer-checked:border-primary-500 hover:bg-primary-500/10 hover:border-primary-500 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white text-sm kanit-regular',
+            labelClassName
+          )}
+          htmlFor={id}
+        >
           {label}
         </label>
-      </>
+      </div>
     );
   }
 );

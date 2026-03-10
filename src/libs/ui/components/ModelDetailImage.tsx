@@ -134,10 +134,6 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     };
 
     const handleWireframeButton = () => {
-      // setModelVisualConfig({
-      //   ...modelVisualConfig,
-      //   showWireframe: !modelVisualConfig.showWireframe,
-      // });
       setShowWireframe((show) => !show);
     };
 
@@ -177,7 +173,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     if (is3DFile) {
       return (
-        <div className={cn('model-viewer h-100 w-100  position-relative', className)} ref={ref}>
+        <div className={cn('model-viewer h-100 w-100 position-relative', className)} ref={ref}>
           <Canvas
             scene={SceneConfig}
             key={canvasKey}
@@ -245,7 +241,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     if (imageUrl) {
       return (
-        <div className='w-100 h-100 bg-dark'>
+        <div className='w-100 h-100'>
           <img
             ref={ref as React.RefObject<HTMLImageElement>}
             className={cn('w-100 h-100 object-fit-scale', className)}

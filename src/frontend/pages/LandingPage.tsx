@@ -26,55 +26,55 @@ const LandingPage: React.FC = () => {
   return (
     <React.Suspense fallback={<Preloader />}>
       <BaseLayout bordered={false}>
-        <main className="d-flex flex-column overflow-hidden justify-content-between bg-black h-86-vh bg-grid">
-          <Label className={cn("slide-in-text text-white kanit-light text-left w-100 fs-10 glowing lts-3", isDesktop ? "ms-13 mt-5" : "text-center")}>
+        <main className="flex flex-col items-center overflow-hidden justify-between bg-ui-bg h-[86vh] bg-grid">
+          <Label className={cn("slide-in-text text-ui-text kanit-light text-center w-full fs-10 glowing lts-3 mt-10")}>
             Welcome to Modelab
           </Label>
-          <div className="d-flex flex-row w-100 h-84-vh">
+          <div className="flex flex-row w-full h-[84vh] justify-center items-center">
             {isDesktop && (
-              <section className="d-flex flex-row justify-content-center overflow-hidden">
-                <div className="w-70 h-100 d-flex justify-content-center align-items-end">
+              <section className="flex flex-row justify-center overflow-hidden w-1/2">
+                <div className="w-full h-full flex justify-center items-center">
                   {loading ? ( // Conditionally render Preloader while image is loading
                     <Preloader />
                   ) : (
-                    <CoverImage className="w-100 object-fit-contain zoom-120 ms-7" size={size} />
+                    <CoverImage className="w-full h-full object-contain" size={size} />
                   )}
                 </div>
               </section>
             )}
-            <section className={cn("d-flex flex-row justify-content-center h-100", isDesktop ? "mr-5" : "w-100")}>
-              <div className="d-flex flex-column align-items-center justify-content-evenly mt-5 rounded-4 w-350-px h-50-vh p-2 bg-light fade-in shadowed">
-                <div className="d-flex flex-column align-items-center justify-content-between">
+            <section className={cn("flex flex-row justify-center h-full items-center", isDesktop ? "w-1/2" : "w-full")}>
+              <div className="flex flex-col items-center justify-around rounded-2xl w-[350px] h-[50vh] p-4 bg-bg-100/90 backdrop-blur-sm animate-in fade-in duration-700 shadowed">
+                <div className="flex flex-col items-center justify-between">
                   <Button
-                    className="justify-content-center"
+                    className="justify-center"
                     font="regular"
                     variant="primary"
                     rounding="md"
                     size="md"
                   >
-                    <FontAwesomeIcon icon={faGoogle} className="mr-1" />
+                    <FontAwesomeIcon icon={faGoogle} className="mr-2" />
                     Sign in
                   </Button>
-                  <p className="lts-3 fs-2">For all features</p>
+                  <p className="lts-3 fs-2 mt-2">For all features</p>
                 </div>
-                <div className="d-flex justify-content-center align-items-center sep lts-1">
-                  <span className="line"></span>
-                  <span className="">OR</span>
-                  <span className="line"></span>
+                <div className="flex justify-center items-center gap-4 lts-1 w-full">
+                  <span className="flex-grow h-[1px] bg-ui-border"></span>
+                  <span className="text-text-500">OR</span>
+                  <span className="flex-grow h-[1px] bg-ui-border"></span>
                 </div>
-                <div className="d-flex flex-column align-items-center justify-content-center">
+                <div className="flex flex-col items-center justify-center">
                   <Button
-                    className="justify-content-center"
+                    className="justify-center"
                     font="regular"
                     variant="light"
                     rounding="md"
                     size="md"
                   >
-                    <Link className="text-dark text-decoration-none" to="/browser">
+                    <Link className="text-text-950 no-underline" to="/browser">
                       Browse assets
                     </Link>
                   </Button>
-                  <p className="lts-3 fs-2">Without downloads</p>
+                  <p className="lts-3 fs-2 mt-2">Without downloads</p>
                 </div>
               </div>
             </section>

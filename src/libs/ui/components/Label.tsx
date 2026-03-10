@@ -9,17 +9,17 @@ type BaseLabelAttributes = Pick<
 
 const labelVariants = cva(
   `
-    dark:text-neutral-100
+    text-text-950
   `,
   {
     variants: {
       size: {
-        xxs: 'fs-4',
-        xs: 'fs-5',
-        sm: 'fs-6',
-        md: 'fs-7',
-        lg: 'fs-8',
-        xl: 'fs-10',
+        xxs: 'fs-1',
+        xs: 'fs-2',
+        sm: 'fs-3',
+        md: 'fs-4',
+        lg: 'fs-5',
+        xl: 'fs-8',
       },
     },
     defaultVariants: {

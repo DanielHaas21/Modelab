@@ -76,27 +76,29 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
       <Link
         onClick={CheckLogin}
         to={User.isAuthenticated ? '/models/' + (id || null) : '/Browser'}
-        className="darken text-decoration-none fade-in-left text-dark rounded-3"
+        className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div
-          className={cn(className, 'd-flex flex-column align-items-center mb-2', `w-${width}-px h-${height}-px`)}
+          className={cn(className, 'flex flex-col items-center mb-2 bg-bg-50 border border-ui-border rounded-lg overflow-hidden shadowed-black')}
+          style={{ width: `${width}px`, height: `${height}px` }}
           ref={ref}
           {...props}
         >
-          <div className="w-90 bg-primary flex-grow-1 rounded-2 mt-2 overflow-hidden">
+          <div className="w-[90%] flex-grow mt-2 rounded-md overflow-hidden relative">
             <img
               src={imageUrl === null ? placeholder : imageUrl}
-              className="object-fit-cover w-100 h-100"
+              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+              alt={name}
             />
           </div>
-          <div className="w-85">
-            <ScrollLabel size="sm" className="text-left kanit-regular fw-bold">
+          <div className="w-[90%] py-2">
+            <ScrollLabel size="sm" className="text-left kanit-bold">
               {name}
             </ScrollLabel>
-            <div className="d-flex flex-row flex-wrap justify-content-start kanit-light mb-2">
+            <div className="flex flex-row flex-wrap justify-start kanit-light text-xs text-text-500 mt-1">
               {tags?.slice(0, 8).map((tag, index) => (
-                <span className="mr-1" key={index}>
-                  {tag}
+                <span className="mr-2" key={index}>
+                  #{tag}
                 </span>
               ))}
               {Array.isArray(tags) && tags.length > 8 && <span>...and {tags.length - 8} more</span>}

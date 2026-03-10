@@ -6,14 +6,14 @@ import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 
 /**
- * @todo Add more info
+ * @TODO.md Add more info
  */
 const About: React.FC = () => {
   const { isDesktop } = useResponsive();
 
   return (
     <BaseLayout bordered={true}>
-      <main className={cn("w-100 h-100", isDesktop ? "ps-8" : "px-2")}>
+      <main className={cn("w-100 h-100 pt-10 overflow-y-auto custom-scrollbar", isDesktop ? "ps-8" : "px-2")}>
         <Label size={'md'}>About</Label>
         <div className="ps-2">
           <AboutSection title="What is Modelab?">
@@ -26,8 +26,8 @@ const About: React.FC = () => {
           </AboutSection>
           <AboutSection title="How to credit?">No need</AboutSection>
         </div>
-        <Label size={'lg'}>To-Do</Label>
-        <ol>
+        <Label size={'lg'} className="mt-8 mb-4">To-Do</Label>
+        <ol className="ps-8 list-decimal kanit-light text-lg text-text-700 space-y-2 mb-10">
           <li>Migrate to tailwaind</li>
           <li>Full mobile support</li>
           <li>Frontend user pages Login + Signup + Admin Panel</li>

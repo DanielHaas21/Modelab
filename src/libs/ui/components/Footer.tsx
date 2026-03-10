@@ -51,25 +51,25 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
       className={cn(
         variant,
         className,
-        'd-flex flex-row align-items-center bg-light',
-        isDesktop ? 'justify-content-end' : 'justify-content-center',
-        'py-3'
+        'flex flex-row items-center bg-bg-100',
+        isDesktop ? 'justify-end' : 'justify-center',
+        'py-3 border-t border-ui-border'
       )}
       {...props}
     >
       {children}
-      <nav className={cn("d-flex flex-row justify-content-center", isDesktop && "mr-8")}>
-        <Link to="/about" className="fs-2 hover-underline-animation text-decoration-none text-dark">
+      <nav className={cn("flex flex-row justify-center", isDesktop && "mr-32")}>
+        <Link to="/about" className="fs-2 hover-underline-animation no-underline text-text-950">
           About
         </Link>
         <Link
           onClick={NotifyUser}
           to={User.isAuthenticated ? (User.user?.clearance == 2 ? '/manage/upload' : '') : ''}
-          className="fs-2 hover-underline-animation text-decoration-none text-dark middle-link"
+          className="fs-2 hover-underline-animation no-underline text-text-950 middle-link"
         >
           Upload Assets
         </Link>
-        <Link to="/" className="fs-2 hover-underline-animation text-decoration-none text-dark">
+        <Link to="/" className="fs-2 hover-underline-animation no-underline text-text-950">
           Home
         </Link>
       </nav>

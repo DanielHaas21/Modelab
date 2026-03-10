@@ -21,24 +21,23 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   return (
     <div
       className={cn(
-        className,
-        `d-flex flex-column 
-            justify-content-center align-items-center
-            w-100 h-100
-        `
+        'flex flex-col justify-center items-center w-full h-full p-8 text-center',
+        className
       )}
       {...props}
     >
       {image !== undefined && (
-        <div className="w-20 ratio ratio-1x1 mb-2">
-          <img src={image} className="w-100 h-100" />
+        <div className="w-24 aspect-square mb-6 opacity-80">
+          <img src={image} className="w-full h-full object-contain" alt="error icon" />
         </div>
       )}
-      <h1 className="lts-4 fs-9 kanit-light">{code}</h1>
-      <Label size={'xs'} className="kanit-light">
+      <h1 className="tracking-[0.5rem] text-7xl font-light text-accent-500 mb-2">{code}</h1>
+      <Label size={'sm'} className="font-medium text-text-950 mb-4 tracking-wide uppercase">
         {message}
       </Label>
-      {children}
+      <div className="text-text-500 kanit-light max-w-md">
+        {children}
+      </div>
     </div>
   );
 };

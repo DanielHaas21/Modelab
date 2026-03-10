@@ -12,6 +12,7 @@ export * from './Input';
 export * from './Label';
 export * from './Message';
 export * from './ModelDetailImage';
+export * from './ModelDetailImageCarousel';
 export * from './ModelInfoSection';
 export * from './ModelPreview';
 export * from './Preloader';

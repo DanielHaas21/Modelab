@@ -34,63 +34,63 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
   }, [isMain, isPreview, isHidden]);
 
   return (
-    <div className="w-100 ps-1 d-flex flex-column align-items-center">
-      <div className="w-100 d-flex justify-content-between align-items-center">
-        <Label size={'xxs'} className="text-truncate">
+    <div className="w-full pl-1 flex flex-col bg-bg-100/50 p-3 rounded-lg border border-ui-border/30 hover:border-ui-border transition-colors">
+      <div className="w-full flex justify-between items-center mb-1">
+        <Label size={'xxs'} className="truncate font-medium max-w-[200px]">
           {formatName(file)}
         </Label>
-        <button className="btn" onClick={onClose}>
+        <button className="text-text-400 hover:text-accent-500 transition-colors p-1" onClick={onClose}>
           <FontAwesomeIcon icon={faClose} />
         </button>
       </div>
-      <p style={{ opacity: 0.4 }} className="w-100 mb-1">
-        {file.name} ({formatType(file)})
+      <p className="w-full text-xs opacity-40 mb-3 truncate">
+        {file.name} • {formatType(file)}
       </p>
-      <div className="pe-4 w-100">
-        <div className="btn-group w-100 border" role="group">
-          <input
-            type="checkbox"
-            className="btn-check"
-            autoComplete="off"
-            id={`${index}a`}
-            disabled={isHidden}
-            checked={isMain}
-            onChange={() => {
-              setIsMain(!isMain);
-            }}
-          />
-          <label className="btn form-control" htmlFor={`${index}a`}>
-            Main
-          </label>
+      <div className="w-full">
+        <div className="flex w-full border border-ui-border rounded-md overflow-hidden divide-x divide-ui-border" role="group">
+          <div className="flex-1">
+            <input
+              type="checkbox"
+              className="peer hidden"
+              autoComplete="off"
+              id={`${index}a`}
+              disabled={isHidden}
+              checked={isMain}
+              onChange={() => setIsMain(!isMain)}
+            />
+            <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}a`}>
+              Main
+            </label>
+          </div>
 
-          <input
-            type="checkbox"
-            className="btn-check"
-            autoComplete="off"
-            id={`${index}b`}
-            disabled={isHidden}
-            checked={isPreview}
-            onChange={() => {
-              setIsPreview(!isPreview);
-            }}
-          />
-          <label className="btn form-control" htmlFor={`${index}b`}>
-            Preview
-          </label>
+          <div className="flex-1">
+            <input
+              type="checkbox"
+              className="peer hidden"
+              autoComplete="off"
+              id={`${index}b`}
+              disabled={isHidden}
+              checked={isPreview}
+              onChange={() => setIsPreview(!isPreview)}
+            />
+            <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}b`}>
+              Preview
+            </label>
+          </div>
 
-          <input
-            type="checkbox"
-            className="btn-check"
-            autoComplete="off"
-            id={`${index}c`}
-            checked={isHidden}
-            onChange={() => {
-              setIsHidden(!isHidden);
-            }}
-          />
-          <label className="btn form-control" htmlFor={`${index}c`}>
-            Hidden
-          </label>
+          <div className="flex-1">
+            <input
+              type="checkbox"
+              className="peer hidden"
+              autoComplete="off"
+              id={`${index}c`}
+              checked={isHidden}
+              onChange={() => setIsHidden(!isHidden)}
+            />
+            <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-accent-500 peer-checked:text-white hover:bg-accent-500/10 hover:text-accent-500 peer-checked:hover:bg-accent-600 peer-checked:hover:text-white" htmlFor={`${index}c`}>
+              Hidden
+            </label>
+          </div>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ interface ConfirmationState {
   confirmationId?: string;
   responseA?: string;
   responseB?: string;
+  body?: React.ReactNode;
 }
 
 const initialState: ConfirmationState = {

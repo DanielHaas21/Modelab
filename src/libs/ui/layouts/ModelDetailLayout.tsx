@@ -42,48 +42,54 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
 
   return (
     <>
-      <Header className={bordered ? 'bordered-h icon-rel' : 'w-100'} />
-      <main className={cn("w-100 h-86-vh d-flex pt-5", isDesktop ? "ps-8 pe-8" : "px-4")}>
-        <div className={cn("d-flex flex-column", isDesktop ? "w-50" : "w-100")}>
-          <section className="d-flex flex-column">{children}</section>
-          <section className="d-flex align-items-end justify-content-start w-100 flex-grow-1 row mx-0">
+      <Header className={'h-[8vh] ' + (bordered ? 'border-b border-ui-border' : 'w-full')} />
+      <main className={cn("w-full h-[86vh] flex items-center overflow-hidden", isDesktop ? "px-32" : "px-4")}>
+        <div className={cn("flex flex-col h-full py-10", isDesktop ? "w-1/2" : "w-full")}>
+          <section className="flex flex-col flex-grow overflow-y-auto custom-scrollbar pr-4">{children}</section>
+          <section className="flex items-end justify-start w-full flex-wrap mb-8 mt-4">
             {goBack && (
-              <Link className="text-decoration-none col-6" to="/browser">
-                <Button variant="light" className="justify-content-between w-100">
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                  <span className="w-100">Back</span>
-                </Button>
-              </Link>
+              <div className="w-1/2 p-1">
+                <Link className="no-underline" to="/browser">
+                  <Button variant="light" className="justify-between w-full">
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                    <span className="w-full">Back</span>
+                  </Button>
+                </Link>
+              </div>
             )}
             {editButtonId !== undefined && (
-              <Link className="text-decoration-none col-6" to={'/manage/' + editButtonId}>
-                <Button variant="light" className="justify-content-between w-100">
-                  <FontAwesomeIcon icon={faPencil} />
-                  <span className="w-100">Edit</span>
-                </Button>
-              </Link>
+              <div className="w-1/2 p-1">
+                <Link className="no-underline" to={'/manage/' + editButtonId}>
+                  <Button variant="light" className="justify-between w-full">
+                    <FontAwesomeIcon icon={faPencil} />
+                    <span className="w-full">Edit</span>
+                  </Button>
+                </Link>
+              </div>
             )}
             {previewButtonId !== undefined && (
-              <Link
-                className="text-decoration-none col-6"
-                onClick={previewButtonOnCLick}
-                to={'/models/' + previewButtonId}
-              >
-                <Button variant="light" className="justify-content-between w-100">
-                  <FontAwesomeIcon icon={faEye} />
-                  <span className="w-100">Preview</span>
-                </Button>
-              </Link>
+              <div className="w-1/2 p-1">
+                <Link
+                  className="no-underline"
+                  onClick={previewButtonOnCLick}
+                  to={'/models/' + previewButtonId}
+                >
+                  <Button variant="light" className="justify-between w-full">
+                    <FontAwesomeIcon icon={faEye} />
+                    <span className="w-full">Preview</span>
+                  </Button>
+                </Link>
+              </div>
             )}
             {uploadSaveButton !== undefined && (
-              <div className="col-6">
+              <div className="w-1/2 p-1">
                 <Button
                   variant="light"
-                  className="justify-content-between w-100"
+                  className="justify-between w-full"
                   onClick={uploadSaveButton.onClick}
                 >
                   <FontAwesomeIcon icon={uploadSaveButton.type == 'upload' ? faUpload : faSave} />
-                  <span className="w-100">
+                  <span className="w-full">
                     {uploadSaveButton.type == 'upload' ? 'Upload' : 'Save'}
                   </span>
                 </Button>
@@ -92,12 +98,14 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           </section>
         </div>
         {isDesktop && (
-          <aside className={cn("d-flex flex-column align-items-center justify-content-center min-h-70-vh overflow-hidden w-50 ms-5")}>
-            <ModelDetailImageCarousel image={image ?? []} />
+          <aside className={cn("flex flex-col items-center justify-center min-h-[70vh] overflow-hidden w-1/2 ml-10")}>
+            <div className="w-full h-full overflow-hidden">
+                <ModelDetailImageCarousel image={image ?? []} />
+            </div>
           </aside>
         )}
       </main >
-      <Footer className={bordered ? 'bordered-f' : 'w-100'} />
+      <Footer className={'h-[6vh] ' + (bordered ? 'border-t border-ui-border' : 'w-full')} />
       <MessageWrapper />
     </>
   );

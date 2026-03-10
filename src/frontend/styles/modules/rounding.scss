@@ -1,6 +1,0 @@
-$c : 3;
-@for $i from 1 through 10 {
-    .rounded-#{$i}{
-        border-radius: #{$i * $c}px;
-    }
-}

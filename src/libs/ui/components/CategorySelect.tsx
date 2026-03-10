@@ -42,20 +42,20 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
   }, [categories]);
 
   return (
-    <>
-      {...categories.map((category, index) => {
+    <div className="flex flex-wrap gap-2 mt-2">
+      {categories.map((category, index) => {
         return (
           <CategoryCheckbox
+            key={category.id}
             id={'browserFilterCateg' + index}
             label={category.name}
             checked={category.isSelected !== undefined && category.isSelected}
-            labelClassName={'btn mb-1' + (index < categories.length - 1 ? ' mr-1' : '')}
             onChanged={() => {
               selectCategory(index, isRadio ? true : !category.isSelected);
             }}
           />
         );
       })}
-    </>
+    </div>
   );
 };

@@ -47,7 +47,7 @@ const ModelDetail: React.FC = () => {
       'Download',
       true,
       Dispatch,
-      'Downlaod',
+      'Download',
       'Cancel',
       <>
         <p>Following files will be downloaded:</p>

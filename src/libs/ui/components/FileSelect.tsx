@@ -2,7 +2,6 @@ import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { UploadedFile } from './UploadedFile';
-import { Input } from './Input';
 
 export interface FileOption {
   name: string;
@@ -42,24 +41,24 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
   };
 
   return (
-    <>
-      <div className="input-group mb-2">
+    <div className="w-full">
+      <div className="mb-4">
         <button
           onClick={() => {
             if (!fileInputRef.current) return;
             fileInputRef.current.click();
           }}
-          className="form-control text-start d-flex justify-content-between"
+          className="flex items-center justify-between w-full bg-bg-100 border border-ui-border rounded-lg px-4 py-3 hover:bg-bg-200 transition-all group"
         >
-          Upload file
-          <FontAwesomeIcon icon={faFile} className="fs-2" />
+          <span className="kanit-regular text-text-700 group-hover:text-text-950">Add more files...</span>
+          <FontAwesomeIcon icon={faFile} className="text-xl text-primary-500" />
         </button>
       </div>
-      <Input ref={fileInputRef} onChange={addFile} className="d-none" type="file" />
-      <div className="w-100 overflow-y-auto" style={{ maxHeight: '249px' }}>
+      <input ref={fileInputRef} onChange={addFile} className="hidden" type="file" />
+      <div className="w-full overflow-x-auto flex flex-row gap-4 pb-4 custom-scrollbar">
         {files.map((file, index) => {
           return (
-            <div className="w-100" key={index}>
+            <div className="min-w-[300px] max-w-[300px]" key={index}>
               <UploadedFile
                 index={index}
                 file={file}
@@ -79,15 +78,10 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
                   setFiles(updatedFiles);
                 }}
               />
-              {index < files.length - 1 && (
-                <div className="w-100 my-1 d-flex justify-content-center">
-                  <div className="w-80" style={{ backgroundColor: 'black', height: '1px' }} />
-                </div>
-              )}
             </div>
           );
         })}
       </div>
-    </>
+    </div>
   );
 };

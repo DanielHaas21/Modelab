@@ -14,7 +14,7 @@ const BrowserFilter = createSlice({
     Set: (state, action: PayloadAction<SearchQuery>) => {
       state.value = action.payload;
     },
-    Clear: (state, action: PayloadAction) => {
+    Clear: (state) => {
       state.value = null;
     },
   },

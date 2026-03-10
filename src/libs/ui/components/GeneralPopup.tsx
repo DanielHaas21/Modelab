@@ -21,39 +21,44 @@ export const GeneralPopup: React.FC = () => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center w-100-vw h-100-vh position-fixed blur fade-in-nodir">
-      <div className="d-flex fade-in align-items-center justify-content-between flex-column w-450-px bg-light rounded-4 p-3">
-        <h2 className="fs-4 kanit-regular w-100 text-start">{Confirmation.text}</h2>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-dark/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="flex flex-col items-center justify-between w-[450px] bg-bg-100 border border-ui-border rounded-2xl p-6 shadow-2xl animate-in zoom-in-95 duration-300">
+        <h2 className="text-2xl kanit-regular w-full text-left mb-4">{Confirmation.text}</h2>
         {body !== undefined && (
-          <div className="w-100 kanit-regular pb-2">{body}</div>
+          <div className="w-full kanit-light pb-6 text-text-700">{body}</div>
         )}
-        {Confirmation.isDeclinable ? (
-          <div className="d-flex align-items-center justify-content-between flex-row w-100">
+        <div className="flex flex-row items-center justify-end gap-3 w-full">
+          {Confirmation.isDeclinable ? (
+            <>
+              <Button
+                onClick={() => handleResolve(false)}
+                className="justify-center"
+                variant="light"
+                size="md"
+              >
+                {Confirmation.responseB ?? 'Cancel'}
+              </Button>
+              <Button
+                autoFocus
+                className="justify-center"
+                variant="primary"
+                size="md"
+                onClick={() => handleResolve(true)}
+              >
+                {Confirmation.responseA ?? 'Confirm'}
+              </Button>
+            </>
+          ) : (
             <Button
-              autoFocus
-              className="justify-content-center mr-2"
+              className="justify-center w-full"
               variant="primary"
+              size="md"
               onClick={() => handleResolve(true)}
             >
-              {Confirmation.responseA ?? 'Yes'}
+              {Confirmation.responseA ?? 'I understand'}
             </Button>
-            <Button
-              onClick={() => handleResolve(false)}
-              className="justify-content-center"
-              variant="light"
-            >
-              {Confirmation.responseB ?? 'No'}
-            </Button>
-          </div>
-        ) : (
-          <Button
-            className="justify-content-center"
-            variant="primary"
-            onClick={() => handleResolve(true)}
-          >
-            {Confirmation.responseA ?? 'I understand'}
-          </Button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

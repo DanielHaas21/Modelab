@@ -40,16 +40,16 @@ type BaseInputAttributes = Pick<
 
 const inputVariants = cva(
   `
-  input-group min-h-40-px rounded-2 bg-light
+  flex items-center min-h-[40px] rounded-border bg-bg-100 border border-ui-border overflow-hidden
   `,
   {
     variants: {
       size: {
-        xs: ' w-150-px ',
-        sm: ' w-200-px ',
-        md: ' w-250-px ',
-        lg: ' w-300-px ',
-        xl: ' w-400-px ',
+        xs: ' w-[150px] ',
+        sm: ' w-[200px] ',
+        md: ' w-[250px] ',
+        lg: ' w-[300px] ',
+        xl: ' w-[400px] ',
       },
     },
     defaultVariants: {
@@ -77,7 +77,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {inputGroupBefore}
         <input
           placeholder={placeholder}
-          className={cn(inputClassName, 'form-control')}
+          className={cn(
+            'w-full bg-transparent px-3 py-2 outline-none text-text-950 placeholder:text-text-400 disabled:opacity-50',
+            inputClassName
+          )}
           ref={ref}
           {...props}
         />

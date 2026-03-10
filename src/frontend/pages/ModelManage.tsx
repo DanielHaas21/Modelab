@@ -261,11 +261,11 @@ const ModelManage: React.FC = () => {
       }))
     }
   };
-  if (isLoadingAsset) return <Preloader className="min-h-100-vh" />;
+  if (isLoadingAsset) return <Preloader className="min-h-screen" />;
 
   return (
     <>
-      <GeneralPopup></GeneralPopup>
+      <GeneralPopup />
       <ModelDetailLayout
         image={files.map((file) => ({
           name: file.name,
@@ -281,11 +281,11 @@ const ModelManage: React.FC = () => {
           onClick: uploadSave,
         }}
       >
-        <div className="position-relative">
+        <div className="relative mb-4 group">
           <Input
             type="text"
-            className="w-100 mb-2"
-            inputClassName="fs-4"
+            className="w-full"
+            inputClassName="text-xl font-medium tracking-wide"
             size={'xl'}
             maxLength={maxAssetNameLength}
             placeholder="Asset name"
@@ -294,14 +294,14 @@ const ModelManage: React.FC = () => {
               setAssetName(event.target.value.substring(0, maxAssetNameLength));
             }}
           />
-          <p className="position-absolute" style={{ right: '8px', bottom: 0, zIndex: 10000 }}>
+          <p className="absolute right-3 bottom-2 text-xs opacity-40 group-focus-within:opacity-100 transition-opacity">
             {assetName.length} / {maxAssetNameLength}
           </p>
         </div>
-        <div className="position-relative">
+        
+        <div className="relative mb-4 group">
           <textarea
-            className="form-control mb-2"
-            style={{ height: '200px', resize: 'none' }}
+            className="w-full bg-bg-100 border border-ui-border rounded-lg p-4 h-[200px] resize-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none text-text-950 transition-all kanit-light"
             rows={8}
             maxLength={maxAssetDescriptionLength}
             placeholder="Asset description"
@@ -310,17 +310,20 @@ const ModelManage: React.FC = () => {
               setAssetDescription(event.target.value.substring(0, maxAssetDescriptionLength));
             }}
           />
-          <p className="position-absolute" style={{ right: '8px', bottom: 0 }}>
+          <p className="absolute right-3 bottom-2 text-xs opacity-40 group-focus-within:opacity-100 transition-opacity">
             {assetDescription.length} / {maxAssetDescriptionLength}
           </p>
         </div>
+
         <ModelInfoSection name="Category">
           <CategorySelect categories={categories} setCategories={setCategories} isRadio={true} />
         </ModelInfoSection>
-        <ModelInfoSection name="Tags">
+        
+        <ModelInfoSection name="Tags" className="mt-6">
           <TagSelect tags={tags} setTags={setTags} />
         </ModelInfoSection>
-        <ModelInfoSection name="Files">
+        
+        <ModelInfoSection name="Files" className="mt-6 pb-10">
           <FileSelect files={files} setFiles={setFiles} />
         </ModelInfoSection>
       </ModelDetailLayout>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../../utils';
 
 interface InfiniteScrollProps {
   children: React.ReactNode;
@@ -54,11 +55,11 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   return (
     <div
       ref={scrollDivRef}
-      className={className + ' flex-grow-1 overflow-y-auto'}
+      className={cn('flex-grow overflow-y-auto custom-scrollbar', className)}
       onScroll={tryLoadMore}
     >
       {children}
-      <div className="w-100">{isLoading && loader}</div>
+      <div className="w-full">{isLoading && loader}</div>
     </div>
   );
 };

@@ -9,11 +9,11 @@ import { Remove } from '../../../store/slices/Message';
 import { Label } from './Label';
 
 const variantMeta = {
-  Success: { label: 'Success', color: 'bg-success' },
-  Warning: { label: 'Warning', color: 'bg-warning' },
-  Error: { label: 'Error', color: 'bg-danger' },
-  Alert: { label: 'Alert', color: 'bg-danger' },
-  Info: { label: 'Info', color: 'bg-info' },
+  Success: { label: 'Success', color: 'bg-primary-500' },
+  Warning: { label: 'Warning', color: 'bg-secondary-500' },
+  Error: { label: 'Error', color: 'bg-accent-500' },
+  Alert: { label: 'Alert', color: 'bg-accent-500' },
+  Info: { label: 'Info', color: 'bg-bg-400' },
 } as const;
 
 type VariantType = keyof typeof variantMeta;
@@ -57,25 +57,27 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
     return (
       <div
         className={cn(
-          className,
-          variant,
-          'd-flex bg-light overflow-hidden flex-row message fade-in-right justify-content-start align-items-stretch rounded-3 w-250-px'
+          'flex flex-row bg-bg-100 border border-ui-border rounded-lg shadow-lg overflow-hidden w-[300px] animate-in slide-in-from-right duration-300',
+          className
         )}
         ref={ref}
         {...props}
       >
-        <div className={cn(meta.color, 'msg-tag')}></div>
-        <div className="h-100 pt-1 pb-1 mr-1">
-          <Label size="xxs" className="mt-1 mb-0 kanit-regular">
-            {meta.label}
-          </Label>
-          <p className="kanit-light m-0 w-100">{children}</p>
+        <div className={cn('w-2 shrink-0', meta.color)}></div>
+        <div className="flex-grow p-3">
+          <div className="flex items-center justify-between mb-1">
+            <Label size="xxs" className="font-bold uppercase tracking-wider opacity-70">
+              {meta.label}
+            </Label>
+            <button 
+              onClick={onRemove}
+              className="text-text-400 hover:text-text-950 transition-colors pointer-events-auto"
+            >
+              <FontAwesomeIcon icon={faClose} />
+            </button>
+          </div>
+          <p className="text-sm kanit-light text-text-700 leading-snug">{children}</p>
         </div>
-        <FontAwesomeIcon
-          icon={faClose}
-          className="fs-3 mr-1 ms-auto cursor-pointer align-self-center"
-          onClick={onRemove}
-        ></FontAwesomeIcon>
       </div>
     );
   }
@@ -105,20 +107,21 @@ export const MessageWrapper: React.FC<MessageWrapperProps> = ({ classname, ...pr
     <div
       id="MessageWrapper"
       className={cn(
-        classname,
-        'position-fixed p-3 d-flex flex-column-reverse gap-2 overflow-visible'
+        'fixed bottom-6 right-6 z-[110] flex flex-col-reverse gap-3 pointer-events-none',
+        classname
       )}
       {...props}
     >
       {visibleMessages.map((ms, index) => (
-        <Message
-          key={index}
-          variant={ms.variant}
-          onRemove={() => handleRemove(index)}
-          className={removingIds.includes(index) ? 'exit' : ''}
-        >
-          {ms.message}
-        </Message>
+        <div key={index} className="pointer-events-auto">
+          <Message
+            variant={ms.variant}
+            onRemove={() => handleRemove(index)}
+            className={removingIds.includes(index) ? 'opacity-0 translate-x-10 transition-all duration-300' : ''}
+          >
+            {ms.message}
+          </Message>
+        </div>
       ))}
     </div>
   );

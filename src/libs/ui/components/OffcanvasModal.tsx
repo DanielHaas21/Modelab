@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Offcanvas from 'bootstrap/js/dist/offcanvas';
 
 interface OffcanvasProps {
   title: string;
@@ -13,31 +12,40 @@ export interface OffcanvasHandle {
 
 export const OffcanvasModal = React.forwardRef<OffcanvasHandle, OffcanvasProps>(
   ({ title, children, ...props }, ref) => {
-    const offcanvasRef = React.useRef<HTMLDivElement>(null);
-    const offcanvasInstanceRef = React.useRef<Offcanvas | null>(null);
+    const [isOpen, setIsOpen] = React.useState(false);
 
     React.useImperativeHandle(ref, () => ({
       open: () => {
-        if (!offcanvasRef.current) return;
-
-        if (!offcanvasInstanceRef.current) {
-          offcanvasInstanceRef.current = new Offcanvas(offcanvasRef.current);
-        }
-
-        offcanvasInstanceRef.current?.show();
+        setIsOpen(true);
+        document.body.style.overflow = 'hidden';
       },
       close: () => {
-        offcanvasInstanceRef.current?.hide();
+        setIsOpen(false);
+        document.body.style.overflow = '';
       },
     }));
 
+    if (!isOpen) return null;
+
     return (
-      <div {...props} ref={offcanvasRef} className="offcanvas offcanvas-bottom offcanvas-fullscreen" tabIndex={-1} >
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title">{title}</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" />
+      <div 
+        className="fixed inset-0 z-50 flex flex-col bg-bg-50 animate-in slide-in-from-bottom duration-300"
+        {...props}
+      >
+        <div className="flex items-center justify-between p-4 border-b border-ui-border">
+          <h5 className="text-xl font-semibold kanit-regular">{title}</h5>
+          <button 
+            type="button" 
+            className="p-2 text-2xl leading-none hover:opacity-70 transition-opacity"
+            onClick={() => {
+                setIsOpen(false);
+                document.body.style.overflow = '';
+            }}
+          >
+            ×
+          </button>
         </div>
-        <div className="offcanvas-body">
+        <div className="flex-grow overflow-auto p-4">
           {children}
         </div>
       </div>

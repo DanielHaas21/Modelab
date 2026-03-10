@@ -10,19 +10,18 @@ export const AssetTag = React.forwardRef<HTMLDivElement, AssetTagProps>(
     return (
       <span
         ref={ref}
-        className="model-tag rounded-2 border border-dark-subtle small me-2 mb-1"
-        style={{
-          padding: '2px 8px',
-        }}
+        className="inline-flex items-center px-2 py-0.5 rounded-md border border-ui-border text-xs mr-2 mb-1 bg-bg-200 text-text-700 font-medium tracking-tight"
       >
         {name}
         {onClose && (
           <button
             onClick={onClose}
             type="button"
-            className="ms-2 btn-close small"
+            className="ml-2 hover:text-accent-500 cursor-pointer transition-colors"
             aria-label="Close"
-          ></button>
+          >
+            ×
+          </button>
         )}
       </span>
     );

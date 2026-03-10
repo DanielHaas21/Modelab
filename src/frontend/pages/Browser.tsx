@@ -162,9 +162,9 @@ const Browser: React.FC = () => {
 
   return (
     <BaseLayout bordered={true}>
-      <main className="w-100 h-100 d-flex flex-column">
-        <div className={cn("w-100 py-4 bg-light row mx-0 px-2")}>
-          <section className={cn("px-0 d-flex align-items-center justify-content-center", isDesktop ? "col-10" : "col-10")}>
+      <main className="w-full h-full flex flex-col bg-bg-100">
+        <div className={cn("w-full py-4 flex mx-0 px-2")}>
+          <section className={cn("px-0 flex items-center justify-center", isDesktop ? "w-10/12" : "w-10/12")}>
             <Input
               size="xl"
               placeholder="Search"
@@ -173,17 +173,17 @@ const Browser: React.FC = () => {
                 setSearchText(event.target.value);
               }}
               inputGroupBefore={
-                <span className="input-group-text">
+                <span className="flex items-center px-3 text-text-500 border-r border-ui-border">
                   <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
                 </span>
               }
             />
           </section>
           {!isDesktop && (
-            <div className='col-2'>
+            <div className='w-2/12 pl-2'>
               <Button
                 variant="light"
-                className='w-100 p-0 justify-content-center'
+                className='w-full p-0 justify-center'
                 onClick={() => offcanvasHandleRef?.current?.open()}
               >
                 <FontAwesomeIcon icon={faFilter} className="fs-2" />
@@ -191,10 +191,10 @@ const Browser: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="row w-100 flex-grow-1 overflow-y-hidden">
+        <div className="flex w-full flex-grow overflow-hidden">
           <BrowserResults searchQuery={searchQuery} />
           {isDesktop && (
-            <aside className="sticky-top h-min-content col-xl-2 col-4 d-flex flex-column">
+            <aside className="sticky top-0 h-full w-1/4 xl:w-1/6 flex flex-col p-4 overflow-y-auto custom-scrollbar">
               {BrowserFilters}
             </aside>
           )}
@@ -202,7 +202,9 @@ const Browser: React.FC = () => {
       </main>
       {!isDesktop && (
         <OffcanvasModal ref={offcanvasHandleRef} title='Filters' >
-          {BrowserFilters}
+          <div className="p-4">
+            {BrowserFilters}
+          </div>
         </OffcanvasModal>
       )}
     </BaseLayout >

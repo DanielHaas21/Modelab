@@ -148,27 +148,25 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
 
   return (
     <InfiniteScroll
-      className="col-xl-10 col-8 h-100"
+      className="xl:w-5/6 lg:w-3/4 w-full h-full flex-grow p-4"
       hasMore={results.hasMore}
       itemCount={results.assets.length}
       loadMore={loadMore}
-      loader={<Label className="w-100 text-center">Loading...</Label>}
+      loader={<Label className="w-full text-center py-4">Loading...</Label>}
     >
       {results.assets.length == 0 && !isLoading && (
-        <Label className="w-100 text-center">No assets found.</Label>
+        <Label className="w-full text-center py-10 opacity-50">No assets found.</Label>
       )}
       <section
+        className="grid justify-center justify-items-center"
         style={{
-          display: 'grid',
           gridTemplateColumns: `repeat(auto-fit, minmax(${previewWidth}px, 1fr))`,
-          justifyContent: 'center',
-          justifyItems: 'center',
           gap: `${gap}px`,
         }}
       >
-        {...results.assets.map((result) => {
+        {results.assets.map((result) => {
           return (
-            <React.Suspense fallback={<Preloader />}>
+            <React.Suspense key={result.id} fallback={<Preloader />}>
               <ModelPreview
                 name={result.name}
                 tags={result.tags}
