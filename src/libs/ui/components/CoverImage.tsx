@@ -5,7 +5,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 const images = import.meta.glob('../assets/*.png'); // no idea what datatype this is
 const image_name: string = 'train_';
 
-const CoverImageVariants = cva('ddsds', {
+const CoverImageVariants = cva('', {
   variants: {
     size: {
       fullhd: image_name + 'fullhd.png',

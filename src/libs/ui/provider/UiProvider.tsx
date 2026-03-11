@@ -1,0 +1,52 @@
+'use client';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import type { i18n as I18nInstance, TOptionsBase } from 'i18next';
+
+export type TranslationValue = string | number | React.ReactNode;
+type TranslationOptions = TOptionsBase & Record<string, unknown>;
+// I18n context
+const I18nContext = createContext<I18nInstance | null>(null);
+
+export const useTranslation = (root: string) => {
+  const i18n = useContext(I18nContext);
+  const [, rerender] = useReducer((n: number) => n + 1, 0);
+
+  useEffect(() => {
+    if (!i18n) return;
+    i18n.on('languageChanged', rerender);
+    i18n.store?.on('added', rerender);
+    return () => {
+      i18n.off('languageChanged', rerender);
+      i18n.store?.off('added', rerender);
+    };
+  }, [i18n]);
+
+  function t(key: string): string;
+  function t(key: string, options: TranslationOptions): TranslationValue;
+  function t(key: string, options?: TranslationOptions): TranslationValue {
+    if (!i18n) return `${root}.${key}`;
+
+    return i18n.t(`${root}.${key}`, options);
+  }
+
+  return t;
+};
+
+export const useI18n = () => {
+  const i18n = useContext(I18nContext);
+  if (!i18n) throw new Error('I18n not initialized');
+  return i18n;
+};
+
+interface UiProviderProps {
+  children: React.ReactNode;
+  i18nValue: I18nInstance; // value for I18nContext
+}
+
+export function UiProvider({ children, i18nValue }: UiProviderProps) {
+  return (
+    <I18nContext.Provider value={i18nValue}>
+      {children}
+    </I18nContext.Provider>
+  );
+}

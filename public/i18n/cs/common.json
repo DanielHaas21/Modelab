@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "home": {
+      "welcome": "Vítejte v Modelab",
+      "sign_in": "Přihlásit se",
+      "features": "Pro všechny funkce",
+      "or": "NEBO",
+      "browse": "Prohlížeč",
+      "without_downloads": "Bez stahování"
+    }
+  },
+  "ui": {}
+}

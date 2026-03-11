@@ -1,0 +1,13 @@
+{
+  "pages": {
+    "home": {
+      "welcome": "Welcome to Modelab",
+      "sign_in": "Sign in",
+      "features": "For all features",
+      "or": "OR",
+      "browse": "Browse assets",
+      "without_downloads": "Without downloads"
+    }
+  },
+  "ui": {}
+}

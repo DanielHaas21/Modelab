@@ -143,12 +143,9 @@
     .bg-grid {
         background-image: url('src/libs/ui/assets/grid.svg');
         background-size: 140px 140px;
-        box-shadow: 0px 0px 200px 10px inset var(--dark);
+        box-shadow: 0px 0px 200px 10px inset rgba(0, 0, 0, 0.8);
     }
-    
-    .light .bg-grid {
-        box-shadow: 0px 0px 200px 10px inset var(--light);
-    }
+  
 
     .glowing {
         text-shadow: 0px 0px 100px rgba(255, 255, 255, 0.8);
@@ -287,15 +284,7 @@
     
     .position-relative { position: relative; }
     .position-absolute { position: absolute; }
-    
-    .ms-3 { margin-left: 1rem; }
-    .ms-4 { margin-left: 1.5rem; }
-    .ps-2 { padding-left: 0.5rem; }
-    .ps-8 { padding-left: 2rem; }
-    .pe-4 { padding-right: 1.5rem; }
-    .mt-4 { margin-top: 1.5rem; }
-    .mt-6 { margin-top: 2rem; }
-    .pb-4 { padding-bottom: 1.5rem; }
+  
     
     .rounded-4 { border-radius: 1rem; }
     .sticky-bottom { position: sticky; bottom: 0; }

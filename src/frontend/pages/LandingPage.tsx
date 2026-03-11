@@ -8,11 +8,14 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useResponsive } from '../../libs/hooks/useResponsive';
+import { useTranslation } from '../../libs/ui/provider';
 
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);
   const [loading, setLoading] = React.useState(true); // New loading state
   const { isDesktop } = useResponsive();
+
+  const t = useTranslation("pages.home")
 
   React.useEffect(() => {
     const loadImage = async () => {
@@ -28,7 +31,7 @@ const LandingPage: React.FC = () => {
       <BaseLayout bordered={false}>
         <main className="flex flex-col items-center overflow-hidden justify-between bg-ui-bg h-[86vh] bg-grid">
           <Label className={cn("slide-in-text text-ui-text kanit-light text-center w-full fs-10 glowing lts-3 mt-10")}>
-            Welcome to Modelab
+            {t("welcome")}
           </Label>
           <div className="flex flex-row w-full h-[84vh] justify-center items-end">
             {isDesktop && (
@@ -53,13 +56,13 @@ const LandingPage: React.FC = () => {
                     size="md"
                   >
                     <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                    Sign in
+                    {t("sign_in")}
                   </Button>
-                  <p className="lts-3 fs-2 mt-2">For all features</p>
+                  <p className="lts-3 fs-2 mt-2">{t("features")}</p>
                 </div>
                 <div className="flex justify-center items-center gap-4 lts-1 w-full">
                   <span className="flex-grow h-[1px] bg-ui-border"></span>
-                  <span className="text-text-500">OR</span>
+                  <span className="text-text-500">{t("or")}</span>
                   <span className="flex-grow h-[1px] bg-ui-border"></span>
                 </div>
                 <div className="flex flex-col items-center justify-center">
@@ -71,10 +74,10 @@ const LandingPage: React.FC = () => {
                     size="md"
                   >
                     <Link className="text-text-950 no-underline" to="/browser">
-                      Browse assets
+                      {t("browse")}
                     </Link>
                   </Button>
-                  <p className="lts-3 fs-2 mt-2">Without downloads</p>
+                  <p className="lts-3 fs-2 mt-2">{t("without_downloads")}</p>
                 </div>
               </div>
             </section>
