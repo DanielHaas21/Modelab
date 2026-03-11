@@ -1,9 +1,10 @@
-import { routes } from '../routes';
+import { ROUTES } from '../routes';
 import { CategoryData } from './Category';
-import Service from './Service';
+import { Service } from './Service';
 import { TagData } from './Tag';
 import { CreateModelData, UpdateModelData } from '../types';
 import FormData from 'form-data';
+import { API_PATH } from '../apiPath';
 interface SearchQuery {
   page: number;
   count: number;
@@ -67,11 +68,11 @@ export interface AssetDelete {
 }
 
 export class Asset extends Service {
-  constructor(baseURL: string) {
-    super(baseURL);
+  constructor() {
+    super(API_PATH);
   }
 
-  public async update(data: UpdateModelData): Promise<AssetUpdate> { 
+  public async update(data: UpdateModelData): Promise<AssetUpdate> {
     const form = new FormData();
 
     form.append('name', data.name.substring(0, 128));
@@ -87,7 +88,7 @@ export class Asset extends Service {
       form.append('files[]', file.file!);
     });
 
-    return this.POST(routes.POST.Asset + data.id + '/update', form, {
+    return this.POST(ROUTES.POST.Asset + data.id + '/update', form, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -112,7 +113,7 @@ export class Asset extends Service {
       form.append('files[]', file.file!);
     });
 
-    return this.POST(routes.POST.Asset + 'create', form, {
+    return this.POST(ROUTES.POST.Asset + 'create', form, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -122,11 +123,11 @@ export class Asset extends Service {
   }
 
   public async get(id: number): Promise<AssetGet> {
-    return this.POST(routes.POST.Asset + id) as Promise<AssetGet>;
+    return this.POST(ROUTES.POST.Asset + id) as Promise<AssetGet>;
   }
 
   public async get_all(page: number, count: number): Promise<AssetGetAll> {
-    return this.POST(routes.POST.Asset + 'all', { page, count }) as Promise<AssetGetAll>;
+    return this.POST(ROUTES.POST.Asset + 'all', { page, count }) as Promise<AssetGetAll>;
   }
 
   public async search(query: SearchQuery): Promise<AssetSearch> {
@@ -149,14 +150,14 @@ export class Asset extends Service {
       ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery.join(',') }),
     };
 
-    return this.POST(routes.POST.Asset + 'search', data) as Promise<AssetSearch>;
+    return this.POST(ROUTES.POST.Asset + 'search', data) as Promise<AssetSearch>;
   }
 
   public async get_files(id: number): Promise<AssetGetFiles> {
-    return this.POST(routes.POST.Asset + id + '/files') as Promise<AssetGetFiles>;
+    return this.POST(ROUTES.POST.Asset + id + '/files') as Promise<AssetGetFiles>;
   }
 
   public async delete(id: number): Promise<AssetDelete> {
-    return this.POST(routes.POST.Asset + id + '/delete') as Promise<AssetDelete>;
+    return this.POST(ROUTES.POST.Asset + id + '/delete') as Promise<AssetDelete>;
   }
 }

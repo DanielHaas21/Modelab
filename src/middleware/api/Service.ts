@@ -11,7 +11,7 @@ interface ApiResponse {
 /**
  * Serves as the base class with elemental protocols
  */
-export default class Service {
+export class Service {
   private axiosInstance: AxiosInstance;
   protected baseURL: string;
 

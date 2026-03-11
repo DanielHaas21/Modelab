@@ -40,9 +40,9 @@ const ModelManage: React.FC = () => {
   const maxAssetNameLength = 128;
   const maxAssetDescriptionLength = 320;
 
-  const categoryApi = new Category(import.meta.env.VITE_API_PATH);
-  const tagApi = new Tag(import.meta.env.VITE_API_PATH);
-  const assetApi = new Asset(import.meta.env.VITE_API_PATH);
+  const categoryApi = new Category();
+  const tagApi = new Tag();
+  const assetApi = new Asset();
 
   const [asset, setAsset] = React.useState<AssetData | null>(null);
   const [isLoadingAsset, setIsLoadingAsset] = React.useState<boolean>(action != uploadAction);
@@ -298,7 +298,7 @@ const ModelManage: React.FC = () => {
             {assetName.length} / {maxAssetNameLength}
           </p>
         </div>
-        
+
         <div className="relative mb-4 group">
           <textarea
             className="w-full bg-bg-100 border border-ui-border rounded-lg p-4 h-[200px] resize-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none text-text-950 transition-all kanit-light"
@@ -318,11 +318,11 @@ const ModelManage: React.FC = () => {
         <ModelInfoSection name="Category">
           <CategorySelect categories={categories} setCategories={setCategories} isRadio={true} />
         </ModelInfoSection>
-        
+
         <ModelInfoSection name="Tags" className="mt-6">
           <TagSelect tags={tags} setTags={setTags} />
         </ModelInfoSection>
-        
+
         <ModelInfoSection name="Files" className="mt-6 pb-10">
           <FileSelect files={files} setFiles={setFiles} />
         </ModelInfoSection>

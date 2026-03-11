@@ -1,9 +1,10 @@
-import Service from './Service';
-import { routes } from '../routes';
+import { Service } from './Service';
+import { ROUTES } from '../routes';
+import { API_PATH } from '../apiPath';
 
 export class File extends Service {
-  constructor(baseURL: string) {
-    super(baseURL);
+  constructor() {
+    super(API_PATH);
   }
 
   public async get(id: number): Promise<string> {
@@ -11,6 +12,6 @@ export class File extends Service {
   }
 
   public getURL(id: number): string {
-    return this.baseURL + routes.GET.File + id;
+    return this.baseURL + ROUTES.GET.File + id;
   }
 }

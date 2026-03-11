@@ -30,7 +30,7 @@ const fetchAssets = async (
   page: number,
   count: number
 ): Promise<FetchResult> => {
-  const assetApi = new Asset(import.meta.env.VITE_API_PATH);
+  const assetApi = new Asset();
 
   const formatResult = (assets: AssetData[], info: PaginatedInfo): FetchResult => {
     return {
