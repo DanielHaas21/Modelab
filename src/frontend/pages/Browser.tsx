@@ -20,10 +20,11 @@ import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
+import { API_PATH } from '../../middleware/apiPath';
 
 const Browser: React.FC = () => {
-  const categoryApi = new Category(import.meta.env.VITE_API_PATH);
-  const tagApi = new Tag(import.meta.env.VITE_API_PATH);
+  const categoryApi = new Category();
+  const tagApi = new Tag();
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);

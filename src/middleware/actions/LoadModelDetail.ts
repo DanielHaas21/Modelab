@@ -1,6 +1,8 @@
 import ApiError from '../api/ApiError';
 import { ModelData } from '../types';
 import { ASSET } from '../ApiClients';
+import { ROUTES } from '../routes';
+import { API_PATH } from '../apiPath';
 
 export default async function LoadModelDetail(id: number): Promise<ModelData> {
   const ModelMetadata = await ASSET.get(id);
@@ -20,7 +22,7 @@ export default async function LoadModelDetail(id: number): Promise<ModelData> {
     category: category,
     tags: tags,
     files: FileMetadata.files.map((meta) => ({
-      bin: import.meta.env.VITE_API_PATH + `file/${meta.id}`,
+      bin: API_PATH + ROUTES.GET.File + meta.id,
       name: meta.name,
       type: meta.type,
     })),
