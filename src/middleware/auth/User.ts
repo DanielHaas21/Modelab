@@ -1,0 +1,38 @@
+import { Clearance } from '../../store/types';
+import { Service } from '../Service';
+import { API_PATH } from '../apiPath';
+import { ROUTES } from '../routes';
+
+export interface UserLogin {
+  token: string;
+}
+
+export interface UserData {
+  email: string;
+  givenName: string;
+  familyName: string;
+  picture: string;
+  clearance: Clearance;
+}
+
+export interface GetUserInfo {
+  user: UserData;
+}
+
+export class User extends Service {
+  constructor() {
+    super(API_PATH);
+  }
+
+  public async login(accessToken: string): Promise<UserLogin> {
+    return this.POST(ROUTES.POST.User + 'login', { accessToken }) as Promise<UserLogin>;
+  }
+
+  public async getInfo(authToken: string): Promise<GetUserInfo> {
+    return this.POST(ROUTES.POST.User + 'info', {}, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+      }
+    }) as Promise<GetUserInfo>;
+  }
+}

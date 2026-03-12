@@ -2,12 +2,11 @@ import * as React from 'react';
 import { cn } from '../../utils';
 import darkIcon from '../assets/icon/black/black_logo.svg';
 import lightIcon from '../assets/icon/white/white_logo@0.5x.png';
-import userIconLight from '../assets/user-circle-light.svg';
-import userIconDark from '../assets/user-circle-dark.svg';
 import { UserPopup } from './UserPopup';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
 import { Hide, Toggle } from '../../../store/slices/Popup';
+import { UserImage } from './UserImage';
 
 interface HeaderProps {
   className?: string;
@@ -17,7 +16,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className, children, ...props }) => {
   const Dispatch = useDispatch<AppDispatch>();
   const Mode = useSelector((state: RootState) => state.Mode.value);
-  const UserAuthenticated = useSelector((state: RootState) => state.User.isAuthenticated);
   const Popup = useSelector((state: RootState) => state.Popup.value);
   const popupRef = React.useRef<HTMLDivElement>(null);
   const userImageRef = React.useRef<HTMLImageElement>(null);
@@ -69,18 +67,10 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
           <h1 className="ml-1 mt-1 fs-5 kanit-extralight">Modelab</h1>
         </div>
         {children}
-        {UserAuthenticated ? (
-          <img
-            ref={userImageRef}
-            onClick={TogglePopup}
-            src={Mode === 'dark' ? userIconDark : userIconLight}
-            id="userIcon"
-            className="w-[60px] mr-5 cursor-pointer hover:opacity-80 transition-opacity"
-            alt="user"
-          />
-        ) : (
-          <div className="w-[60px] mr-5" />
-        )}
+        <UserImage
+          className='mr-5 cursor-pointer'
+          onClick={TogglePopup}
+        />
       </header>
       {Popup ? <UserPopup ref={popupRef} /> : null}
     </>

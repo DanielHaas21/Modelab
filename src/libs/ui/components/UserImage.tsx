@@ -1,0 +1,29 @@
+import * as React from 'react';
+import { RootState } from '../../../store/store';
+import { useSelector } from 'react-redux';
+import userIconLight from '../assets/user-circle-light.svg';
+import userIconDark from '../assets/user-circle-dark.svg';
+import { cn } from '../../utils';
+
+interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> { }
+
+export const UserImage = React.forwardRef<HTMLImageElement, UserImageProps>(
+  ({ className, ...props }, ref) => {
+    const UserData = useSelector((state: RootState) => state.User);
+    const Mode = useSelector((state: RootState) => state.Mode.value);
+
+    const userImage = UserData.user?.picture
+      ? UserData.user?.picture
+      : Mode === 'dark'
+        ? userIconDark
+        : userIconLight;
+
+    return <img
+      ref={ref}
+      src={userImage}
+      referrerPolicy="no-referrer"
+      alt="User Profile"
+      className={cn('w-[60px] h-[60px] rounded-full border-2 border-primary-500/20', className)}
+      {...props}
+    />;
+  });

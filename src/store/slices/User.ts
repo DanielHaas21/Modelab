@@ -1,33 +1,35 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { clearance } from '../types/';
+import { Clearance } from '../types/';
 
 interface UserData {
-  id: string | number;
-  clearance: clearance;
+  clearance: Clearance;
   email: string;
   username: string;
-  first_name: string;
-  last_name: string;
+  firstMame: string;
+  lastName: string;
   picture?: string;
+  token: string;
 }
 
 interface UserState {
   user: UserData | null;
   isAuthenticated: boolean;
+  authToken: string | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
   user: {
-    id:1,
-    clearance:2,
-    email:"skibiditoilet",
-    username:"test",
-    first_name:"name",
-    last_name:"other name"
+    clearance: 2,
+    email: "skibiditoilet",
+    username: "test",
+    firstMame: "name",
+    lastName: "other name",
+    token: ""
   },
   isAuthenticated: true, // for dev purposes can be set to true
+  authToken: null,
   loading: false,
   error: null,
 };

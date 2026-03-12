@@ -1,6 +1,6 @@
 import { ROUTES } from '../routes';
 import { CategoryData } from './Category';
-import { Service } from './Service';
+import { Service } from '../Service';
 import { TagData } from './Tag';
 import { CreateModelData, UpdateModelData } from '../types';
 import FormData from 'form-data';
