@@ -11,6 +11,25 @@ interface UserLoginButtonWrapperProps {
 export const UserLoginButtonWrapper: React.FC<UserLoginButtonWrapperProps> = ({ children }) => {
   const dispatch = useDispatch();
 
+  const handleDevLogin = async () => {
+    try {
+      const login = await USER.login('token');
+      const { user: userData } = await USER.getInfo(login.token);
+
+      dispatch(loginSuccess({
+        firstMame: userData.givenName,
+        lastName: userData.familyName,
+        email: userData.email,
+        picture: userData.picture,
+        username: `${userData.givenName} ${userData.familyName}`,
+        token: login.token,
+        clearance: userData.clearance,
+      }));
+    } catch (error) {
+      dispatch(loginFailure('Failed to fetch user info.'));
+    }
+  };
+
   const handleSuccess = async (tokenResponse: TokenResponse) => {
     try {
       const login = await USER.login(tokenResponse.access_token);
@@ -44,7 +63,11 @@ export const UserLoginButtonWrapper: React.FC<UserLoginButtonWrapperProps> = ({ 
       children.props.onClick(e);
     }
     dispatch(loginStart());
-    googleLogin();
+    if (import.meta.env.DEV) {
+      handleDevLogin();
+    } else {
+      googleLogin();
+    }
   };
 
   return React.cloneElement(children, {
