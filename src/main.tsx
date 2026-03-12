@@ -8,9 +8,10 @@ import { Preloader } from './libs/ui/components/Preloader.tsx';
 (async () => {
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
-      <Suspense fallback={<Preloader />}> <UiProvider i18nValue={i18n}>
-        <App />
-      </UiProvider>
+      <Suspense fallback={<Preloader />}>
+        <UiProvider i18nValue={i18n}>
+          <App />
+        </UiProvider>
       </Suspense>
     </StrictMode>
   );

@@ -55,10 +55,10 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         </button>
       </div>
       <input ref={fileInputRef} onChange={addFile} className="hidden" type="file" />
-      <div className="w-full overflow-x-auto flex flex-row gap-4 pb-4 custom-scrollbar">
+      <div className="w-full overflow-x-auto h-[400px] sm:h-fit flex flex-col sm:flex-row gap-4 pb-4 custom-scrollbar">
         {files.map((file, index) => {
           return (
-            <div className="min-w-[300px] max-w-[300px]" key={index}>
+            <div className="min-w-[300px] w-full sm:max-w-[300px]" key={index}>
               <UploadedFile
                 index={index}
                 file={file}

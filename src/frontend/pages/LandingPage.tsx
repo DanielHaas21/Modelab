@@ -12,7 +12,7 @@ import { useTranslation } from '../../libs/ui/provider';
 
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);
-  const [loading, setLoading] = React.useState(true); // New loading state
+  const [loading, setLoading] = React.useState<boolean>(true); // New loading state
   const { isDesktop } = useResponsive();
 
   const t = useTranslation("pages.home")
@@ -29,8 +29,8 @@ const LandingPage: React.FC = () => {
   return (
     <React.Suspense fallback={<Preloader />}>
       <BaseLayout bordered={false}>
-        <main className="flex flex-col items-center overflow-hidden justify-between bg-ui-bg h-[86vh] bg-grid">
-          <Label className={cn("slide-in-text text-ui-text kanit-light text-center w-full fs-10 glowing lts-3 mt-10")}>
+        <main className="flex flex-col items-center overflow-hidden justify-between bg-[#0d0d0d] h-[86vh] bg-grid">
+          <Label className={cn("w-full slide-in-text text-white kanit-light text-center md:text-left ms-0 md:ms-[25%] fs-10 glowing lts-3 mt-10")}>
             {t("welcome")}
           </Label>
           <div className="flex flex-row w-full h-[84vh] justify-center items-end">
@@ -45,8 +45,8 @@ const LandingPage: React.FC = () => {
                 </div>
               </section>
             )}
-            <section className={cn("flex flex-row justify-center h-full items-center", isDesktop ? "w-1/2" : "w-full")}>
-              <div className="flex flex-col items-center justify-around rounded-2xl w-[350px] h-[50vh] p-4 bg-bg-100/90 backdrop-blur-sm animate-in fade-in duration-700 shadowed">
+            <section className={cn("flex flex-row justify-center h-full items-center ", isDesktop ? "w-1/2" : "w-full")}>
+              <div className="flex flex-col items-center justify-around rounded-2xl w-[400px] h-[50vh] p-4 bg-bg-100 md:ms-[100px] mt-[-100px] backdrop-blur-sm animate-in fade-in duration-700 shadowed">
                 <div className="flex flex-col items-center justify-between">
                   <Button
                     className="justify-center"

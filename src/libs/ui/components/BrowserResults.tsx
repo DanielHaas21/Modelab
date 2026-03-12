@@ -84,7 +84,6 @@ interface Results {
 
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
   const loadPerPage = 8; // Assets loaded per page
-  const gap = 8;
   const previewWidth = 350;
   const previewHeight = 250;
 
@@ -103,10 +102,6 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       hasMore: true,
       page: 0,
     });
-    // const handler = setTimeout(() => {
-    // }, 200);
-
-    // return () => clearTimeout(handler);
   }, [searchQuery]);
 
   const fetchPage = async (
@@ -158,11 +153,8 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
         <Label className="w-full text-center py-10 opacity-50">No assets found.</Label>
       )}
       <section
-        className="grid justify-center justify-items-center"
-        style={{
-          gridTemplateColumns: `repeat(auto-fit, minmax(${previewWidth}px, 1fr))`,
-          gap: `${gap}px`,
-        }}
+        className="grid justify-center justify-items-center gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+
       >
         {results.assets.map((result) => {
           return (

@@ -141,17 +141,17 @@ const Browser: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-100 mt-4">
+      <div className="mt-4">
         <Label size="xs">Tags</Label>
-        <div className="w-100">
+        <div className="">
           <TagSelect tags={tags} setTags={setTags} />
         </div>
       </div>
 
-      <div className="w-100 mt-4">
+      <div className="mt-4">
         <Button
           onClick={resetFilters}
-          className="w-100 justify-content-center"
+          className="w-full justify-content-center"
           size={'sm'}
           variant="light"
         >
@@ -195,7 +195,7 @@ const Browser: React.FC = () => {
         <div className="flex w-full flex-grow overflow-hidden">
           <BrowserResults searchQuery={searchQuery} />
           {isDesktop && (
-            <aside className="sticky top-0 h-full w-1/4 xl:w-1/6 flex flex-col p-4 overflow-y-auto custom-scrollbar">
+            <aside className="sticky top-0 h-full w-1/4 xl:w-1/6 flex flex-col p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
               {BrowserFilters}
             </aside>
           )}

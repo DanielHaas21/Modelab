@@ -173,7 +173,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     if (is3DFile) {
       return (
-        <div className={cn('model-viewer h-100 w-100 position-relative', className)} ref={ref}>
+        <div className={cn('model-viewer h-100 relative', className)} ref={ref}>
           <Canvas
             scene={SceneConfig}
             key={canvasKey}
@@ -204,7 +204,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
             <Environment background preset="sunset" />
           </Canvas>
           <div
-            className="position-absolute d-flex flex-column"
+            className="absolute flex flex-col"
             style={{ right: 45, top: 20, bottom: 0 }}
           >
             <button
@@ -217,7 +217,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
             </button>
             {actionsOpen && (
               <div
-                className="rounded d-flex flex-column fade-in-half"
+                className="rounded flex flex-col fade-in-half"
                 style={{ position: 'relative' }}
               >
                 <button onClick={handleCameraRefocusButton}>
@@ -241,7 +241,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
 
     if (imageUrl) {
       return (
-        <div className='w-100 h-100'>
+        <div className=' h-100'>
           <img
             ref={ref as React.RefObject<HTMLImageElement>}
             className={cn('w-100 h-100 object-fit-scale', className)}
@@ -257,7 +257,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     return (
       <img
         ref={ref as React.RefObject<HTMLImageElement>}
-        className={cn('h-80 w-100', className)}
+        className={cn('h-100 w-100', className)}
         src={placeholder}
         alt="Unsupported format"
         {...props}

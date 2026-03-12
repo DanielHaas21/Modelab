@@ -30,7 +30,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
         {image === null ? (
           <div className="bg-primary rounded-4 h-70 w-90 d-flex align-items-center justify-content-center" />
         ) : (
-          <Carousel className='w-100 rounded-4 overflow-hidden' dynamicHeight={true} showThumbs={false}>
+          <Carousel className='rounded-4 overflow-hidden' dynamicHeight={true} showThumbs={false}>
             {image.map((data) => {
               return (
                 <React.Suspense key={data.name} fallback={<Preloader />}>

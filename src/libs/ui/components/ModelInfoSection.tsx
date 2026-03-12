@@ -17,7 +17,7 @@ export const ModelInfoSection = React.forwardRef<HTMLDivElement, ModelInfoSectio
             {name}
           </Label>
         </div>
-        <div className="w-2/3 flex justify-start flex-wrap flex-row gap-2">{children}</div>
+        <div className="w-full sm:w-2/3 flex justify-start flex-wrap flex-row gap-2">{children}</div>
       </div>
     );
   }

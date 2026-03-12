@@ -1,5 +1,10 @@
 {
   "pages": {
+    "about": {
+      "about": "About Modelab",
+      "info": "Modelab is a database of models, textures and other assets that are made by students for  students",
+      "offer": "Modelab offers 100% free assets for students working on games, websites, or school any other projects"
+    },
     "home": {
       "welcome": "Vítejte v Modelab",
       "sign_in": "Přihlásit se",
