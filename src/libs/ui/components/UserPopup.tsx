@@ -9,10 +9,10 @@ import { Label } from './Label';
 import { DarkMode, LightMode } from '../../../store/slices/Mode';
 import { UserImage } from './UserImage';
 import { useTranslation } from '../provider';
-import { useAuth } from '../provider/AuthProvider';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { useAuth } from '../../auth/AuthProvider';
 
 interface UserPopupProps {
   className?: string;

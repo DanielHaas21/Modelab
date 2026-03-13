@@ -7,11 +7,11 @@ import './index.css';
 
 import { Preloader } from './libs/ui/components/Preloader.tsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { AuthProvider } from './libs/ui/provider/AuthProvider.tsx';
 import { UiProvider } from './libs/ui/provider/index.ts';
 import { ThemeProvider } from './libs/ui/provider/ThemeProvider.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
+import { AuthProvider } from './libs/auth/AuthProvider.tsx';
 
 (async () => {
   createRoot(document.getElementById('root')!).render(

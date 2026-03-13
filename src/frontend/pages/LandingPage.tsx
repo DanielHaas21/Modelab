@@ -9,12 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { useTranslation } from '../../libs/ui/provider';
-import { useAuth } from '../../libs/ui/provider/AuthProvider';
 import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useCheckClearance } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
+import { useAuth } from '../../libs/auth/AuthProvider';
 
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);

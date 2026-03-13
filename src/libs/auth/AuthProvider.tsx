@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
-import { ASSET, CATEGORY, FILE, TAG, USER } from '../../../middleware/ApiClients';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
-import { UserStateActions } from '../../../store/slices/User';
+import { RootState } from '../../store/store';
+import { ASSET, CATEGORY, FILE, TAG, USER } from '../../middleware/ApiClients';
+import { UserStateActions } from '../../store/slices/User';
 
 interface Auth {
   googleLogin: () => void;
