@@ -9,6 +9,7 @@ import { Label } from './Label';
 import { DarkMode, LightMode } from '../../../store/slices/Mode';
 import { UserImage } from './UserImage';
 import { useTranslation } from '../provider';
+import { useAuth } from '../provider/AuthProvider';
 
 interface UserPopupProps {
   className?: string;
@@ -17,17 +18,26 @@ interface UserPopupProps {
 // wrap buttons in Link when Oauth is implemented
 export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
   ({ className, ...props }, ref) => {
+    const { changeAccount, logout } = useAuth();
     const dispatch = useDispatch();
     const UserData = useSelector((state: RootState) => state.User);
     const Mode = useSelector((state: RootState) => state.Mode.value);
     const t = useTranslation('ui.user_popup');
 
-    const toggleTheme = () => {
+    const handleToggleTheme = () => {
       if (Mode === 'light') {
         dispatch(DarkMode());
       } else {
         dispatch(LightMode());
       }
+    };
+
+    const handleChangeAccount = () => {
+      changeAccount();
+    };
+
+    const handleLogout = () => {
+      logout();
     };
 
     return (
@@ -51,12 +61,18 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
             font_size="sm"
             variant="light"
             font="regular"
-            onClick={toggleTheme}
+            onClick={handleToggleTheme}
           >
             <FontAwesomeIcon icon={Mode === 'light' ? faMoon : faSun} className="mr-2" />
             {Mode === 'light' ? t('dark_mode') : t('light_mode')}
           </Button>
-          <Button className="w-full justify-center" font_size="sm" variant="light" font="regular">
+          <Button
+            className="w-full justify-center"
+            font_size="sm"
+            variant="light"
+            font="regular"
+            onClick={handleChangeAccount}
+          >
             <FontAwesomeIcon icon={faShuffle} className="mr-2" />
             {t('switch_account')}
           </Button>
@@ -65,6 +81,7 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
             variant="primary"
             font_size="sm"
             font="regular"
+            onClick={handleLogout}
           >
             <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-2" />
             {t('logout')}

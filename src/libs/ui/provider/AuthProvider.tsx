@@ -1,12 +1,14 @@
 import React, { createContext, use, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { loginFailure, loginStart, loginSuccess } from '../../../store/slices/User';
 import { USER } from '../../../middleware/ApiClients';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
+import { UserStateActions } from '../../../store/slices/User';
 
 interface Auth {
   googleLogin: () => void;
+  changeAccount: () => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<Auth | null>(null);
@@ -39,10 +41,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const refreshAuth = async () => {
     const token = UserData.auth?.authToken ?? localStorage.getItem(AUTH_LS_KEY);
 
-    dispatch(loginStart());
+    dispatch(UserStateActions.loginStart());
 
     if (token === null) {
-      dispatch(loginFailure('Invalid or missing token.'));
+      dispatch(UserStateActions.loginFailure('Invalid or missing token.'));
       return;
     }
 
@@ -50,7 +52,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { user } = await USER.getInfo(token);
       localStorage.setItem(AUTH_LS_KEY, token);
 
-      dispatch(loginSuccess({
+      dispatch(UserStateActions.loginSuccess({
         user: {
           email: user.email,
           firstMame: user.givenName,
@@ -64,12 +66,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       }));
     } catch (error) {
-      dispatch(loginFailure('Failed to refresh auth.'));
+      dispatch(UserStateActions.loginFailure('Failed to refresh auth.'));
     }
   };
 
   const loginWithToken = async (googleToken: string) => {
-    dispatch(loginStart());
+    dispatch(UserStateActions.loginStart());
 
     try {
       const { token } = await USER.login(googleToken);
@@ -77,7 +79,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       localStorage.setItem(AUTH_LS_KEY, token);
 
-      dispatch(loginSuccess({
+      dispatch(UserStateActions.loginSuccess({
         user: {
           email: user.email,
           firstMame: user.givenName,
@@ -91,12 +93,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       }));
     } catch (error) {
-      dispatch(loginFailure('Failed to login.'));
+      dispatch(UserStateActions.loginFailure('Failed to login.'));
     }
   };
 
   const googleLogin = () => {
-    dispatch(loginStart());
+    dispatch(UserStateActions.loginStart());
 
     if (import.meta.env.DEV) {
       loginWithToken('dev_token');
@@ -108,15 +110,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
         loginWithToken(tokenResponse.access_token);
       },
       onError: () => {
-        dispatch(loginFailure('Google login failed.'));
+        dispatch(UserStateActions.loginFailure('Google login failed.'));
       },
     });
     login();
   };
 
+  const changeAccount = () => {
+    logout();
+    googleLogin();
+  };
+
+  const logout = () => {
+    dispatch(UserStateActions.logout());
+    localStorage.removeItem(AUTH_LS_KEY);
+  };
+
   return (
     <AuthContext.Provider value={{
-      googleLogin
+      googleLogin,
+      changeAccount,
+      logout
     }}>
       {children}
     </AuthContext.Provider>
