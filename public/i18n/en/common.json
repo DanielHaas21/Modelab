@@ -22,5 +22,43 @@
       "without_downloads": "Without downloads"
     }
   },
-  "ui": {}
+  "ui": {
+    "footer": {
+      "about": "About",
+      "upload_assets": "Upload Assets",
+      "home": "Home",
+      "no_clearance": "You don't have the required clearance for this function",
+      "login_required": "You must log in order to use this function"
+    },
+    "user_popup": {
+      "guest_user": "Guest User",
+      "dark_mode": "Dark Mode",
+      "light_mode": "Light Mode",
+      "switch_account": "Switch account",
+      "logout": "Logout"
+    },
+    "message": {
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error",
+      "alert": "Alert",
+      "info": "Info"
+    },
+    "model_preview": {
+      "login_required": "You must log in order to use this function",
+      "and_more": "...and {{count}} more"
+    },
+    "browser_results": {
+      "loading": "Loading...",
+      "no_assets": "No assets found."
+    },
+    "file_select": {
+      "add_more": "Add more files..."
+    },
+    "uploaded_file": {
+      "main": "Main",
+      "preview": "Preview",
+      "hidden": "Hidden"
+    }
+  }
 }

@@ -11,11 +11,12 @@ import { ScrollLabel } from './ScrollLabel';
 import { ASSET, FILE } from '../../../middleware/ApiClients';
 import ApiError from '../../../middleware/api/ApiError';
 import { AssetTag } from './AssetTag';
+import { useTranslation } from '../provider';
 
 interface ModelPreviewProps {
   className?: string;
   id: number;
-  
+
   name: string;
   width: number;
   height: number;
@@ -41,10 +42,11 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
   ({ className, name, id, tags, width, height, ...props }, ref) => {
     const User = useSelector((state: RootState) => state.User);
     const Dispatch = useDispatch<AppDispatch>();
+    const t = useTranslation('ui.model_preview');
 
     const CheckLogin = () => {
       if (!User.isAuthenticated) {
-        Dispatch(Add({ variant: 'Info', message: 'You must log in order to use this function' }));
+        Dispatch(Add({ variant: 'Info', message: t('login_required') }));
       }
     };
 
@@ -101,7 +103,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
               {tags?.slice(0, 8).map((tag, index) => (
                 <AssetTag key={index} name={tag} />
               ))}
-              {Array.isArray(tags) && tags.length > 8 && <span>...and {tags.length - 8} more</span>}
+              {Array.isArray(tags) && tags.length > 8 && <span>{t('and_more', { count: tags.length - 8 })}</span>}
             </div>
           </div>
         </div>

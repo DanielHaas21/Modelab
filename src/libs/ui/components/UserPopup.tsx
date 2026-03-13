@@ -8,6 +8,7 @@ import { faShuffle, faArrowRightFromBracket, faSun, faMoon } from '@fortawesome/
 import { Label } from './Label';
 import { DarkMode, LightMode } from '../../../store/slices/Mode';
 import { UserImage } from './UserImage';
+import { useTranslation } from '../provider';
 
 interface UserPopupProps {
   className?: string;
@@ -19,6 +20,7 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
     const dispatch = useDispatch();
     const UserData = useSelector((state: RootState) => state.User);
     const Mode = useSelector((state: RootState) => state.Mode.value);
+    const t = useTranslation('ui.user_popup');
 
     const toggleTheme = () => {
       if (Mode === 'light') {
@@ -39,7 +41,7 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
       >
         <UserImage className='mb-3' />
         <Label size="xxs" className="font-medium text-text-950 mb-1">
-          {UserData.user?.username || 'Guest User'}
+          {UserData.user?.username || t('guest_user')}
         </Label>
         <p className="text-sm kanit-light text-primary-500 mb-6">{UserData.user?.email || 'guest@modelab.com'}</p>
 
@@ -52,11 +54,11 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
             onClick={toggleTheme}
           >
             <FontAwesomeIcon icon={Mode === 'light' ? faMoon : faSun} className="mr-2" />
-            {Mode === 'light' ? 'Dark Mode' : 'Light Mode'}
+            {Mode === 'light' ? t('dark_mode') : t('light_mode')}
           </Button>
           <Button className="w-full justify-center" font_size="sm" variant="light" font="regular">
             <FontAwesomeIcon icon={faShuffle} className="mr-2" />
-            Switch account
+            {t('switch_account')}
           </Button>
           <Button
             className="w-full justify-center"
@@ -65,7 +67,7 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
             font="regular"
           >
             <FontAwesomeIcon icon={faArrowRightFromBracket} className="mr-2" />
-            Logout
+            {t('logout')}
           </Button>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Label } from './Label';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FileOption } from './FileSelect';
 import React from 'react';
+import { useTranslation } from '../provider';
 
 interface UploadedFileProps {
   index: number;
@@ -23,6 +24,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
   const [isMain, setIsMain] = React.useState<boolean>(file.isMain);
   const [isHidden, setIsHidden] = React.useState<boolean>(file.isHidden);
   const [isPreview, setIsPreview] = React.useState<boolean>(file.isPreview);
+  const t = useTranslation('ui.uploaded_file');
 
   React.useEffect(() => {
     setIsMain(file.isMain);
@@ -59,7 +61,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
               onChange={() => setIsMain(!isMain)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}a`}>
-              Main
+              {t('main')}
             </label>
           </div>
 
@@ -74,7 +76,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
               onChange={() => setIsPreview(!isPreview)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}b`}>
-              Preview
+              {t('preview')}
             </label>
           </div>
 
@@ -88,7 +90,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
               onChange={() => setIsHidden(!isHidden)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-accent-500 peer-checked:text-white hover:bg-accent-500/10 hover:text-accent-500 peer-checked:hover:bg-accent-600 peer-checked:hover:text-white" htmlFor={`${index}c`}>
-              Hidden
+              {t('hidden')}
             </label>
           </div>
         </div>

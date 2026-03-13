@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { Add } from '../../../store/slices/Message';
 import { useResponsive } from '../../hooks/useResponsive';
+import { useTranslation } from '../provider';
 
 const FooterVariants = cva('', {
   variants: {
@@ -32,6 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
   const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
   const { isDesktop } = useResponsive();
+  const t = useTranslation('ui.footer');
 
   const NotifyUser = () => {
     User.isAuthenticated
@@ -39,11 +41,11 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
         ? Dispatch(
           Add({
             variant: 'Error',
-            message: 'You dont have the requiered clearance for this function',
+            message: t('no_clearance'),
           })
         )
         : null
-      : Dispatch(Add({ variant: 'Info', message: 'You must log in order to use this function' }));
+      : Dispatch(Add({ variant: 'Info', message: t('login_required') }));
   };
 
   return (
@@ -60,17 +62,17 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
       {children}
       <nav className={cn("flex flex-row justify-center", isDesktop && "mr-32")}>
         <Link to="/about" className="fs-2 hover-underline-animation no-underline text-text-950">
-          About
+          {t('about')}
         </Link>
         <Link
           onClick={NotifyUser}
           to={User.isAuthenticated ? (User.user?.clearance == 2 ? '/manage/upload' : '') : ''}
           className="fs-2 hover-underline-animation no-underline text-text-950 middle-link"
         >
-          Upload Assets
+          {t('upload_assets')}
         </Link>
         <Link to="/" className="fs-2 hover-underline-animation no-underline text-text-950">
-          Home
+          {t('home')}
         </Link>
       </nav>
     </footer>

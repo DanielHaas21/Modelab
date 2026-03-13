@@ -2,6 +2,7 @@ import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { UploadedFile } from './UploadedFile';
+import { useTranslation } from '../provider';
 
 export interface FileOption {
   name: string;
@@ -21,6 +22,7 @@ interface FileSelectProps {
 
 export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const t = useTranslation('ui.file_select');
 
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;
@@ -50,7 +52,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
           }}
           className="flex items-center justify-between w-full bg-bg-100 border border-ui-border rounded-lg px-4 py-3 hover:bg-bg-200 transition-all group"
         >
-          <span className="kanit-regular text-text-700 group-hover:text-text-950">Add more files...</span>
+          <span className="kanit-regular text-text-700 group-hover:text-text-950">{t('add_more')}</span>
           <FontAwesomeIcon icon={faFile} className="text-xl text-primary-500" />
         </button>
       </div>

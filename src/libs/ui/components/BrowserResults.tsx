@@ -7,6 +7,7 @@ import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
 import { CategoryOption } from './CategorySelect';
 import { TagOption } from './TagSelect';
+import { useTranslation } from '../provider';
 
 export interface SearchQuery {
   categories: CategoryOption[];
@@ -86,6 +87,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
   const loadPerPage = 8; // Assets loaded per page
   const previewWidth = 350;
   const previewHeight = 250;
+  const t = useTranslation('ui.browser_results');
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -147,10 +149,10 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       hasMore={results.hasMore}
       itemCount={results.assets.length}
       loadMore={loadMore}
-      loader={<Label className="w-full text-center py-4">Loading...</Label>}
+      loader={<Label className="w-full text-center py-4">{t('loading')}</Label>}
     >
       {results.assets.length == 0 && !isLoading && (
-        <Label className="w-full text-center py-10 opacity-50">No assets found.</Label>
+        <Label className="w-full text-center py-10 opacity-50">{t('no_assets')}</Label>
       )}
       <section
         className="grid justify-center justify-items-center gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"

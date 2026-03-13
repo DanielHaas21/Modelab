@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { Remove } from '../../../store/slices/Message';
 import { Label } from './Label';
+import { useTranslation } from '../provider';
 
 const variantMeta = {
   Success: { label: 'Success', color: 'bg-primary-500' },
@@ -45,6 +46,7 @@ interface MessageProps extends MessageVariantProps {
 const Message = React.forwardRef<HTMLDivElement, MessageProps>(
   ({ className, children, variant = 'Info', onRemove, ...props }, ref) => {
     const meta = variantMeta[variant];
+    const t = useTranslation('ui.message');
 
     React.useEffect(() => {
       const timer = setTimeout(() => {
@@ -67,9 +69,9 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
         <div className="flex-grow p-3">
           <div className="flex items-center justify-between mb-1">
             <Label size="xxs" className="font-bold uppercase tracking-wider opacity-70">
-              {meta.label}
+              {t(variant.toLowerCase())}
             </Label>
-            <button 
+            <button
               onClick={onRemove}
               className="text-text-400 hover:text-text-950 transition-colors pointer-events-auto"
             >
