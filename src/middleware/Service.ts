@@ -14,8 +14,10 @@ interface ApiResponse {
 export class Service {
   private axiosInstance: AxiosInstance;
   protected baseURL: string;
+  protected bearerToken: string | null;
 
-  constructor(baseURL: string) {
+  constructor(baseURL: string, bearerToken?: string) {
+    this.bearerToken = bearerToken ?? null;
     this.baseURL = baseURL;
     this.axiosInstance = axios.create({
       baseURL,
@@ -24,6 +26,10 @@ export class Service {
         'Content-Type': 'application/json',
       },
     });
+  }
+
+  public setToken(bearerToken: string | null) {
+    this.bearerToken = bearerToken;
   }
 
   private checkResponse(response: AxiosResponse<ApiResponse>): void {
@@ -39,14 +45,31 @@ export class Service {
     }
   }
 
+  private addAuthHeader(config?: AxiosRequestConfig) {
+    if (config === undefined) {
+      config = {};
+    }
+
+    if (this.bearerToken !== undefined) {
+      config.headers = {
+        ...config.headers,
+        'Authorization': `Bearer ${this.bearerToken}`,
+      };
+    }
+
+    return config;
+  }
+
   // Axios request wrapper methods
   protected async GET(url: string, config?: AxiosRequestConfig): Promise<Object> {
+    config = this.addAuthHeader(config);
     const response: AxiosResponse<ApiResponse> = await this.axiosInstance.get(url, config);
     this.checkResponse(response);
     return response.data;
   }
 
   protected async POST(url: string, data?: Object, config?: AxiosRequestConfig): Promise<Object> {
+    config = this.addAuthHeader(config);
     const response: AxiosResponse<ApiResponse> = await this.axiosInstance.post(url, data, config);
     this.checkResponse(response);
     return response.data;

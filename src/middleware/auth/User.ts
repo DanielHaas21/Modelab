@@ -28,11 +28,7 @@ export class User extends Service {
     return this.POST(ROUTES.POST.User + 'login', { accessToken }) as Promise<UserLogin>;
   }
 
-  public async getInfo(authToken: string): Promise<GetUserInfo> {
-    return this.POST(ROUTES.POST.User + 'info', {}, {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-      }
-    }) as Promise<GetUserInfo>;
+  public async getInfo(): Promise<GetUserInfo> {
+    return this.POST(ROUTES.POST.User + 'info') as Promise<GetUserInfo>;
   }
 }

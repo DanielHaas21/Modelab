@@ -1,7 +1,7 @@
-import React, { createContext, use, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { USER } from '../../../middleware/ApiClients';
+import { ASSET, CATEGORY, FILE, TAG, USER } from '../../../middleware/ApiClients';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { UserStateActions } from '../../../store/slices/User';
 
@@ -38,6 +38,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
+  const setToken = (token: string | null) => {
+    if (token === null) {
+      USER.setToken(token);
+      ASSET.setToken(token);
+      FILE.setToken(token);
+      TAG.setToken(token);
+      CATEGORY.setToken(token);
+      localStorage.removeItem(AUTH_LS_KEY);
+    } else {
+      localStorage.setItem(AUTH_LS_KEY, token);
+      USER.setToken(token);
+      ASSET.setToken(token);
+      FILE.setToken(token);
+      TAG.setToken(token);
+      CATEGORY.setToken(token);
+    }
+  };
+
   const refreshAuth = async () => {
     const token = UserData.auth?.authToken ?? localStorage.getItem(AUTH_LS_KEY);
 
@@ -49,8 +67,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     try {
-      const { user } = await USER.getInfo(token);
-      localStorage.setItem(AUTH_LS_KEY, token);
+      setToken(token);
+      const { user } = await USER.getInfo();
 
       dispatch(UserStateActions.loginSuccess({
         user: {
@@ -67,7 +85,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       }));
     } catch (error) {
+      setToken(null);
       dispatch(UserStateActions.loginFailure('Failed to refresh auth.'));
+      if (import.meta.env.DEV) {
+        console.error(error);
+      }
     }
   };
 
@@ -76,9 +98,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     try {
       const { token } = await USER.login(googleToken);
-      const { user } = await USER.getInfo(token);
-
-      localStorage.setItem(AUTH_LS_KEY, token);
+      setToken(token);
+      const { user } = await USER.getInfo();
 
       dispatch(UserStateActions.loginSuccess({
         user: {
@@ -95,8 +116,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       }));
     } catch (error) {
+      setToken(null);
       dispatch(UserStateActions.loginFailure('Failed to login.'));
-      console.log(error);
+      if (import.meta.env.DEV) {
+        console.error(error);
+      }
     }
   };
 
@@ -127,7 +151,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = () => {
     dispatch(UserStateActions.logout());
-    localStorage.removeItem(AUTH_LS_KEY);
+    setToken(null);
   };
 
   return (
