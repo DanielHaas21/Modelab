@@ -21,6 +21,7 @@ import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { API_PATH } from '../../middleware/apiPath';
+import { useTranslation } from '../../libs/ui/provider';
 
 const Browser: React.FC = () => {
   const categoryApi = new Category();
@@ -28,7 +29,7 @@ const Browser: React.FC = () => {
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
-
+  
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
   const BrowserFilter = useSelector((state: RootState) => state.BrowserFilter);
@@ -43,6 +44,7 @@ const Browser: React.FC = () => {
   });
 
   const { isDesktop } = useResponsive();
+  const t = useTranslation("pages.browser");
 
   const resetFilters = () => {
     setSearchText('');
@@ -142,7 +144,7 @@ const Browser: React.FC = () => {
       </div>
 
       <div className="mt-4">
-        <Label size="xs">Tags</Label>
+        <Label size="xs">{t("categories")}</Label>
         <div className="">
           <TagSelect tags={tags} setTags={setTags} />
         </div>
@@ -155,7 +157,7 @@ const Browser: React.FC = () => {
           size={'sm'}
           variant="light"
         >
-          Clear Filters
+          {t("clear_filters")}
         </Button>
       </div>
     </>

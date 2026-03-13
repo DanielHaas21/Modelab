@@ -15,6 +15,7 @@ import { AssetTag } from './AssetTag';
 interface ModelPreviewProps {
   className?: string;
   id: number;
+  
   name: string;
   width: number;
   height: number;

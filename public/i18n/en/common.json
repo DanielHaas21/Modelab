@@ -1,5 +1,13 @@
 {
   "pages": {
+    "no_match": {
+      "no_match": "Oops! Page not found",
+      "message": "The page you're looking for doesn't exist or has been moved."
+    },
+    "browser": {
+      "clear_filters": "Clear filters",
+      "categories": "Categories"
+    },
     "about": {
       "about": "About Modelab",
       "info": "Modelab is a database of models, textures and other assets that are made by students for  students",
