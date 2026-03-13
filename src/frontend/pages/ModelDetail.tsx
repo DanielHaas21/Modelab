@@ -146,6 +146,7 @@ const ModelDetail: React.FC = () => {
         <div className={cn("sticky-bottom mt-6 pb-4 d-flex flex-column gap-2", isDesktop && "ms-4")}>
           <Button
             onClick={() => downloadAllAsZip(modelData.files)}
+            disabled={!hasClearance(CLEARANCE.USER)}
             className={cn("d-flex justify-content-center", !isDesktop && "w-100")}
           >
             Download
