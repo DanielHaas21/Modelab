@@ -11,6 +11,7 @@ import { useResponsive } from '../../hooks/useResponsive';
 import { useTranslation } from '../provider';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
+import { BrowserRoutes } from '../../../global/BrowserRoutes';
 
 const FooterVariants = cva('', {
   variants: {
@@ -62,17 +63,17 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
     >
       {children}
       <nav className={cn("flex flex-row justify-center", isDesktop && "mr-32")}>
-        <Link to="/about" className="fs-2 hover-underline-animation no-underline text-text-950">
+        <Link to={BrowserRoutes.About} className="fs-2 hover-underline-animation no-underline text-text-950">
           {t('about')}
         </Link>
         <Link
           onClick={CheckAdminClearance}
-          to={hasClearance(CLEARANCE.ADMIN) ? '/manage/upload' : ''}
+          to={hasClearance(CLEARANCE.ADMIN) ? (BrowserRoutes.ModelManage + 'upload') : ''}
           className="fs-2 hover-underline-animation no-underline text-text-950 middle-link"
         >
           {t('upload_assets')}
         </Link>
-        <Link to="/" className="fs-2 hover-underline-animation no-underline text-text-950">
+        <Link to={BrowserRoutes.LandingPage} className="fs-2 hover-underline-animation no-underline text-text-950">
           {t('home')}
         </Link>
       </nav>

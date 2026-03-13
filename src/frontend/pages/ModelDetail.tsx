@@ -28,9 +28,10 @@ import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { ModelDetailImageCarousel } from '../../libs/ui/components/ModelDetailImageCarousel';
 import { CLEARANCE } from '../../store/types';
+import { BrowserRoutes } from '../../global/BrowserRoutes';
 
 const ModelDetail: React.FC = () => {
-  useValidatePermission(CLEARANCE.GUEST, '/browser');
+  useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
 
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
   const model = useParams();

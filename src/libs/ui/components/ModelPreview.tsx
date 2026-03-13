@@ -12,6 +12,7 @@ import { ASSET, FILE } from '../../../middleware/ApiClients';
 import ApiError from '../../../middleware/api/ApiError';
 import { AssetTag } from './AssetTag';
 import { useTranslation } from '../provider';
+import { BrowserRoutes } from '../../../global/BrowserRoutes';
 
 interface ModelPreviewProps {
   className?: string;
@@ -70,7 +71,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
 
     return (
       <Link
-        to={'/models/' + id}
+        to={BrowserRoutes.ModelDetail + id}
         className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div

@@ -26,12 +26,13 @@ import { useValidatePermission } from '../../libs/auth';
 import { useModelFromUpload } from '../../libs/hooks/useModelFromUpload';
 import { Add } from '../../store/slices/Message';
 import { CLEARANCE } from '../../store/types';
+import { BrowserRoutes } from '../../global/BrowserRoutes';
 
 const ModelManage: React.FC = () => {
   const { action } = useParams();
   const assetId = Number(action);
 
-  useValidatePermission(CLEARANCE.ADMIN, isFinite(assetId) ? `/models/${assetId}` : '/browser/');
+  useValidatePermission(CLEARANCE.ADMIN, isFinite(assetId) ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -203,12 +204,12 @@ const ModelManage: React.FC = () => {
       );
 
       if (userConfirmed) {
-        navigate('/models/' + asset?.id);
+        navigate(BrowserRoutes.ModelDetail + asset?.id);
       } else {
         return;
       }
     } else {
-      navigate('/models/' + asset?.id);
+      navigate(BrowserRoutes.ModelDetail + asset?.id);
     }
   };
 

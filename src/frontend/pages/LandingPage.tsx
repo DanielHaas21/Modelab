@@ -14,6 +14,7 @@ import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useCheckClearance } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
+import { BrowserRoutes } from '../../global/BrowserRoutes';
 
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);
@@ -70,7 +71,7 @@ const LandingPage: React.FC = () => {
                         rounding="md"
                         size="md"
                       >
-                        <Link className="text-text-950 no-underline" to="/browser">
+                        <Link className="text-text-950 no-underline" to={BrowserRoutes.Browser}>
                           {t("browse")}
                         </Link>
                       </Button>
@@ -105,7 +106,7 @@ const LandingPage: React.FC = () => {
                           rounding="md"
                           size="md"
                         >
-                          <Link className="text-text-950 no-underline" to="/browser">
+                          <Link className="text-text-950 no-underline" to={BrowserRoutes.Browser}>
                             {t("browse")}
                           </Link>
                         </Button>

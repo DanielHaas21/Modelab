@@ -9,6 +9,7 @@ import NoMatchPage from './frontend/pages/NoMatchPage';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRoutes } from './global/BrowserRoutes';
 
 /**
  * There should be no active HTML in this component, only wrapping of providers, routers etc.
@@ -18,11 +19,11 @@ function App(): React.ReactElement {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/browser" element={<Browser />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/models/:modelId" element={<ModelDetail />} />
-          <Route path="/manage/:action" element={<ModelManage />} />
+          <Route path={BrowserRoutes.LandingPage} element={<LandingPage />} />
+          <Route path={BrowserRoutes.Browser} element={<Browser />} />
+          <Route path={BrowserRoutes.About} element={<About />} />
+          <Route path={BrowserRoutes.ModelDetail + ':modelId'} element={<ModelDetail />} />
+          <Route path={BrowserRoutes.ModelManage + ':action'} element={<ModelManage />} />
           <Route path="*" element={<NoMatchPage />} />
         </Routes>
       </BrowserRouter>

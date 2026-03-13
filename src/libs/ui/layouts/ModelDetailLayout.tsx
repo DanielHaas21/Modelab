@@ -11,6 +11,7 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';
 import { ModelDetailImageCarousel } from '../components/ModelDetailImageCarousel';
+import { BrowserRoutes } from '../../../global/BrowserRoutes';
 
 export interface UploadSaveButton {
   type: 'save' | 'upload';
@@ -49,7 +50,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           <section className="flex items-end justify-start w-full flex-wrap mb-8 mt-4">
             {goBack && (
               <div className="w-1/2 p-1">
-                <Link className="no-underline" to="/browser">
+                <Link className="no-underline" to={BrowserRoutes.Browser}>
                   <Button variant="light" className="justify-between w-full">
                     <FontAwesomeIcon icon={faArrowLeft} />
                     <span className="w-full">Back</span>
@@ -59,7 +60,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
             )}
             {editButtonId !== undefined && (
               <div className="w-1/2 p-1">
-                <Link className="no-underline" to={'/manage/' + editButtonId}>
+                <Link className="no-underline" to={BrowserRoutes.ModelManage + editButtonId}>
                   <Button variant="light" className="justify-between w-full">
                     <FontAwesomeIcon icon={faPencil} />
                     <span className="w-full">Edit</span>
@@ -72,7 +73,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
                 <Link
                   className="no-underline"
                   onClick={previewButtonOnCLick}
-                  to={'/models/' + previewButtonId}
+                  to={BrowserRoutes.ModelDetail + previewButtonId}
                 >
                   <Button variant="light" className="justify-between w-full">
                     <FontAwesomeIcon icon={faEye} />
@@ -100,7 +101,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
         {isDesktop && (
           <aside className={cn("flex flex-col items-center justify-center min-h-[70vh] overflow-hidden w-1/2 ml-10")}>
             <div className="w-full h-full overflow-hidden">
-                <ModelDetailImageCarousel image={image ?? []} />
+              <ModelDetailImageCarousel image={image ?? []} />
             </div>
           </aside>
         )}
