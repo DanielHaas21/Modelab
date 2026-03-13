@@ -20,20 +20,20 @@ import { AppDispatch } from '../../store/store';
 import { Add } from '../../store/slices/Message';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
-import { useValidatePermission } from '../../libs/auth';
+import { useCheckClearance, useValidatePermission } from '../../libs/auth';
 import JSZip from 'jszip';
 import { ModelFileProps } from '../../libs/types/ModelFileProps';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { ModelDetailImageCarousel } from '../../libs/ui/components/ModelDetailImageCarousel';
+import { CLEARANCE } from '../../store/types';
 
 const ModelDetail: React.FC = () => {
-  useValidatePermission(1, '/Browser');
+  useValidatePermission(CLEARANCE.GUEST, '/browser');
 
   const [modelData, setModelData] = React.useState<ModelData | null>(null);
   const model = useParams();
-  const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
@@ -41,6 +41,7 @@ const ModelDetail: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const { isDesktop } = useResponsive();
+  const { hasClearance } = useCheckClearance();
 
   const downloadAllAsZip = async (files: ModelFileProps[]) => {
     const displayFilesConfirmed = await confirm(
@@ -120,10 +121,8 @@ const ModelDetail: React.FC = () => {
         bordered={true}
         image={modelData.files}
         editButtonId={
-          User.isAuthenticated
-            ? User.user?.clearance === 2
-              ? modelData?.id
-              : undefined
+          hasClearance(CLEARANCE.USER)
+            ? modelData?.id
             : undefined
         }
       >

@@ -40,15 +40,7 @@ const imageTypes = [
  */
 export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
   ({ className, name, id, tags, width, height, ...props }, ref) => {
-    const User = useSelector((state: RootState) => state.User);
-    const Dispatch = useDispatch<AppDispatch>();
     const t = useTranslation('ui.model_preview');
-
-    const CheckLogin = () => {
-      if (!User.isAuthenticated) {
-        Dispatch(Add({ variant: 'Info', message: t('login_required') }));
-      }
-    };
 
     const [imageUrl, setImageUrl] = React.useState<string | null>(null);
 
@@ -78,8 +70,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
 
     return (
       <Link
-        onClick={CheckLogin}
-        to={User.isAuthenticated ? '/models/' + (id || null) : '/Browser'}
+        to={'/models/' + id}
         className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div

@@ -15,10 +15,11 @@
     },
     "home": {
       "welcome": "Vítejte v Modelab",
+      "hello": "Vítej",
       "sign_in": "Přihlásit se",
       "features": "Pro všechny funkce",
-      "or": "NEBO",
-      "browse": "Prohlížeč",
+      "or": "nebo",
+      "browse": "Prohlížet assety",
       "without_downloads": "Bez stahování"
     }
   },
@@ -31,11 +32,13 @@
       "login_required": "Pro použití této funkce se musíte přihlásit"
     },
     "user_popup": {
-      "guest_user": "Hostující uživatel",
+      "guest_user": "Návštěvník",
+      "without_downloads": "Bez stahování",
       "dark_mode": "Tmavý režim",
       "light_mode": "Světlý režim",
       "switch_account": "Přepnout účet",
-      "logout": "Odhlásit se"
+      "logout": "Odhlásit se",
+      "sign_in": "Přihlásit se"
     },
     "message": {
       "success": "Úspěch",

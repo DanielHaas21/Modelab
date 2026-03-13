@@ -33,7 +33,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const UserData = useSelector((state: RootState) => state.User);
 
   useEffect(() => {
-    if (UserData.auth === null) {
+    if (!UserData.auth.isAuthenticated) {
       refreshAuth();
     }
   }, []);
@@ -62,6 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         },
         auth: {
           authToken: token,
+          isAuthenticated: true,
           clearance: user.clearance,
         }
       }));
@@ -89,16 +90,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
         },
         auth: {
           authToken: token,
+          isAuthenticated: true,
           clearance: user.clearance,
         }
       }));
     } catch (error) {
       dispatch(UserStateActions.loginFailure('Failed to login.'));
+      console.log(error);
     }
   };
 
   const googleLogin = () => {
     dispatch(UserStateActions.loginStart());
+
 
     if (import.meta.env.DEV) {
       loginWithToken('dev_token');
@@ -130,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider value={{
       googleLogin,
       changeAccount,
-      logout
+      logout,
     }}>
       {children}
     </AuthContext.Provider>

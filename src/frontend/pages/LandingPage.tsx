@@ -10,12 +10,18 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { useTranslation } from '../../libs/ui/provider';
 import { useAuth } from '../../libs/ui/provider/AuthProvider';
+import { RootState } from '../../store/store';
+import { useSelector } from 'react-redux';
+import { useCheckClearance } from '../../libs/auth';
+import { CLEARANCE } from '../../store/types';
 
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true); // New loading state
   const { isDesktop } = useResponsive();
   const { googleLogin } = useAuth();
+  const { hasClearance } = useCheckClearance();
+  const UserData = useSelector((state: RootState) => state.User);
 
   const t = useTranslation("pages.home");
 
@@ -53,39 +59,61 @@ const LandingPage: React.FC = () => {
             )}
             <section className={cn("flex flex-row justify-center h-full items-center ", isDesktop ? "w-1/2" : "w-full")}>
               <div className="flex flex-col items-center justify-around rounded-2xl w-[400px] h-[50vh] p-4 bg-bg-100 md:ms-[100px] mt-[-100px] backdrop-blur-sm animate-in fade-in duration-700 shadowed">
-                <div className="flex flex-col items-center justify-between">
-                  <Button
-                    className="justify-center"
-                    font="regular"
-                    variant="primary"
-                    rounding="md"
-                    size="md"
-                    onClick={handleLogin}
-                  >
-                    <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                    {t("sign_in")}
-                  </Button>
-                  <p className="lts-3 fs-2 mt-2">{t("features")}</p>
-                </div>
-                <div className="flex justify-center items-center gap-4 lts-1 w-full">
-                  <span className="flex-grow h-[1px] bg-ui-border"></span>
-                  <span className="text-text-500">{t("or")}</span>
-                  <span className="flex-grow h-[1px] bg-ui-border"></span>
-                </div>
-                <div className="flex flex-col items-center justify-center">
-                  <Button
-                    className="justify-center"
-                    font="regular"
-                    variant="light"
-                    rounding="md"
-                    size="md"
-                  >
-                    <Link className="text-text-950 no-underline" to="/browser">
-                      {t("browse")}
-                    </Link>
-                  </Button>
-                  <p className="lts-3 fs-2 mt-2">{t("without_downloads")}</p>
-                </div>
+                {(hasClearance(CLEARANCE.USER))
+                  ? (
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="lts-3 fs-2 mt-2">{t("hello")} {UserData.user?.username}</p>
+                      <Button
+                        className="justify-center"
+                        font="regular"
+                        variant="light"
+                        rounding="md"
+                        size="md"
+                      >
+                        <Link className="text-text-950 no-underline" to="/browser">
+                          {t("browse")}
+                        </Link>
+                      </Button>
+                    </div>
+                  )
+                  : (
+                    <>
+                      <div className="flex flex-col items-center justify-between">
+                        <Button
+                          className="justify-center"
+                          font="regular"
+                          variant="primary"
+                          rounding="md"
+                          size="md"
+                          onClick={handleLogin}
+                        >
+                          <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                          {t("sign_in")}
+                        </Button>
+                        <p className="lts-3 fs-2 mt-2">{t("features")}</p>
+                      </div>
+                      <div className="flex justify-center items-center gap-4 lts-1 w-full">
+                        <span className="flex-grow h-[1px] bg-ui-border"></span>
+                        <span className="text-text-500 uppercase">{t("or")}</span>
+                        <span className="flex-grow h-[1px] bg-ui-border"></span>
+                      </div>
+                      <div className="flex flex-col items-center justify-center">
+                        <Button
+                          className="justify-center"
+                          font="regular"
+                          variant="light"
+                          rounding="md"
+                          size="md"
+                        >
+                          <Link className="text-text-950 no-underline" to="/browser">
+                            {t("browse")}
+                          </Link>
+                        </Button>
+                        <p className="lts-3 fs-2 mt-2">{t("without_downloads")}</p>
+                      </div>
+                    </>
+                  )
+                }
               </div>
             </section>
           </div>

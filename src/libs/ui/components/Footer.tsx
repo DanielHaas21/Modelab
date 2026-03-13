@@ -9,6 +9,8 @@ import { AppDispatch } from '../../../store/store';
 import { Add } from '../../../store/slices/Message';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useTranslation } from '../provider';
+import { useCheckClearance } from '../../auth';
+import { CLEARANCE } from '../../../store/types';
 
 const FooterVariants = cva('', {
   variants: {
@@ -30,22 +32,21 @@ interface FooterProps extends FooterVariantProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
-  const User = useSelector((state: RootState) => state.User);
   const Dispatch = useDispatch<AppDispatch>();
   const { isDesktop } = useResponsive();
   const t = useTranslation('ui.footer');
 
-  const NotifyUser = () => {
-    User.isAuthenticated
-      ? User.user?.clearance == 1
-        ? Dispatch(
-          Add({
-            variant: 'Error',
-            message: t('no_clearance'),
-          })
-        )
-        : null
-      : Dispatch(Add({ variant: 'Info', message: t('login_required') }));
+  const { hasClearance } = useCheckClearance();
+
+  const CheckAdminClearance = () => {
+    if (!hasClearance(CLEARANCE.ADMIN)) {
+      Dispatch(
+        Add({
+          variant: 'Error',
+          message: t('no_clearance'),
+        })
+      )
+    }
   };
 
   return (
@@ -65,8 +66,8 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
           {t('about')}
         </Link>
         <Link
-          onClick={NotifyUser}
-          to={User.isAuthenticated ? (User.user?.clearance == 2 ? '/manage/upload' : '') : ''}
+          onClick={CheckAdminClearance}
+          to={hasClearance(CLEARANCE.ADMIN) ? '/manage/upload' : ''}
           className="fs-2 hover-underline-animation no-underline text-text-950 middle-link"
         >
           {t('upload_assets')}

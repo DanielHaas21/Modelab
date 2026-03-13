@@ -15,9 +15,10 @@
     },
     "home": {
       "welcome": "Welcome to Modelab",
+      "hello": "Hello",
       "sign_in": "Sign in",
       "features": "For all features",
-      "or": "OR",
+      "or": "or",
       "browse": "Browse assets",
       "without_downloads": "Without downloads"
     }
@@ -32,10 +33,12 @@
     },
     "user_popup": {
       "guest_user": "Guest User",
+      "without_downloads": "Without downloads",
       "dark_mode": "Dark Mode",
       "light_mode": "Light Mode",
       "switch_account": "Switch account",
-      "logout": "Logout"
+      "logout": "Logout",
+      "sign_in": "Sign in"
     },
     "message": {
       "success": "Success",

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Clearance } from '../types/';
+import { CLEARANCE, Clearance } from '../types/';
 
 interface UserData {
   email: string;
@@ -12,6 +12,7 @@ interface UserData {
 interface AuthData {
   authToken: string | null;
   clearance: Clearance,
+  isAuthenticated: boolean;
 }
 
 interface LoginData {
@@ -21,14 +22,18 @@ interface LoginData {
 
 interface UserState {
   user: UserData | null;
-  auth: AuthData | null;
+  auth: AuthData;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
   user: null,
-  auth: null,
+  auth: {
+    authToken: null,
+    isAuthenticated: false,
+    clearance: CLEARANCE.GUEST,
+  },
   loading: false,
   error: null,
 };
@@ -48,12 +53,20 @@ const UserSlice = createSlice({
     },
     loginFailure: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
-      state.auth = null;
+      state.auth = {
+        authToken: null,
+        isAuthenticated: false,
+        clearance: CLEARANCE.GUEST
+      };
       state.loading = false;
     },
     logout: (state) => {
       state.user = null;
-      state.auth = null;
+      state.auth = {
+        authToken: null,
+        isAuthenticated: false,
+        clearance: CLEARANCE.GUEST
+      };
       state.loading = false;
       state.error = null;
     },

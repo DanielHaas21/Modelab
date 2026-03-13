@@ -26,14 +26,6 @@ const About: React.FC = () => {
           </AboutSection>
           <AboutSection title="How to credit?">No need</AboutSection>
         </div>
-        <Label size={'lg'} className="mt-8 mb-4">To-Do</Label>
-        <ol className="ps-8 list-decimal kanit-light text-lg text-text-700 space-y-2 mb-10">
-          <li>Migrate to tailwaind</li>
-          <li>Full mobile support</li>
-          <li>Frontend user pages Login + Signup + Admin Panel</li>
-          <li>Backend user endpoints</li>
-          <li>Refactor?</li>
-        </ol>
       </main>
     </BaseLayout>
   );

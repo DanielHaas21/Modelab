@@ -25,13 +25,16 @@ import { useDispatch } from 'react-redux';
 import { useValidatePermission } from '../../libs/auth';
 import { useModelFromUpload } from '../../libs/hooks/useModelFromUpload';
 import { Add } from '../../store/slices/Message';
+import { CLEARANCE } from '../../store/types';
 
 const ModelManage: React.FC = () => {
-  useValidatePermission(2, '/Browser');
+  const { action } = useParams();
+  const assetId = Number(action);
+
+  useValidatePermission(CLEARANCE.ADMIN, isFinite(assetId) ? `/models/${assetId}` : '/browser/');
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { action } = useParams();
 
   const [refresh, setRefresh] = React.useState<number>(0);
   const [initialChanges, setInitialChanges] = React.useState<EditChanges | null>(null);
@@ -131,8 +134,6 @@ const ModelManage: React.FC = () => {
     };
 
     const loadAsset = async () => {
-      const assetId = Number(action);
-
       setIsLoadingAsset(true);
 
       const asset = (await fetchAsset(assetId)) ?? null;
