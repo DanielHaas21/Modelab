@@ -1,6 +1,6 @@
 import { API_PATH } from '../apiPath';
 import { ROUTES } from '../routes';
-import { Service } from './Service';
+import { Service } from '../Service';
 
 export interface TagData {
   name: string;

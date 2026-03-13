@@ -9,13 +9,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { useTranslation } from '../../libs/ui/provider';
+import { UserLoginButtonWrapper } from '../../libs/ui/components/UserLoginButtonWrapper';
 
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<img | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true); // New loading state
   const { isDesktop } = useResponsive();
 
-  const t = useTranslation("pages.home")
+  const t = useTranslation("pages.home");
 
   React.useEffect(() => {
     const loadImage = async () => {
@@ -48,16 +49,18 @@ const LandingPage: React.FC = () => {
             <section className={cn("flex flex-row justify-center h-full items-center ", isDesktop ? "w-1/2" : "w-full")}>
               <div className="flex flex-col items-center justify-around rounded-2xl w-[400px] h-[50vh] p-4 bg-bg-100 md:ms-[100px] mt-[-100px] backdrop-blur-sm animate-in fade-in duration-700 shadowed">
                 <div className="flex flex-col items-center justify-between">
-                  <Button
-                    className="justify-center"
-                    font="regular"
-                    variant="primary"
-                    rounding="md"
-                    size="md"
-                  >
-                    <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                    {t("sign_in")}
-                  </Button>
+                  <UserLoginButtonWrapper>
+                    <Button
+                      className="justify-center"
+                      font="regular"
+                      variant="primary"
+                      rounding="md"
+                      size="md"
+                    >
+                      <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                      {t("sign_in")}
+                    </Button>
+                  </UserLoginButtonWrapper>
                   <p className="lts-3 fs-2 mt-2">{t("features")}</p>
                 </div>
                 <div className="flex justify-center items-center gap-4 lts-1 w-full">

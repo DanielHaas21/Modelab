@@ -1,1 +1,2 @@
-export type clearance = 1 | 2;
+
+export type Clearance = 1 | 2;

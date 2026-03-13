@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
-import ApiError from './ApiError';
+import ApiError from './api/ApiError';
 
 // Base API response
 interface ApiResponse {
