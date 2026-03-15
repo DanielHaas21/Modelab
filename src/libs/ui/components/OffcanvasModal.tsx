@@ -10,6 +10,9 @@ export interface OffcanvasHandle {
   close: () => void;
 }
 
+/**
+ * A component that renders an offcanvas modal, which slides in from the bottom of the screen. 
+ */
 export const OffcanvasModal = React.forwardRef<OffcanvasHandle, OffcanvasProps>(
   ({ title, children, ...props }, ref) => {
     const [isOpen, setIsOpen] = React.useState(false);

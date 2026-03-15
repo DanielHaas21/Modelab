@@ -7,6 +7,9 @@ import { cn } from '../../utils';
 
 interface UserImageProps extends React.ImgHTMLAttributes<HTMLImageElement> { }
 
+/**
+ * A component for displaying the user's profile image. It retrieves the user's profile picture from the Redux store and displays it. If no profile picture is available, it falls back to a default user icon based on the current theme (light or dark).
+ */
 export const UserImage = React.forwardRef<HTMLImageElement, UserImageProps>(
   ({ className, ...props }, ref) => {
     const UserData = useSelector((state: RootState) => state.User);

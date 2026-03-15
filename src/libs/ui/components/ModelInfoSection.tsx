@@ -8,6 +8,9 @@ interface ModelInfoSectionProps {
   className?: string;
 }
 
+/**
+ * A component that renders a section of model information with a label and optional children.
+ */
 export const ModelInfoSection = React.forwardRef<HTMLDivElement, ModelInfoSectionProps>(
   ({ name, children, className }, ref) => {
     return (

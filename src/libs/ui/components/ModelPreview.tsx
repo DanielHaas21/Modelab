@@ -42,6 +42,12 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
       })();
     }, [id, UserData.auth]);
 
+
+    const tagsRender = tags?.slice(0, 8).map((tag, index) => (
+      <AssetTag key={index} name={tag} />
+    ));
+    const andMore = Array.isArray(tags) && tags.length > 8 && <span>{t('and_more', { count: tags.length - 8 })}</span>;
+
     return (
       <Link
         to={BrowserRoutes.ModelDetail + id}
@@ -64,11 +70,9 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
             <ScrollLabel size="sm" className="text-left font-bold">
               {name}
             </ScrollLabel>
-            <div className="flex flex-row flex-wrap justify-start font-light text-xs text-text-500 mt-1">
-              {tags?.slice(0, 8).map((tag, index) => (
-                <AssetTag key={index} name={tag} />
-              ))}
-              {Array.isArray(tags) && tags.length > 8 && <span>{t('and_more', { count: tags.length - 8 })}</span>}
+            <div className="flex flex-row flex-wrap justify-start kanit-light text-xs text-text-500 mt-1">
+              {tagsRender}
+              {andMore}
             </div>
           </div>
         </div>

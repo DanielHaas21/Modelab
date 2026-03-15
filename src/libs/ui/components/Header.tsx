@@ -72,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
           onClick={TogglePopup}
         />
       </header>
-      {Popup ? <UserPopup ref={popupRef} /> : null}
+      {Popup ?? <UserPopup ref={popupRef} />}
     </>
   );
 };
