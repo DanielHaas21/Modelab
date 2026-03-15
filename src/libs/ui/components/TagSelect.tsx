@@ -1,7 +1,14 @@
-import { TagOption } from '../types';
 import { AssetTag } from './AssetTag';
 import React from 'react';
 
+/**
+ * Represents a tag option that can be selected in a tag selection component.
+ */
+export interface TagOption {
+  name: string;
+  id: number; // Unique
+  isSelected?: boolean;
+}
 
 interface TagSelectProps {
   tags: TagOption[];

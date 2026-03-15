@@ -7,7 +7,7 @@ import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
 import { CategoryOption } from './CategorySelect';
 import { useTranslation } from '../provider';
-import { TagOption } from '../types';
+import { TagOption } from './TagSelect';
 
 export interface SearchQuery {
   categories: CategoryOption[];

@@ -1,10 +1,8 @@
+import { img } from '../types/size';
 /**
  *
  * @returns image size variant
  */
-
-import { img } from '../types/size';
-
 export function DecideImageSize(): img {
   let width: number = window.innerWidth;
   let height: number = window.innerHeight;

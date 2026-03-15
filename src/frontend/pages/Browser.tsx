@@ -6,8 +6,8 @@ import {
   Label,
   CategorySelect,
   CategoryOption,
-  TagOption,
   Button,
+  TagOption,
 } from '../../libs/ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
