@@ -3,8 +3,6 @@ import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
 import placeholder from '../assets/placeholder.png';
 import { ScrollLabel } from './ScrollLabel';
-import { ASSET, FILE } from '../../../middleware/ApiClients';
-import ApiError from '../../../middleware/api/ApiError';
 import { AssetTag } from './AssetTag';
 import { useTranslation } from '../provider';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';

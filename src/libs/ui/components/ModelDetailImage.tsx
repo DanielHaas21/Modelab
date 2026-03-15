@@ -8,7 +8,7 @@ import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/free-solid-svg-icons';
-import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFileOther, DetailFilePreview } from '../../../middleware/types';
+import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
 
 

@@ -34,21 +34,30 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
     if (userCanDownload) {
       switch (group) {
         case 'image':
-          const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
-          const imageUrl = URL.createObjectURL(imageBlob);
-          file = {
-            ...fileBase,
-            type: 'image',
-            imageUrl,
-          };
+          try {
+            const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
+            const imageUrl = URL.createObjectURL(imageBlob);
+            file = {
+              ...fileBase,
+              type: 'image',
+              imageUrl,
+            };
+          } catch (error) {
+            console.error('Image download failed.', fileInfo, error);
+          }
           break;
         case 'model':
-          const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
-          file = {
-            ...fileBase,
-            type: '3d',
-            model,
-          };
+          try {
+            const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
+
+            file = {
+              ...fileBase,
+              type: '3d',
+              model,
+            };
+          } catch (error) {
+            console.error('Model download/parse failed.', fileInfo, error);
+          }
           break;
         case 'audio':
           try {
@@ -61,8 +70,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
               audioUrl,
             };
           } catch (error) {
-            console.error('Audio download failed:', error);
-            break;
+            console.error('Audio download failed.', fileInfo, error);
           }
           break;
         case 'other':

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Button,
   CategoryOption,
   CategorySelect,
   FileSelect,
@@ -10,7 +11,7 @@ import {
   TagOption,
   TagSelect,
 } from '../../libs/ui/components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
@@ -23,7 +24,11 @@ import { FILE } from '../../middleware/ApiClients';
 import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
 import deleteModel from '../../middleware/actions/DeleteModel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useToast } from '../../libs/ui/components/Toast';
+import { useValidatePermission } from '../../libs/auth';
+import { CLEARANCE } from '../../store/types';
 
 const createDetailFileFromLocalFile = async (localFile: LocalManageFile, supportedFileTypes: SupportedFileTypes): Promise<DetailFile | null> => {
   const blob = new Blob([localFile.localFile], { type: localFile.type });
@@ -93,7 +98,8 @@ const ModelManage: React.FC = () => {
   const { action } = useParams();
   const assetId = isFinite(Number(action)) ? Number(action) : undefined;
   const { show } = useToast();
-  // useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
+
+  useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -249,27 +255,76 @@ const ModelManage: React.FC = () => {
 
       show({
         title: 'Saved!',
-        variant: 'success'
+        variant: 'success',
       });
 
     } else {
-      await createModel({
+      const createdId = await createModel({
         name: assetNameInput,
         desc: assetDescriptionInput,
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),
       });
-      setRefreshModel((i) => i + 1);
-      
+      // setRefreshModel((i) => i + 1);
+
       show({
         title: 'Uploaded!',
-        variant: 'success'
+        variant: 'success',
+        actions: (
+          <Button variant='light' onClick={() => navigate(BrowserRoutes.ModelManage + createdId)}>
+            <FontAwesomeIcon icon={faPen} />
+            <span className="w-full">Go to edit</span>
+          </Button>
+        )
       });
     }
   };
 
-  if (isLoading) return <Preloader className="min-h-screen" />;
+  if (isLoading || modelManageData === null) return <Preloader className="min-h-screen" />;
+
+  const ActionButtons = (
+    <>
+      {assetId !== undefined && (
+        <div className="w-1/2 p-1">
+          <Link
+            className="no-underline"
+            onClick={handleShowPreview}
+            to={BrowserRoutes.ModelDetail + assetId}
+          >
+            <Button variant="light" className="justify-between w-full">
+              <FontAwesomeIcon icon={faEye} />
+              <span className="w-full">Preview</span>
+            </Button>
+          </Link>
+        </div>
+      )}
+      <div className="w-1/2 p-1">
+        <Button
+          variant="light"
+          className="justify-between w-full"
+          onClick={handleUploadOrSave}
+        >
+          <FontAwesomeIcon icon={assetId === undefined ? faUpload : faSave} />
+          <span className="w-full">
+            {assetId === undefined ? 'Upload' : 'Save'}
+          </span>
+        </Button>
+      </div>
+      {assetId !== undefined && (
+        <div className="w-1/2 p-1">
+          <Button
+            variant="accent"
+            className="justify-between w-full"
+            onClick={handleDelete}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+            <span className="w-full">Delete</span>
+          </Button>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <>
@@ -277,18 +332,7 @@ const ModelManage: React.FC = () => {
       <ModelDetailLayout
         files={previewDetailFiles}
         bordered={true}
-        previewButton={assetId !== undefined ? {
-          id: assetId,
-          onClick: handleShowPreview
-        } : undefined}
-        deleteButton={assetId !== undefined ? {
-          id: assetId,
-          onClick: handleDelete
-        } : undefined}
-        uploadSaveButton={{
-          type: assetId ? 'save' : 'upload',
-          onClick: handleUploadOrSave,
-        }}
+        buttons={ActionButtons}
       >
         <div className="relative mb-4 group">
           <Input

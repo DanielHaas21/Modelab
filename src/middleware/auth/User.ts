@@ -19,7 +19,7 @@ export interface GetUserInfo {
   user: UserData;
 }
 
-export class User extends Service {
+export class UserService extends Service {
   constructor() {
     super(API_PATH);
   }

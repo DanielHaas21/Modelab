@@ -1,60 +1,24 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components';
-import { Button } from '../components/Button';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEye, faPencil, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';
 import { ModelDetailImageCarousel } from '../components/ModelDetailImageCarousel';
-import { BrowserRoutes } from '../../../global/BrowserRoutes';
 import { DetailFile } from '../../../middleware/types';
-
-export interface UploadSaveButton {
-  type: 'save' | 'upload';
-  onClick: () => void;
-}
-
-export interface DeleteButton {
-  id: number;
-  onClick: () => void;
-}
-
-export interface EditButton {
-  id: number;
-}
-
-export interface PreviewButton {
-  id: number;
-  onClick: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>;
-}
-
-export interface GoBackButton {
-  onClick: () => void;
-}
 
 interface ModelDetailProps {
   children?: React.ReactNode;
   files?: DetailFile[] | null;
   bordered: boolean;
-  goBackButton?: GoBackButton;
-  editButton?: EditButton;
-  previewButton?: PreviewButton;
-  uploadSaveButton?: UploadSaveButton;
-  deleteButton?: DeleteButton;
+  buttons?: React.ReactNode;
 }
 
 export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   children,
   files = null,
   bordered = true,
-  goBackButton,
-  editButton,
-  previewButton,
-  uploadSaveButton,
-  deleteButton,
+  buttons,
 }) => {
   const { isDesktop } = useResponsive();
 
@@ -65,69 +29,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
         <div className={cn("flex flex-col h-full py-10", isDesktop ? "w-1/2" : "w-full")}>
           <section className="flex flex-col grow overflow-y-auto custom-scrollbar pr-4">{children}</section>
           <section className="flex items-end justify-start w-full flex-wrap mb-8 mt-4">
-            {goBackButton !== undefined && (
-              <div className="w-1/2 p-1">
-                <Link
-                  className="no-underline"
-                  onClick={goBackButton.onClick}
-                  to={BrowserRoutes.Browser}>
-                  <Button variant="light" className="justify-between w-full">
-                    <FontAwesomeIcon icon={faArrowLeft} />
-                    <span className="w-full">Back</span>
-                  </Button>
-                </Link>
-              </div>
-            )}
-            {editButton !== undefined && (
-              <div className="w-1/2 p-1">
-                <Link className="no-underline" to={BrowserRoutes.ModelManage + editButton.id}>
-                  <Button variant="light" className="justify-between w-full">
-                    <FontAwesomeIcon icon={faPencil} />
-                    <span className="w-full">Edit</span>
-                  </Button>
-                </Link>
-              </div>
-            )}
-            {previewButton !== undefined && (
-              <div className="w-1/2 p-1">
-                <Link
-                  className="no-underline"
-                  onClick={previewButton.onClick}
-                  to={BrowserRoutes.ModelDetail + previewButton.id}
-                >
-                  <Button variant="light" className="justify-between w-full">
-                    <FontAwesomeIcon icon={faEye} />
-                    <span className="w-full">Preview</span>
-                  </Button>
-                </Link>
-              </div>
-            )}
-            {uploadSaveButton !== undefined && (
-              <div className="w-1/2 p-1">
-                <Button
-                  variant="light"
-                  className="justify-between w-full"
-                  onClick={uploadSaveButton.onClick}
-                >
-                  <FontAwesomeIcon icon={uploadSaveButton.type == 'upload' ? faUpload : faSave} />
-                  <span className="w-full">
-                    {uploadSaveButton.type == 'upload' ? 'Upload' : 'Save'}
-                  </span>
-                </Button>
-              </div>
-            )}
-            {deleteButton !== undefined && (
-              <div className="w-1/2 p-1">
-                <Button
-                  variant="accent"
-                  className="justify-between w-full"
-                  onClick={deleteButton.onClick}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                  <span className="w-full">Delete</span>
-                </Button>
-              </div>
-            )}
+            {buttons}
           </section>
         </div>
         {isDesktop && (
