@@ -28,9 +28,12 @@ import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
 import { faArrowLeft, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from '../../libs/ui/provider';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
+
+  const t = useTranslation("pages.model_detail");
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [modelDetailData, setModelDetailData] = React.useState<ModelDetailData | null>(null);
@@ -46,18 +49,20 @@ const ModelDetail: React.FC = () => {
   const UserData = useSelector((state: RootState) => state.User);
   const { hasClearance } = useCheckClearance();
 
+  // zip download of all files
+
   const downloadAllAsZip = async (files: DetailFile[]) => {
     if (modelDetailData === null) return;
     const modelData = modelDetailData.model;
 
     const displayFilesConfirmed = await confirm(
-      'Download',
+      t("confirm.download"),
       true,
       Dispatch,
-      'Download',
-      'Cancel',
+      t("confirm.download"),
+      t("confirm.cancel"),
       <>
-        <p>Following files will be downloaded:</p>
+        <p>{t("confirm.note")}</p>
         <ul className="w-100 list-group">
           {modelData.files.filter(file => file.download !== null).map((file, index) => (
             <li className="list-group-item" key={index}>
@@ -90,7 +95,7 @@ const ModelDetail: React.FC = () => {
     document.body.appendChild(link);
 
     link.click();
-    show({ variant: 'success', title: 'Asset saved successfully!' });
+    show({ variant: 'success', title: t("saved") });
 
     document.body.removeChild(link);
     URL.revokeObjectURL(link.href);
@@ -115,8 +120,8 @@ const ModelDetail: React.FC = () => {
   if (!modelDetailData) {
     return (
       <BaseLayout bordered={true}>
-        <ErrorDisplay image={icon_boom} code={404} message="Oops! Asset not found">
-          <p>The asset you're looking for doesn't exist or has been moved.</p>
+        <ErrorDisplay image={icon_boom} code={404} message={t("oops")}>
+          <p>{t("notFound")}</p>
         </ErrorDisplay>
       </BaseLayout>
     );
@@ -132,7 +137,7 @@ const ModelDetail: React.FC = () => {
           to={BrowserRoutes.Browser}>
           <Button variant="light" className="justify-between w-full">
             <FontAwesomeIcon icon={faArrowLeft} />
-            <span className="w-full">Back</span>
+            <span className="w-full">{t("back")}</span>
           </Button>
         </Link>
       </div>
@@ -141,7 +146,7 @@ const ModelDetail: React.FC = () => {
           <Link className="no-underline" to={BrowserRoutes.ModelManage + modelData.id}>
             <Button variant="light" className="justify-between w-full">
               <FontAwesomeIcon icon={faPencil} />
-              <span className="w-full">Edit</span>
+              <span className="w-full">{t("edit")}</span>
             </Button>
           </Link>
         </div>
@@ -179,7 +184,7 @@ const ModelDetail: React.FC = () => {
             disabled={!hasClearance(CLEARANCE.USER)}
             className={cn("flex justify-center", !isDesktop && "w-100")}
           >
-            Download
+            {t("download_all")}
           </Button>
           {!isDesktop && (
             <Button
@@ -187,7 +192,7 @@ const ModelDetail: React.FC = () => {
               onClick={() => offcanvasHandleRef.current?.open()}
               className="flex justify-center w-100"
             >
-              Preview
+          {t("preview")}
             </Button>
           )}
         </div>

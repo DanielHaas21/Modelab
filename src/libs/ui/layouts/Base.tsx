@@ -7,6 +7,9 @@ interface BaseProps {
   bordered: boolean;
 }
 
+/**
+ * A simple layout component that renders a header, a footer and a main section. 
+ */
 export const BaseLayout: React.FC<BaseProps> = ({ children, bordered = true }) => {
   return (
     <>

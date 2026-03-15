@@ -3,6 +3,8 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { i18n as I18nInstance, TOptionsBase } from 'i18next';
 import { ToastProvider } from '../components/Toast';
 
+// This file contains the UiProvider component, which is used to provide the i18n context and the toast context to the entire application. It also contains the useTranslation hook, which is used to translate strings in the application.
+
 export type TranslationValue = string | number | React.ReactNode;
 type TranslationOptions = TOptionsBase & Record<string, unknown>;
 // I18n context

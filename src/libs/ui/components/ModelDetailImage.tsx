@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
+import { useTranslation } from '../provider';
 
 
 // This file is renders a model using THREE
@@ -160,6 +161,7 @@ const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, o
 
     const distance = Math.max(distanceToFitHeight, distanceToFitWidth);
 
+    // Position the camera
     camera.position.set(center.x, center.y, center.z + distance);
     camera.lookAt(center);
     camera.updateProjectionMatrix();
@@ -177,10 +179,12 @@ const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, o
   return null;
 };
 
+// 3D model viewer component, it renders a 3D model using the Model component.
+
 interface Model3DProps {
   file: DetailFile3D;
   canvasKey?: number;
-  onContextLoss?: (e: Event) => void;
+  onContextLoss?: (e: Event) => void; // The onContextLoss prop is a callback function that is triggered when the WebGL context is lost, it allows the parent component to handle the context loss by re-rendering the canvas with a new key, which will create a new WebGL context.
 }
 
 const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
@@ -200,6 +204,9 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
       scale: 0.1,
     });
 
+    // The SceneConfig is memoized to prevent unnecessary re-renders of the entire scene when the model visual configuration changes. 
+    // It creates a new THREE.Scene instance with a blurred background, which is used as the scene for the Canvas component.
+    // By memoizing it, we ensure that the same scene instance is reused across renders unless the dependencies change (in this case, there are no dependencies, so it will only be created once).
     const SceneConfig = React.useMemo(() => {
       const scene = new Three.Scene();
       scene.backgroundBlurriness = 1;
@@ -294,7 +301,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
   }
 );
 
-// Audio
+// Audio model viewer component, it renders an audio file using the HTML5 audio element.
 
 interface ModelAudioProps {
   file: DetailFileAudio;
@@ -302,6 +309,7 @@ interface ModelAudioProps {
 
 const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
   ({ file }, ref) => {
+    const t = useTranslation('ui.model_detail');
     return (
       <div
         ref={ref}
@@ -314,7 +322,7 @@ const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
             src={file.audioUrl}
             className="w-full outline-none"
           >
-            Your browser does not support the audio element.
+            {t('unsupported_browser')}
           </audio>
         </div>
       </div>
@@ -324,7 +332,7 @@ const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
 
 export default ModelAudio;
 
-// --
+// Top level component that decides which type of model viewer to render based on the file type, it also handles unsupported file types by rendering a placeholder image.
 
 interface ModelDetailImageProps {
   file: DetailFile;
