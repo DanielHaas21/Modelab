@@ -70,7 +70,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
             <ScrollLabel size="sm" className="text-left font-bold">
               {name}
             </ScrollLabel>
-            <div className="flex flex-row flex-wrap justify-start kanit-light text-xs text-text-500 mt-1">
+            <div className="flex flex-row flex-wrap justify-start font-light text-xs text-text-500 mt-1">
               {tagsRender}
               {andMore}
             </div>
