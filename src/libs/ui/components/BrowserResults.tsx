@@ -36,36 +36,29 @@ const fetchAssets = async (
   const formatResult = (assets: AssetData[], info: PaginatedInfo): FetchResult => {
     return {
       info,
-      assets: assets.map((asset) => {
-        return {
-          name: asset.name,
-          tags: asset.tags.map((tag) => tag.name),
-          id: asset.id,
-        };
-      }),
+      assets: assets.map((asset) => ({
+        name: asset.name,
+        tags: asset.tags.map((tag) => tag.name),
+        id: asset.id,
+      })),
     };
   };
 
-  // Get all if no query
   if (
-    searchQuery === undefined ||
-    (searchQuery.categories.length == 0 &&
-      searchQuery.tags.length == 0 &&
-      searchQuery.nameQuery.length == 0)
+    !searchQuery ||
+    (searchQuery.categories.length === 0 &&
+      searchQuery.tags.length === 0 &&
+      searchQuery.nameQuery.length === 0)
   ) {
     const { assets, info } = await assetApi.getAll(page, count);
     return formatResult(assets, info);
   }
 
-  // Use the search
   const { assets, info } = await assetApi.search({
     page,
     count,
-    categoryQuery:
-      searchQuery.categories.length > 0
-        ? searchQuery.categories.map((category) => category.id)
-        : undefined,
-    tagQuery: searchQuery.tags.length > 0 ? searchQuery.tags.map((tag) => tag.id) : undefined,
+    categoryQuery: searchQuery.categories.length > 0 ? searchQuery.categories.map(c => c.id) : undefined,
+    tagQuery: searchQuery.tags.length > 0 ? searchQuery.tags.map(t => t.id) : undefined,
     nameQuery: searchQuery.nameQuery.length > 0 ? searchQuery.nameQuery : undefined,
     descriptionQuery: undefined,
   });
@@ -77,70 +70,89 @@ interface BrowserResultProps {
 }
 
 interface Results {
-  searchQuery?: SearchQuery;
   assets: AssetResult[];
   page: number;
   hasMore: boolean;
 }
 
 export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
-  const loadPerPage = 8; // Assets loaded per page
+  const loadPerPage = 8; // Assets per page
   const previewWidth = 350;
   const previewHeight = 250;
   const t = useTranslation('ui.browser_results');
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
   const [results, setResults] = React.useState<Results>({
-    searchQuery,
     assets: [],
     hasMore: true,
     page: 0,
   });
 
+  const requestVersion = React.useRef(0);
+
   React.useEffect(() => {
+    requestVersion.current += 1;
+    const currentVersion = requestVersion.current;
+
     setResults({
-      searchQuery,
       assets: [],
       hasMore: true,
       page: 0,
     });
+
+    const initialLoad = async () => {
+      setIsLoading(true);
+      const result = await fetchPage(0, searchQuery);
+
+      if (currentVersion === requestVersion.current && result) {
+        const { assets, info } = result;
+        const hasMore = 0 < info.pageCount - 1;
+        setResults({
+          assets,
+          page: hasMore ? 1 : 0,
+          hasMore,
+        });
+        setIsLoading(false);
+      }
+    };
+
+    initialLoad();
   }, [searchQuery]);
 
-  const fetchPage = async (
-    page: number,
-    searchQuery?: SearchQuery
-  ): Promise<FetchResult | undefined> => {
+  const fetchPage = async (page: number, query?: SearchQuery): Promise<FetchResult | undefined> => {
     try {
-      return await fetchAssets(searchQuery, page, loadPerPage);
+      return await fetchAssets(query, page, loadPerPage);
     } catch (err) {
       if (err instanceof ApiError) {
         console.error('Failed to fetch assets', err);
       } else {
         throw err;
       }
+      return undefined;
     }
   };
 
   const loadMore = async () => {
-    if (!results.hasMore) return;
+    if (!results.hasMore || isLoading) return;
+
+    const currentVersion = requestVersion.current;
     setIsLoading(true);
 
-    const result = await fetchPage(results.page, results.searchQuery);
+    const result = await fetchPage(results.page, searchQuery);
 
-    if (result == undefined) {
-      return;
+    if (currentVersion !== requestVersion.current) return;
+
+    if (result) {
+      const { assets, info } = result;
+      setResults((prev) => {
+        const isLastPage = info.page >= info.pageCount - 1;
+        return {
+          assets: [...prev.assets, ...assets],
+          page: info.page + 1,
+          hasMore: !isLastPage,
+        };
+      });
     }
-    const { assets, info } = result;
-
-    const hasMore = results.page < info.pageCount - 1;
-    const updatedResults: Results = {
-      searchQuery: results.searchQuery,
-      assets: [...results.assets, ...assets],
-      page: info.page + (hasMore ? 1 : 0),
-      hasMore: hasMore,
-    };
-    setResults(updatedResults);
     setIsLoading(false);
   };
 
@@ -152,26 +164,21 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
       loadMore={loadMore}
       loader={<Label className="w-full text-center py-4">{t('loading')}</Label>}
     >
-      {results.assets.length == 0 && !isLoading && (
+      {results.assets.length === 0 && !isLoading && (
         <Label className="w-full text-center py-10 opacity-50">{t('no_assets')}</Label>
       )}
-      <section
-        className="grid justify-center justify-items-center gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-
-      >
-        {results.assets.map((result) => {
-          return (
-            <React.Suspense key={result.id} fallback={<Preloader />}>
-              <ModelPreview
-                name={result.name}
-                tags={result.tags}
-                id={result.id}
-                width={previewWidth}
-                height={previewHeight}
-              />
-            </React.Suspense>
-          );
-        })}
+      <section className="grid justify-center justify-items-center gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {results.assets.map((result) => (
+          <React.Suspense key={`${requestVersion.current}-${result.id}`} fallback={<Preloader />}>
+            <ModelPreview
+              name={result.name}
+              tags={result.tags}
+              id={result.id}
+              width={previewWidth}
+              height={previewHeight}
+            />
+          </React.Suspense>
+        ))}
       </section>
     </InfiniteScroll>
   );
