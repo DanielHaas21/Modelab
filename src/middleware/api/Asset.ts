@@ -85,7 +85,7 @@ export class Asset extends Service {
     data.files.forEach((file, index) => {
       form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
       form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
-      form.append('files[]', file.file!);
+      form.append('files[]', file.localFile);
     });
 
     return this.POST(ROUTES.POST.Asset + data.id + '/update', form, {
@@ -110,7 +110,7 @@ export class Asset extends Service {
     data.files.forEach((file, index) => {
       form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
       form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
-      form.append('files[]', file.file!);
+      form.append('files[]', file.localFile);
     });
 
     return this.POST(ROUTES.POST.Asset + 'create', form, {

@@ -26,7 +26,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
 
     useEffect(() => {
       if (selectedItem >= showableFiles.length) {
-        setSelectedItem(showableFiles.length - 1);
+        setSelectedItem(Math.max(showableFiles.length - 1, 0));
       }
     }, [files]);
 

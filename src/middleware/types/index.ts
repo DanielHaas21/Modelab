@@ -1,2 +1,4 @@
-export * from './ModelData';
-export * from './ModelManageData';
+export * from './CreateModelData';
+export * from './UpdateModelData';
+export * from './DetailModel';
+export * from './ManageModel';
