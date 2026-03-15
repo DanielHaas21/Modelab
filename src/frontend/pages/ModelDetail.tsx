@@ -38,7 +38,6 @@ const ModelDetail: React.FC = () => {
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
-
   const { isDesktop } = useResponsive();
 
   const UserData = useSelector((state: RootState) => state.User);
@@ -128,6 +127,9 @@ const ModelDetail: React.FC = () => {
       <ModelDetailLayout
         bordered={true}
         files={modelData.files}
+        goBackButton={{
+          onClick: () => { }
+        }}
         editButton={hasClearance(CLEARANCE.USER)
           ? { id: modelData.id }
           : undefined

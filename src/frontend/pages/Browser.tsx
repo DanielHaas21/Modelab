@@ -20,7 +20,6 @@ import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
-import { API_PATH } from '../../middleware/apiPath';
 import { useTranslation } from '../../libs/ui/provider';
 
 const Browser: React.FC = () => {
@@ -129,7 +128,6 @@ const Browser: React.FC = () => {
     }
   }, [searchText, tags, categories]);
 
-
   const BrowserFilters = (
     <>
       <div className="w-100">
@@ -194,7 +192,7 @@ const Browser: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="flex w-full flex-grow overflow-hidden">
+        <div className="flex w-full grow overflow-hidden">
           <BrowserResults searchQuery={searchQuery} />
           {isDesktop && (
             <aside className="sticky top-0 h-full w-1/4 xl:w-1/6 flex flex-col p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">

@@ -55,7 +55,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   return (
     <div
       ref={scrollDivRef}
-      className={cn('flex-grow overflow-y-auto custom-scrollbar', className)}
+      className={cn('grow overflow-y-auto custom-scrollbar', className)}
       onScroll={tryLoadMore}
     >
       {children}

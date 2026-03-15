@@ -53,7 +53,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
           ref={ref}
           {...props}
         >
-          <div className="w-[90%] flex-grow mt-2 rounded-md overflow-hidden relative">
+          <div className="w-[90%] grow mt-2 rounded-md overflow-hidden relative">
             <img
               src={imageUrl === null ? placeholder : imageUrl}
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"

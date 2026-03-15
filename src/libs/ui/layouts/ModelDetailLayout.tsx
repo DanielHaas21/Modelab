@@ -32,11 +32,15 @@ export interface PreviewButton {
   onClick: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>;
 }
 
+export interface GoBackButton {
+  onClick: () => void;
+}
+
 interface ModelDetailProps {
   children?: React.ReactNode;
   files?: DetailFile[] | null;
   bordered: boolean;
-  goBack?: boolean;
+  goBackButton?: GoBackButton;
   editButton?: EditButton;
   previewButton?: PreviewButton;
   uploadSaveButton?: UploadSaveButton;
@@ -47,7 +51,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   children,
   files = null,
   bordered = true,
-  goBack = true,
+  goBackButton,
   editButton,
   previewButton,
   uploadSaveButton,
@@ -60,11 +64,14 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
       <Header className={'h-[8vh] ' + (bordered ? 'border-b border-ui-border' : 'w-full')} />
       <main className={cn("w-full h-[86vh] flex items-center overflow-hidden", isDesktop ? "px-32" : "px-4")}>
         <div className={cn("flex flex-col h-full py-10", isDesktop ? "w-1/2" : "w-full")}>
-          <section className="flex flex-col flex-grow overflow-y-auto custom-scrollbar pr-4">{children}</section>
+          <section className="flex flex-col grow overflow-y-auto custom-scrollbar pr-4">{children}</section>
           <section className="flex items-end justify-start w-full flex-wrap mb-8 mt-4">
-            {goBack && (
+            {goBackButton !== undefined && (
               <div className="w-1/2 p-1">
-                <Link className="no-underline" to={BrowserRoutes.Browser}>
+                <Link
+                  className="no-underline"
+                  onClick={goBackButton.onClick}
+                  to={BrowserRoutes.Browser}>
                   <Button variant="light" className="justify-between w-full">
                     <FontAwesomeIcon icon={faArrowLeft} />
                     <span className="w-full">Back</span>

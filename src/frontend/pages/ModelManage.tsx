@@ -274,7 +274,6 @@ const ModelManage: React.FC = () => {
       <ModelDetailLayout
         files={previewDetailFiles}
         bordered={true}
-        goBack={false}
         previewButton={assetId !== undefined ? {
           id: assetId,
           onClick: handleShowPreview

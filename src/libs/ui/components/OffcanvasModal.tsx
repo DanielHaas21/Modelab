@@ -28,24 +28,24 @@ export const OffcanvasModal = React.forwardRef<OffcanvasHandle, OffcanvasProps>(
     if (!isOpen) return null;
 
     return (
-      <div 
+      <div
         className="fixed inset-0 z-50 flex flex-col bg-bg-50 animate-in slide-in-from-bottom duration-300"
         {...props}
       >
         <div className="flex items-center justify-between p-4 border-b border-ui-border">
           <h5 className="text-xl font-semibold kanit-regular">{title}</h5>
-          <button 
-            type="button" 
+          <button
+            type="button"
             className="p-2 text-2xl leading-none hover:opacity-70 transition-opacity"
             onClick={() => {
-                setIsOpen(false);
-                document.body.style.overflow = '';
+              setIsOpen(false);
+              document.body.style.overflow = '';
             }}
           >
             ×
           </button>
         </div>
-        <div className="flex-grow overflow-auto p-4">
+        <div className="grow overflow-auto p-4">
           {children}
         </div>
       </div>
