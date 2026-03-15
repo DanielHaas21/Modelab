@@ -195,7 +195,55 @@ const ModelManage: React.FC = () => {
 
   };
 
-  const handleUploadOrSave = () => {
+  const handleUploadOrSave = async () => {
+    // if (
+    //   assetNameInput.length === 0 ||
+    //   assetDescriptionInput.length === 0 ||
+    //   filesInput.length === 0 ||
+    //   tagsInput.filter((tag) => tag.isSelected).length === 0
+    // ) {
+    //   await confirm(
+    //     'Not enough data!',
+    //     false,
+    //     dispatch,
+    //     undefined,
+    //     undefined,
+    //     <p>name, description, files, and a tag is requiered</p>
+    //   );
+
+    //   return;
+    // }
+
+    // if (action === 'upload') {
+    //   await createModel({
+    //     name: assetName,
+    //     desc: assetDescription,
+    //     category: categories.find((cat) => cat.isSelected == true)?.id ?? 1,
+    //     tags: tags.filter((tag) => tag.isSelected == true).map((tag) => tag.id),
+    //     files: files.filter((file) => file.file !== undefined),
+    //   });
+    //   setRefresh((prev) => prev + 1);
+    // } else {
+    //   await editModel({
+    //     id: asset!.id,
+    //     name: assetName,
+    //     desc: assetDescription,
+    //     category: categories.find((cat) => cat.isSelected == true)?.id ?? 1,
+    //     tags: tags.filter((tag) => tag.isSelected == true).map((tag) => tag.id),
+    //     files: files.filter((file) => file.file !== undefined),
+    //   });
+    //   setInitialChanges({
+    //     name: assetName,
+    //     description: assetDescription,
+    //     category: categories.find((cat) => cat.isSelected) ?? categories[0],
+    //     tags: tags.filter((tag) => tag.isSelected),
+    //     files: files,
+    //   });
+    //   dispatch(Add({
+    //     message: 'Saved!',
+    //     variant: 'Success'
+    //   }))
+    // }
   };
 
   if (isLoading) return <Preloader className="min-h-screen" />;

@@ -5,7 +5,7 @@ import { CLEARANCE, Clearance } from '../../store/types';
 
 export default async function LoadModelPreviewImage(id: number, userClearance: Clearance): Promise<string | null> {
   const fileMetadata = await ASSET.getFiles(id);
-  const supportedFileTypes = await FILE.getSupportedFileTypes();
+  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
   const userCanDownload = userClearance >= CLEARANCE.USER;
 
