@@ -2,17 +2,15 @@ import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
 import placeholder from '../assets/placeholder.png';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../store/store';
-import { Add } from '../../../store/slices/Message';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
 import { ScrollLabel } from './ScrollLabel';
 import { ASSET, FILE } from '../../../middleware/ApiClients';
 import ApiError from '../../../middleware/api/ApiError';
 import { AssetTag } from './AssetTag';
 import { useTranslation } from '../provider';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
+import LoadModelPreviewImage from '../../../middleware/actions/LoadModelPreviewImage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
 interface ModelPreviewProps {
   className?: string;
@@ -24,16 +22,6 @@ interface ModelPreviewProps {
   tags?: string[];
 }
 
-const imageTypes = [
-  'image/png', // PNG
-  'image/jpeg', // JPG, JPEG
-  'image/gif', // GIF
-  'image/svg+xml', // SVG
-  'image/webp', // WEBP
-  'image/tiff', // TIFF
-  'image/bmp', // BMP
-];
-
 /**
  * Is a preview for a Model/texture
  * supports an Image, name and tags
@@ -43,31 +31,16 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
   ({ className, name, id, tags, width, height, ...props }, ref) => {
     const t = useTranslation('ui.model_preview');
 
+    const UserData = useSelector((state: RootState) => state.User);
+
     const [imageUrl, setImageUrl] = React.useState<string | null>(null);
 
     React.useEffect(() => {
-      const fetchPreview = async () => {
-        try {
-          const { files } = await ASSET.get_files(id);
-          return files.find((file) => file.isPreview && imageTypes.includes(file.type));
-        } catch (err) {
-          if (err instanceof ApiError) {
-            console.error('Failed to fetch files', err);
-          } else {
-            throw err;
-          }
-        }
-      };
-
-      const loadImage = async () => {
-        const preview = (await fetchPreview()) ?? null;
-        if (preview == null) return;
-
-        setImageUrl(FILE.getURL(preview.id));
-      };
-
-      loadImage();
-    }, [id]);
+      (async () => {
+        const imageUrl = await LoadModelPreviewImage(id, UserData.auth.clearance);
+        setImageUrl(imageUrl);
+      })();
+    }, [id, UserData.auth]);
 
 
     const tagsRender = tags?.slice(0, 8).map((tag, index) => (
@@ -86,7 +59,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
           ref={ref}
           {...props}
         >
-          <div className="w-[90%] flex-grow mt-2 rounded-md overflow-hidden relative">
+          <div className="w-[90%] grow mt-2 rounded-md overflow-hidden relative">
             <img
               src={imageUrl === null ? placeholder : imageUrl}
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"

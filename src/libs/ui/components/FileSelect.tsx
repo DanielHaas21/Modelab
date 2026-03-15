@@ -1,43 +1,35 @@
 import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useRef } from 'react';
 import { UploadedFile } from './UploadedFile';
 import { useTranslation } from '../provider';
-
-export interface FileOption {
-  name: string;
-  type: string;
-  isHidden: boolean;
-  isMain: boolean;
-  isPreview: boolean;
-
-  id?: number;
-  file?: File;
-}
+import { ManageFile } from '../../../middleware/types';
 
 interface FileSelectProps {
-  files: FileOption[];
-  setFiles: React.Dispatch<React.SetStateAction<FileOption[]>>;
+  files: ManageFile[];
+  setFiles: React.Dispatch<React.SetStateAction<ManageFile[]>>;
 }
 
 export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslation('ui.file_select');
 
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;
     const file = event.target.files[0];
 
-    const updatedFiles = [...files];
-    updatedFiles.push({
-      file,
-      name: file.name,
-      type: file.type,
-      isMain: false,
-      isHidden: false,
-      isPreview: false,
-    });
-    setFiles(updatedFiles);
+    setFiles((prev) => [
+      ...prev,
+      {
+        type: 'local',
+        localFile: file,
+        name: file.name,
+        fileType: file.type,
+        isMain: false,
+        isHidden: false,
+        isPreview: false,
+      },
+    ]);
 
     event.target.value = '';
   };
@@ -65,19 +57,21 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
                 index={index}
                 file={file}
                 onClose={() => {
-                  const updatedFiles = [...files];
-                  updatedFiles.splice(index, 1);
-                  setFiles(updatedFiles);
+                  setFiles((prev) => prev.filter((_, i) => i !== index));
                 }}
                 onChange={(isMain, isPreview, isHidden) => {
-                  const updatedFiles = [...files];
-                  updatedFiles[index] = {
-                    ...file,
-                    isMain: isMain,
-                    isPreview: isPreview,
-                    isHidden: isHidden,
-                  };
-                  setFiles(updatedFiles);
+                  setFiles((prev) => {
+                    const updatedFiles = [...prev];
+                    if (updatedFiles[index]) {
+                      updatedFiles[index] = {
+                        ...updatedFiles[index],
+                        isMain,
+                        isPreview,
+                        isHidden,
+                      };
+                    }
+                    return updatedFiles;
+                  });
                 }}
               />
             </div>

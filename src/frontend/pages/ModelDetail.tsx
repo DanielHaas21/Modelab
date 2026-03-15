@@ -2,8 +2,6 @@ import * as React from 'react';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Button } from '../../libs/ui/components/Button';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import {
   confirm,
   ErrorDisplay,
@@ -13,16 +11,15 @@ import {
   Preloader,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { ModelData } from '../../middleware/types';
-import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+import { ModelDetailData, DetailFile } from '../../middleware/types';
+import loadModelDetail from '../../middleware/actions/LoadModelDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
 import { Add } from '../../store/slices/Message';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { useCheckClearance, useValidatePermission } from '../../libs/auth';
 import JSZip from 'jszip';
-import { ModelFileProps } from '../../libs/types/ModelFileProps';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
@@ -33,18 +30,23 @@ import { BrowserRoutes } from '../../global/BrowserRoutes';
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
 
-  const [modelData, setModelData] = React.useState<ModelData | null>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [modelDetailData, setModelDetailData] = React.useState<ModelDetailData | null>(null);
+
   const model = useParams();
   const Dispatch = useDispatch<AppDispatch>();
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
   const { isDesktop } = useResponsive();
+
+  const UserData = useSelector((state: RootState) => state.User);
   const { hasClearance } = useCheckClearance();
 
-  const downloadAllAsZip = async (files: ModelFileProps[]) => {
+  const downloadAllAsZip = async (files: DetailFile[]) => {
+    if (modelDetailData === null) return;
+    const modelData = modelDetailData.model;
+
     const displayFilesConfirmed = await confirm(
       'Download',
       true,
@@ -54,7 +56,7 @@ const ModelDetail: React.FC = () => {
       <>
         <p>Following files will be downloaded:</p>
         <ul className="w-100 list-group">
-          {modelData?.files.map((file, index) => (
+          {modelData.files.filter(file => file.download !== null).map((file, index) => (
             <li className="list-group-item" key={index}>
               {file.name}
             </li>
@@ -67,19 +69,21 @@ const ModelDetail: React.FC = () => {
 
     const zip = new JSZip();
 
-    const fetchFile = async (file: ModelFileProps) => {
-      const response = await fetch(file.bin);
-      const blob = await response.blob();
-      zip.file(file.name, blob);
-    };
-
-    await Promise.all(files.map(fetchFile));
+    for (const file of files) {
+      if (file.download === null) continue;
+      try {
+        const blob = await file.download();
+        zip.file(file.name, blob);
+      } catch (error) {
+        console.error('Downloading error:', error);
+      }
+    }
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(zipBlob);
-    link.download = modelData?.name ? modelData.name + '.zip' : 'asset.zip';
+    link.download = modelData.name ? modelData.name + '.zip' : 'asset.zip';
     document.body.appendChild(link);
 
     link.click();
@@ -90,23 +94,22 @@ const ModelDetail: React.FC = () => {
   };
 
   React.useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       setIsLoading(true);
       try {
-        const ModelData = await LoadModelDetail(parseInt(model.modelId!));
-        setModelData(ModelData);
+        const assetId = parseInt(model.modelId!);
+        const modelData = await loadModelDetail(assetId, UserData.auth.clearance);
+        setModelDetailData(modelData);
       } catch (error) {
         console.error('Error fetching model data:', error);
       }
       setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
+    })();
+  }, [UserData.auth.clearance]);
 
   if (isLoading) return <Preloader className="min-h-100-vh" />;
 
-  if (!modelData)
+  if (!modelDetailData) {
     return (
       <BaseLayout bordered={true}>
         <ErrorDisplay image={icon_boom} code={404} message="Oops! Asset not found">
@@ -114,23 +117,28 @@ const ModelDetail: React.FC = () => {
         </ErrorDisplay>
       </BaseLayout>
     );
+  }
+
+  const modelData = modelDetailData.model;
 
   return (
     <>
       <GeneralPopup />
       <ModelDetailLayout
         bordered={true}
-        image={modelData.files}
-        editButtonId={
-          hasClearance(CLEARANCE.USER)
-            ? modelData?.id
-            : undefined
+        files={modelData.files}
+        goBackButton={{
+          onClick: () => { }
+        }}
+        editButton={hasClearance(CLEARANCE.USER)
+          ? { id: modelData.id }
+          : undefined
         }
       >
         <Label size="lg" className={"kanit-regular lts-1 overflow-y-auto"}>
           {modelData.name}
         </Label>
-        <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
+        <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData.description}</p>
         <ModelInfoSection name="Category">
           <p className="m-0" key={modelData.category.id}>
             {modelData.category.name}
@@ -138,7 +146,7 @@ const ModelDetail: React.FC = () => {
         </ModelInfoSection>
         <ModelInfoSection name="Tags">
           <div className="mt-2 d-flex flex-wrap">
-            {modelData.tags?.map((tag) => {
+            {modelData.tags.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>
@@ -163,7 +171,7 @@ const ModelDetail: React.FC = () => {
         </div>
         {!isDesktop && (
           <OffcanvasModal ref={offcanvasHandleRef} title='Preview' >
-            <ModelDetailImageCarousel image={modelData.files} />
+            <ModelDetailImageCarousel files={modelData.files} />
           </OffcanvasModal>
         )}
       </ModelDetailLayout>

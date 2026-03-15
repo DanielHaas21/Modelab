@@ -53,7 +53,7 @@ const fetchAssets = async (
       searchQuery.tags.length == 0 &&
       searchQuery.nameQuery.length == 0)
   ) {
-    const { assets, info } = await assetApi.get_all(page, count);
+    const { assets, info } = await assetApi.getAll(page, count);
     return formatResult(assets, info);
   }
 
@@ -92,6 +92,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const [results, setResults] = React.useState<Results>({
+    searchQuery,
     assets: [],
     hasMore: true,
     page: 0,
@@ -145,7 +146,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
 
   return (
     <InfiniteScroll
-      className="xl:w-5/6 lg:w-3/4 w-full h-full flex-grow p-4"
+      className="xl:w-5/6 lg:w-3/4 w-full h-full grow p-4"
       hasMore={results.hasMore}
       itemCount={results.assets.length}
       loadMore={loadMore}

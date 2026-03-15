@@ -1,32 +1,100 @@
 import ApiError from '../api/ApiError';
-import { ModelData } from '../types';
-import { ASSET } from '../ApiClients';
-import { ROUTES } from '../routes';
-import { API_PATH } from '../apiPath';
+import { ModelDetailData, DetailFile, DetailModel } from '../types';
+import { ASSET, FILE } from '../ApiClients';
+import { FileGroup, getFileGroup } from '../../libs/utils/isFile';
+import { CLEARANCE, Clearance } from '../../store/types';
+import { FileInfoData } from '../api';
 
-export default async function LoadModelDetail(id: number): Promise<ModelData> {
-  const ModelMetadata = await ASSET.get(id);
-  const FileMetadata = await ASSET.get_files(id);
+const canShowPreview = (fileInfo: FileInfoData, group: FileGroup) => {
+  if (group === 'model' && !FILE.isModelFileLoadable(fileInfo.fileType))
+    return false;
+  return true;
+};
 
-  if (!FileMetadata) throw new ApiError('Failed to load file metadata', 404, 'service');
+export default async function loadModelDetail(id: number, userClearance: Clearance): Promise<ModelDetailData> {
+  const modelMetadata = await ASSET.get(id);
+  const fileMetadata = await ASSET.getFiles(id);
+  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
-  const name = ModelMetadata.asset.name;
-  const desc = ModelMetadata.asset.description;
-  const category = ModelMetadata.asset.category;
-  const tags = ModelMetadata.asset.tags;
+  const userCanDownload = userClearance >= CLEARANCE.USER;
 
-  const data: ModelData = {
-    id: id,
-    name: name,
-    desc: desc,
-    category: category,
-    tags: tags,
-    files: FileMetadata.files.map((meta) => ({
-      bin: API_PATH + ROUTES.GET.File + meta.id,
-      name: meta.name,
-      type: meta.type,
-    })),
+  if (!fileMetadata) throw new ApiError('Failed to load file metadata', 404, 'service');
+
+  const files: DetailFile[] = [];
+  for (const fileInfo of fileMetadata.files) {
+    let file: DetailFile | null = null;
+
+    const fileBase = {
+      ...fileInfo,
+      download: userCanDownload ? (async () => await FILE.getBlob(fileInfo.id, fileInfo.fileType)) : null,
+      previewUrl: FILE.getPreviewURL(fileInfo.id),
+    };
+
+    const group = getFileGroup(fileInfo.fileType, supportedFileTypes);
+    if (userCanDownload) {
+      switch (group) {
+        case 'image':
+          const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
+          const imageUrl = URL.createObjectURL(imageBlob);
+          file = {
+            ...fileBase,
+            type: 'image',
+            imageUrl,
+          };
+          break;
+        case 'model':
+          const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
+          file = {
+            ...fileBase,
+            type: '3d',
+            model,
+          };
+          break;
+        case 'audio':
+          try {
+            const audioBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
+            const audioUrl = URL.createObjectURL(audioBlob);
+
+            file = {
+              ...fileBase,
+              type: 'audio',
+              audioUrl,
+            };
+          } catch (error) {
+            console.error('Audio download failed:', error);
+            break;
+          }
+          break;
+        case 'other':
+          file = {
+            ...fileBase,
+            type: 'other',
+          };
+          break;
+        default:
+          console.error('Unsuported file: ' + fileInfo.name + '.  Ignoring.');
+          break;
+      }
+    } else if (group !== null && canShowPreview(fileInfo, group)) {
+      file = {
+        ...fileBase,
+        type: 'preview',
+      }
+    }
+
+    if (file !== null) files.push(file);
+  }
+
+  const model: DetailModel = {
+    id: modelMetadata.asset.id,
+    name: modelMetadata.asset.name,
+    description: modelMetadata.asset.description,
+    category: modelMetadata.asset.category,
+    tags: modelMetadata.asset.tags,
+    files,
   };
 
-  return data;
+  return {
+    model,
+  };
 }

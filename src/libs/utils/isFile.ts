@@ -1,22 +1,22 @@
-/**
- * Contains methods for checking file types
- */
-export class isFile {
-  /**
-   * Checks if its a valid non-proprietary 3D file
-   * @param file
-   * @returns boolean
-   */
-  public static _3D(file: string): boolean {
-    return /\.(fbx|obj|glb)$/i.test(file);
-  }
 
-  /**
-   * Checks if its a valid image file
-   * @param file
-   * @returns boolean
-   */
-  public static _img(file: string): boolean {
-    return /\.(png|jpe?g|gif|svg)$/i.test(file);
-  }
+export interface SupportedFileTypes {
+  model: string[];
+  audio: string[];
+  image: string[];
+  other: string[];
 }
+
+export type FileGroup = keyof SupportedFileTypes;
+
+export const isFile = (fileType: string, targetGroup: FileGroup, supportedFileTypes: SupportedFileTypes): boolean => {
+  return supportedFileTypes[targetGroup].includes(fileType);
+};
+
+export const getFileGroup = (fileType: string, supportedFileTypes: SupportedFileTypes): FileGroup | null => {
+  for (const groupName of Object.keys(supportedFileTypes)) {
+    const group = groupName as FileGroup;
+    if (supportedFileTypes[group].includes(fileType))
+      return group;
+  }
+  return null;
+};

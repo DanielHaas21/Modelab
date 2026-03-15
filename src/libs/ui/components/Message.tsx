@@ -66,7 +66,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
         {...props}
       >
         <div className={cn('w-2 shrink-0', meta.color)}></div>
-        <div className="flex-grow p-3">
+        <div className="grow p-3">
           <div className="flex items-center justify-between mb-1">
             <Label size="xxs" className="font-bold uppercase tracking-wider opacity-70">
               {t(variant.toLowerCase())}

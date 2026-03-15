@@ -25,7 +25,7 @@ export interface AssetData {
 export interface FileInfoData {
   id: number;
   name: string;
-  type: string;
+  fileType: string;
   isHidden: boolean;
   isMain: boolean;
   isPreview: boolean;
@@ -85,7 +85,7 @@ export class Asset extends Service {
     data.files.forEach((file, index) => {
       form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
       form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
-      form.append('files[]', file.file!);
+      form.append('files[]', file.localFile);
     });
 
     return this.POST(ROUTES.POST.Asset + data.id + '/update', form, {
@@ -110,7 +110,7 @@ export class Asset extends Service {
     data.files.forEach((file, index) => {
       form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
       form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
-      form.append('files[]', file.file!);
+      form.append('files[]', file.localFile);
     });
 
     return this.POST(ROUTES.POST.Asset + 'create', form, {
@@ -126,7 +126,7 @@ export class Asset extends Service {
     return this.POST(ROUTES.POST.Asset + id) as Promise<AssetGet>;
   }
 
-  public async get_all(page: number, count: number): Promise<AssetGetAll> {
+  public async getAll(page: number, count: number): Promise<AssetGetAll> {
     return this.POST(ROUTES.POST.Asset + 'all', { page, count }) as Promise<AssetGetAll>;
   }
 
@@ -153,7 +153,7 @@ export class Asset extends Service {
     return this.POST(ROUTES.POST.Asset + 'search', data) as Promise<AssetSearch>;
   }
 
-  public async get_files(id: number): Promise<AssetGetFiles> {
+  public async getFiles(id: number): Promise<AssetGetFiles> {
     return this.POST(ROUTES.POST.Asset + id + '/files') as Promise<AssetGetFiles>;
   }
 

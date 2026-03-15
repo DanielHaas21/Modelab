@@ -36,7 +36,7 @@ export class Tag extends Service {
     return this.POST(ROUTES.POST.Tag + id) as Promise<TagGet>;
   }
 
-  public async get_all(): Promise<TagGetAll> {
+  public async getAll(): Promise<TagGetAll> {
     return this.POST(ROUTES.POST.Tag + 'all') as Promise<TagGetAll>;
   }
 

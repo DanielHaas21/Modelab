@@ -36,7 +36,7 @@ export class Category extends Service {
     return this.POST(ROUTES.POST.Category + id) as Promise<CategoryGet>;
   }
 
-  public async get_all(): Promise<CategoryGetAll> {
+  public async getAll(): Promise<CategoryGetAll> {
     return this.POST(ROUTES.POST.Category + 'all') as Promise<CategoryGetAll>;
   }
 

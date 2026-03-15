@@ -32,6 +32,10 @@ export class Service {
     this.bearerToken = bearerToken;
   }
 
+  public getToken() {
+    return this.bearerToken;
+  }
+
   private checkResponse(response: AxiosResponse<ApiResponse>): void {
     if (response.status !== 200)
       throw new ApiError('Failed with code: ' + response.status, response.status, 'request');
