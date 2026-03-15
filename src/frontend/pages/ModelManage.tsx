@@ -25,8 +25,10 @@ import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
 import deleteModel from '../../middleware/actions/DeleteModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useToast } from '../../libs/ui/components/Toast';
+import { useValidatePermission } from '../../libs/auth';
+import { CLEARANCE } from '../../store/types';
 
 const createDetailFileFromLocalFile = async (localFile: LocalManageFile, supportedFileTypes: SupportedFileTypes): Promise<DetailFile | null> => {
   const blob = new Blob([localFile.localFile], { type: localFile.type });
@@ -96,7 +98,8 @@ const ModelManage: React.FC = () => {
   const { action } = useParams();
   const assetId = isFinite(Number(action)) ? Number(action) : undefined;
   const { show } = useToast();
-  // useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
+
+  useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -252,7 +255,7 @@ const ModelManage: React.FC = () => {
 
       show({
         title: 'Saved!',
-        variant: 'success'
+        variant: 'success',
       });
 
     } else {
@@ -263,16 +266,22 @@ const ModelManage: React.FC = () => {
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),
       });
-      setRefreshModel((i) => i + 1);
+      // setRefreshModel((i) => i + 1);
 
       show({
         title: 'Uploaded!',
-        variant: 'success'
+        variant: 'success',
+        actions: (
+          <Button variant='light' onClick={() => navigate(BrowserRoutes.ModelManage + createdId)}>
+            <FontAwesomeIcon icon={faPen} />
+            <span className="w-full">Go to edit</span>
+          </Button>
+        )
       });
     }
   };
 
-  if (isLoading) return <Preloader className="min-h-screen" />;
+  if (isLoading || modelManageData === null) return <Preloader className="min-h-screen" />;
 
   const ActionButtons = (
     <>
@@ -296,9 +305,9 @@ const ModelManage: React.FC = () => {
           className="justify-between w-full"
           onClick={handleUploadOrSave}
         >
-          <FontAwesomeIcon icon={assetId !== undefined ? faUpload : faSave} />
+          <FontAwesomeIcon icon={assetId === undefined ? faUpload : faSave} />
           <span className="w-full">
-            {assetId !== undefined ? 'Upload' : 'Save'}
+            {assetId === undefined ? 'Upload' : 'Save'}
           </span>
         </Button>
       </div>

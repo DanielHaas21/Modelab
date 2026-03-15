@@ -100,7 +100,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
 
   React.useEffect(() => {
     setResults({
-      searchQuery: searchQuery,
+      searchQuery,
       assets: [],
       hasMore: true,
       page: 0,

@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components';
-import { Button } from '../components/Button';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEye, faPencil, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';

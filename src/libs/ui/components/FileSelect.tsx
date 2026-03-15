@@ -4,6 +4,8 @@ import React, { useRef } from 'react';
 import { UploadedFile } from './UploadedFile';
 import { useTranslation } from '../provider';
 import { ManageFile } from '../../../middleware/types';
+import { getFileType } from '../../utils/getFileType';
+import { useToast } from './Toast';
 
 interface FileSelectProps {
   files: ManageFile[];
@@ -13,10 +15,23 @@ interface FileSelectProps {
 export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslation('ui.file_select');
+  const { show } = useToast();
 
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;
     const file = event.target.files[0];
+    event.target.value = '';
+
+    const fileType = getFileType(file);
+
+    if (fileType === null) {
+      show({
+        title: 'Unsupported file format!',
+        variant: 'error',
+        description: `File '${file.name}' is not supported`
+      });
+      return;
+    }
 
     setFiles((prev) => [
       ...prev,
@@ -24,14 +39,12 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         type: 'local',
         localFile: file,
         name: file.name,
-        fileType: file.type,
+        fileType: fileType,
         isMain: false,
         isHidden: false,
         isPreview: false,
       },
     ]);
-
-    event.target.value = '';
   };
 
   return (

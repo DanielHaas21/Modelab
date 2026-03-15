@@ -1,13 +1,6 @@
 import { DetailFile, ManageConfigProps, ManageFile, ManageModel, ModelManageData } from '../types';
 import { ASSET, CATEGORY, FILE, TAG } from '../ApiClients';
-import { FileGroup, getFileGroup } from '../../libs/utils/isFile';
-import { FileInfoData } from '../api';
-
-const canShowPreview = (fileInfo: FileInfoData, group: FileGroup) => {
-  if (group === 'model' && !FILE.isModelFileLoadable(fileInfo.fileType))
-    return false;
-  return true;
-};
+import { getFileGroup } from '../../libs/utils/isFile';
 
 export default async function loadModelManage(id: number | null): Promise<ModelManageData> {
   const allCategories = (await CATEGORY.getAll()).categories;
@@ -38,21 +31,29 @@ export default async function loadModelManage(id: number | null): Promise<ModelM
       const group = getFileGroup(fileInfo.fileType, supportedFileTypes);
       switch (group) {
         case 'image':
-          const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
-          const imageUrl = URL.createObjectURL(imageBlob);
-          detailFile = {
-            ...detailFileBase,
-            type: 'image',
-            imageUrl,
-          };
+          try {
+            const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
+            const imageUrl = URL.createObjectURL(imageBlob);
+            detailFile = {
+              ...detailFileBase,
+              type: 'image',
+              imageUrl,
+            };
+          } catch (error) {
+            console.error('Image download failed.', fileInfo, error);
+          }
           break;
         case 'model':
-          const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
-          detailFile = {
-            ...detailFileBase,
-            type: '3d',
-            model,
-          };
+          try {
+            const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
+            detailFile = {
+              ...detailFileBase,
+              type: '3d',
+              model,
+            };
+          } catch (error) {
+            console.error('Model download/parse failed.', fileInfo, error);
+          }
           break;
         case 'audio':
           try {
@@ -65,7 +66,7 @@ export default async function loadModelManage(id: number | null): Promise<ModelM
               audioUrl,
             };
           } catch (error) {
-            console.error('Audio download failed:', error);
+            console.error('Audio download failed.', fileInfo, error);
             break;
           }
           break;
