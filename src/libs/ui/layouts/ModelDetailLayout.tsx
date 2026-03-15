@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components';
-import { MessageWrapper } from '../components';
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -140,7 +139,6 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
         )}
       </main >
       <Footer className={'h-[6vh] ' + (bordered ? 'border-t border-ui-border' : 'w-full')} />
-      <MessageWrapper />
     </>
   );
 };

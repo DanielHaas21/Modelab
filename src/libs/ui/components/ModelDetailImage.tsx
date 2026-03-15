@@ -11,13 +11,17 @@ import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/
 import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFileOther, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
 
-// Preview
 
-interface ModelPreivewProps {
+// This file is renders a model using THREE
+// It composes of multiple subcomponents for different file types, and a main component that decides which one to render based on the file type. 
+
+// Model preview (can be used for both preview and image types since they are both just images with different urls)
+
+interface ModelPreviewProps {
   file: DetailFilePreview;
 }
 
-const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreivewProps>(
+const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
   ({ file }, ref) => {
     return (
       <div className="w-full grow flex items-center">
@@ -32,7 +36,7 @@ const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreivewProps>(
   }
 );
 
-// Image
+// Image (can be used for both image types since they are both just images with different urls)
 
 interface ModelImageProps {
   file: DetailFileImage;
@@ -53,8 +57,12 @@ const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
   }
 );
 
-// 3D
 
+// Model 3D runs a 3D model file through THREE, it includes controls for auto-rotation, wireframe toggle and color palette cycling. It also handles WebGL context loss by re-rendering the canvas.
+
+
+
+// color palette for the model, includes a mesh color and a wireframe color, if meshColor is null it will use the original colors of the model
 interface ColorPalette {
   meshColor: string | null;
   wireframeColor: string;
@@ -66,6 +74,7 @@ const palettes: ColorPalette[] = [
   { meshColor: '#000000', wireframeColor: '#ffffff' },
 ] as const;
 
+// Visual configuration for the model, mostly configured via the dropdown menu in the top right corner of the model, it includes mesh color, wireframe toggle, wireframe color and scale (zoom)
 interface ModelVisualConfig {
   meshColor: string | null;
   showWireframe: boolean;
@@ -82,21 +91,27 @@ interface ModelProps {
 
 const Model = React.forwardRef<ModelType, ModelProps>(
   ({ model, modelVisualConfig }, ref) => {
+
     const clonedModel = React.useMemo(() => {
       const clone = model.clone();
       clone.traverse((child) => {
-        if ((child as THREE.Mesh).isMesh) {
-          const mesh = child as THREE.Mesh;
-          if (modelVisualConfig.meshColor) {
-            mesh.material = new THREE.MeshBasicMaterial({ color: modelVisualConfig.meshColor });
-          }
-          if (modelVisualConfig.showWireframe) {
-            const wireframe = new THREE.LineSegments(
-              new THREE.WireframeGeometry(mesh.geometry),
-              new THREE.LineBasicMaterial({ color: modelVisualConfig.wireframeColor })
-            );
-            mesh.add(wireframe);
-          }
+        // if its not a mesh, we dont care about it
+        if (!(child as THREE.Mesh).isMesh) {
+          return;
+        }
+        // assign new material to the mesh based on the current visual configuration, if meshColor is null we use the original material, otherwise we use a new MeshBasicMaterial with the specified color. If showWireframe is true we also add a wireframe as a child of the mesh with the specified wireframe color.
+        const mesh = child as THREE.Mesh;
+        if (modelVisualConfig.meshColor) {
+          mesh.material = new THREE.MeshBasicMaterial({ color: modelVisualConfig.meshColor });
+        }
+
+        // Add wireframe if enabled
+        if (modelVisualConfig.showWireframe) {
+          const wireframe = new THREE.LineSegments(
+            new THREE.WireframeGeometry(mesh.geometry),
+            new THREE.LineBasicMaterial({ color: modelVisualConfig.wireframeColor })
+          );
+          mesh.add(wireframe);
         }
       });
       return clone;
@@ -107,6 +122,7 @@ const Model = React.forwardRef<ModelType, ModelProps>(
     return <primitive ref={ref} scale={clampedScale} object={clonedModel} />;
   }
 );
+
 
 interface FocusCameraProps {
   modelRef: React.RefObject<ModelType | null>;

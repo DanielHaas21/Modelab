@@ -10,7 +10,7 @@ export * from './Header';
 export * from './InfiniteScroll';
 export * from './Input';
 export * from './Label';
-export * from './Message';
+export * from './Toast';
 export * from './ModelDetailImage';
 export * from './ModelDetailImageCarousel';
 export * from './ModelInfoSection';

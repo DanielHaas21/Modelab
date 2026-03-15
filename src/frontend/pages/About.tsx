@@ -6,9 +6,6 @@ import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { useTranslation } from '../../libs/ui/provider';
 
-/**
- * @TODO.md Add more info
- */
 const About: React.FC = () => {
   const { isDesktop } = useResponsive();
   const t = useTranslation("pages.about");

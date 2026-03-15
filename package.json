@@ -25,6 +25,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
+    "framer-motion": "^12.36.0",
     "i18next": "^25.8.17",
     "i18next-http-backend": "^3.0.2",
     "jszip": "^3.10.1",
@@ -39,6 +40,7 @@
     "react-router-dom": "^7.4.0",
     "tailwind-merge": "^3.0.2",
     "three": "^0.175.0",
+    "uid": "^2.0.2",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
