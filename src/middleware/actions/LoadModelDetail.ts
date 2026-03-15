@@ -1,8 +1,15 @@
 import ApiError from '../api/ApiError';
 import { ModelData, ModelFileProp } from '../types';
 import { ASSET, FILE } from '../ApiClients';
-import { getFileGroup } from '../../libs/utils/isFile';
+import { FileGroup, getFileGroup } from '../../libs/utils/isFile';
 import { CLEARANCE, Clearance } from '../../store/types';
+import { FileInfoData } from '../api';
+
+const canShowPreview = (fileInfo: FileInfoData, group: FileGroup) => {
+  if (group === 'model' && !FILE.isModelFileLoadable(fileInfo.type))
+    return false;
+  return true;
+};
 
 export default async function loadModelDetail(id: number, userClearance: Clearance): Promise<ModelData> {
   const modelMetadata = await ASSET.get(id);
@@ -26,7 +33,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
       id: fileInfo.id,
       name: fileInfo.name,
       fileType: fileInfo.type,
-      download: userCanDownload ? (() => FILE.getBlob(fileInfo.id)) : null,
+      download: userCanDownload ? (async () => await FILE.getBlob(fileInfo.id, fileInfo.type)) : null,
       previewUrl: FILE.getPreviewURL(fileInfo.id),
     };
 
@@ -34,7 +41,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
     if (userCanDownload) {
       switch (group) {
         case 'image':
-          const imageBlob = await FILE.getBlob(fileInfo.id);
+          const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.type);
           const imageUrl = URL.createObjectURL(imageBlob);
           file = {
             ...fileBase,
@@ -51,13 +58,19 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           };
           break;
         case 'audio':
-          const audioBlob = await FILE.getBlob(fileInfo.id);
-          const audioUrl = URL.createObjectURL(audioBlob);
-          file = {
-            ...fileBase,
-            type: 'audio',
-            audioUrl,
-          };
+          try {
+            const audioBlob = await FILE.getBlob(fileInfo.id, fileInfo.type);
+            const audioUrl = URL.createObjectURL(audioBlob);
+
+            file = {
+              ...fileBase,
+              type: 'audio',
+              audioUrl,
+            };
+          } catch (error) {
+            console.error('Audio download failed:', error);
+            break;
+          }
           break;
         case 'other':
           file = {
@@ -69,15 +82,10 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           console.error('Unsuported file: ' + fileInfo.name + '. Ignoring.');
           break;
       }
-    } else {
-      switch (group) {
-        case 'image':
-        case 'model':
-        case 'audio':
-          file = {
-            ...fileBase,
-            type: 'preview',
-          };
+    } else if (group !== null && canShowPreview(fileInfo, group)) {
+      file = {
+        ...fileBase,
+        type: 'preview',
       }
     }
 

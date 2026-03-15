@@ -66,15 +66,13 @@ const ModelDetail: React.FC = () => {
 
     const zip = new JSZip();
 
-    // TODO: Look into big files not downloading issue, shouldn't be because of backend
     for (const file of files) {
       if (file.download === null) continue;
       try {
         const blob = await file.download();
-        console.log(file);
         zip.file(file.name, blob);
       } catch (error) {
-        console.error(error);
+        console.error('Downloading error:', error);
       }
     }
 
@@ -104,7 +102,7 @@ const ModelDetail: React.FC = () => {
       }
       setIsLoading(false);
     })();
-  }, [UserData.auth]);
+  }, [UserData.auth.clearance]);
 
   if (isLoading) return <Preloader className="min-h-100-vh" />;
 

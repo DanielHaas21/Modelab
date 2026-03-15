@@ -21,38 +21,34 @@ export class File extends Service {
     super(API_PATH);
   }
 
-  private async fetchWithAuth(url: string): Promise<Response> {
-    const response = await fetch(url, {
-      headers: this.bearerToken ? { Authorization: `Bearer ${this.bearerToken}` } : {},
-    });
-
-    if (!response.ok) {
-      throw new Error(`File service error: ${response.status} ${response.statusText}`);
-    }
-
-    return response;
+  private async getBlobFromUrl(url: string, fileType: string): Promise<Blob> {
+    const data = await this.GET(url, { responseType: 'arraybuffer' }) as ArrayBuffer;
+    const blob = new Blob([data], { type: fileType });
+    return blob;
   }
 
   public async loadModelFromUrl(url: string, fileType: string) {
-    if (!LOADABLE_MODEL_FILES.includes(fileType as LoadableModelType)) {
+    if (!this.isModelFileLoadable(fileType)) {
       return null;
     }
 
-    const response = await this.fetchWithAuth(url);
-
     switch (fileType) {
       case 'model/obj':
-        const text = await response.text();
-        return this.objLoader.parse(text);
+        const textData = await this.GET(url, { responseType: 'text', timeout: 0 }) as unknown as string;
+        return this.objLoader.parse(textData);
 
       case 'model/fbx':
       case 'application/octet-stream':
-        const buffer = await response.arrayBuffer();
-        return this.fbxLoader.parse(buffer, url);
+        const bufferData = await this.GET(url, { responseType: 'arraybuffer', timeout: 0 }) as unknown as ArrayBuffer;
+        return this.fbxLoader.parse(bufferData, url);
 
       default:
         return null;
     }
+  }
+
+  public isModelFileLoadable(fileType: string) {
+    return LOADABLE_MODEL_FILES.includes(fileType as LoadableModelType);
   }
 
   public async loadModelFromFile(id: number, fileType: string) {
@@ -67,18 +63,17 @@ export class File extends Service {
     return this.getAssetURL(id) + '/preview';
   }
 
-  public async getBlob(id: number): Promise<Blob> {
-    const response = await this.fetchWithAuth(this.getAssetURL(id));
-    return await response.blob();
+  public async getBlob(id: number, fileType: string): Promise<Blob> {
+    const url = this.getAssetURL(id);
+    return await this.getBlobFromUrl(url, fileType);
   }
 
-  public async getPreviewBlob(id: number): Promise<Blob> {
-    const response = await this.fetchWithAuth(this.getPreviewURL(id));
-    return await response.blob();
+  public async getPreviewBlob(id: number, fileType: string): Promise<Blob> {
+    const url = this.getPreviewURL(id);
+    return await this.getBlobFromUrl(url, fileType);
   }
 
   public async getSupportedFileTypes(): Promise<SupportedFileTypes> {
     return await this.GET(this.baseURL + ROUTES.GET.File + 'supported') as SupportedFileTypes;
   }
-
 }

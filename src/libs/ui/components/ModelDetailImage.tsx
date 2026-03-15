@@ -19,7 +19,7 @@ interface ModelPreivewProps {
 const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreivewProps>(
   ({ file }, ref) => {
     return (
-      <div className='h-100'>
+      <div className="w-full grow flex items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
           className={cn('w-100 h-100 object-fit-scale')}
@@ -40,7 +40,7 @@ interface ModelImageProps {
 const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
   ({ file }, ref) => {
     return (
-      <div className='h-100'>
+      <div className="w-full grow flex items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
           className={cn('w-100 h-100 object-fit-scale')}
@@ -195,7 +195,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
     };
 
     return (
-      <div className={cn('model-viewer h-100 relative')} ref={ref}>
+      <div className="w-full h-100 model-viewer relative" ref={ref}>
         <Canvas
           scene={SceneConfig}
           key={canvasKey}
@@ -270,14 +270,23 @@ interface ModelAudioProps {
 const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
   ({ file }, ref) => {
     return (
-      <div ref={ref}>
-        <audio controls src={file.audioUrl}>
+      <div
+        ref={ref}
+        className="w-full grow flex items-center"
+      >
+        <audio
+          controls
+          src={file.audioUrl}
+          className="w-full h-10 outline-none"
+        >
           Your browser does not support the audio element.
         </audio>
       </div>
     );
   }
 );
+
+export default ModelAudio;
 
 // --
 
@@ -307,7 +316,7 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
         return (
           <img
             ref={ref as React.RefObject<HTMLImageElement>}
-            className={'h-100 w-100'}
+            className={'w-full h-full'}
             src={placeholder}
             alt="Unsupported format"
           />
