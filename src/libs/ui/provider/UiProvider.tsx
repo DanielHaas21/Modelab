@@ -1,6 +1,7 @@
 'use client';
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { i18n as I18nInstance, TOptionsBase } from 'i18next';
+import { ToastProvider } from '../components/Toast';
 
 export type TranslationValue = string | number | React.ReactNode;
 type TranslationOptions = TOptionsBase & Record<string, unknown>;
@@ -46,7 +47,9 @@ interface UiProviderProps {
 export function UiProvider({ children, i18nValue }: UiProviderProps) {
   return (
     <I18nContext.Provider value={i18nValue}>
-      {children}
+      <ToastProvider>
+        {children}
+      </ToastProvider>
     </I18nContext.Provider>
   );
 }

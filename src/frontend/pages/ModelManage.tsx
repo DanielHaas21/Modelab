@@ -21,12 +21,12 @@ import { DetailFile, LocalManageFile, ManageFile, ModelManageData } from '../../
 import loadModelManage from '../../middleware/actions/LoadModelManage';
 import { getFileGroup, SupportedFileTypes } from '../../libs/utils';
 import { FILE } from '../../middleware/ApiClients';
-import { Add } from '../../store/slices/Message';
 import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
 import deleteModel from '../../middleware/actions/DeleteModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { useToast } from '../../libs/ui/components/Toast';
 
 const createDetailFileFromLocalFile = async (localFile: LocalManageFile, supportedFileTypes: SupportedFileTypes): Promise<DetailFile | null> => {
   const blob = new Blob([localFile.localFile], { type: localFile.type });
@@ -95,7 +95,7 @@ const createDetailFiles = async (manageFiles: ManageFile[], supportedFileTypes: 
 const ModelManage: React.FC = () => {
   const { action } = useParams();
   const assetId = isFinite(Number(action)) ? Number(action) : undefined;
-
+  const { show } = useToast();
   // useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -249,10 +249,12 @@ const ModelManage: React.FC = () => {
         files: filesInput.filter((file) => file.type === 'local'),
       });
       setRefreshModel((i) => i + 1);
-      dispatch(Add({
-        message: 'Saved!',
-        variant: 'Success'
-      }))
+
+      show({
+        title: 'Saved!',
+        variant: 'success'
+      });
+
     } else {
       const createdId = await createModel({
         name: assetNameInput,
@@ -261,12 +263,12 @@ const ModelManage: React.FC = () => {
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),
       });
-      navigate(BrowserRoutes.ModelManage + createdId);
-      dispatch(Add({
-        message: 'Uploaded!',
-        variant: 'Success',
-      }))
-      // setRefreshModel((i) => i + 1);
+      setRefreshModel((i) => i + 1);
+
+      show({
+        title: 'Uploaded!',
+        variant: 'success'
+      });
     }
   };
 

@@ -9,13 +9,13 @@ import {
   Label,
   ModelInfoSection,
   Preloader,
+  useToast,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
 import { ModelDetailData, DetailFile } from '../../middleware/types';
 import loadModelDetail from '../../middleware/actions/LoadModelDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
-import { Add } from '../../store/slices/Message';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { useCheckClearance, useValidatePermission } from '../../libs/auth';
@@ -37,6 +37,7 @@ const ModelDetail: React.FC = () => {
 
   const model = useParams();
   const Dispatch = useDispatch<AppDispatch>();
+  const { show } = useToast();
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
@@ -89,7 +90,7 @@ const ModelDetail: React.FC = () => {
     document.body.appendChild(link);
 
     link.click();
-    Dispatch(Add({ variant: 'Success', message: 'Asset saved successfully!' }));
+    show({ variant: 'success', title: 'Asset saved successfully!' });
 
     document.body.removeChild(link);
     URL.revokeObjectURL(link.href);

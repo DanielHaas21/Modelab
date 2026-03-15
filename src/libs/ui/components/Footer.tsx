@@ -6,12 +6,12 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
-import { Add } from '../../../store/slices/Message';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useTranslation } from '../provider';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
+import { useToast } from './Toast';
 
 const FooterVariants = cva('', {
   variants: {
@@ -33,20 +33,17 @@ interface FooterProps extends FooterVariantProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
-  const Dispatch = useDispatch<AppDispatch>();
   const { isDesktop } = useResponsive();
   const t = useTranslation('ui.footer');
-
+  const { show } = useToast();
   const { hasClearance } = useCheckClearance();
 
   const CheckAdminClearance = () => {
     if (!hasClearance(CLEARANCE.ADMIN)) {
-      Dispatch(
-        Add({
-          variant: 'Error',
-          message: t('no_clearance'),
-        })
-      )
+      show({
+        variant: 'error',
+        title: t('no_clearance'),
+      });
     }
   };
 
