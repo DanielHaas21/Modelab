@@ -7,6 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { registerResolver } from '../../../store/utils/Resolver';
 import { getBody, registerBody, removeBody } from '../../../store/utils/ConfirmationBodyRegistry';
 
+/**
+ *  A component that displays a general-purpose confirmation popup. 
+*/
 export const GeneralPopup: React.FC = () => {
   const Confirmation = useSelector((state: RootState) => state.ConfirmationSlice);
   const Dispatch = useDispatch<AppDispatch>();

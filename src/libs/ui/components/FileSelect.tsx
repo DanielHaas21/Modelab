@@ -34,6 +34,33 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
     event.target.value = '';
   };
 
+  const filesRender = files.map((file, index) => (
+    <div className="min-w-[300px] w-full sm:max-w-[300px]" key={index}>
+      <UploadedFile
+        index={index}
+        file={file}
+        onClose={() => {
+          setFiles((prev) => prev.filter((_, i) => i !== index));
+        }}
+        onChange={(isMain, isPreview, isHidden) => {
+          setFiles((prev) => {
+            const updatedFiles = [...prev];
+            if (updatedFiles[index]) {
+              updatedFiles[index] = {
+                ...updatedFiles[index],
+                isMain,
+                isPreview,
+                isHidden,
+              };
+            }
+            return updatedFiles;
+          });
+        }}
+      />
+    </div>
+  )
+  )
+
   return (
     <div className="w-full">
       <div className="mb-4">
@@ -50,33 +77,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
       </div>
       <input ref={fileInputRef} onChange={addFile} className="hidden" type="file" />
       <div className="w-full overflow-x-auto h-[400px] sm:h-fit flex flex-col sm:flex-row gap-4 pb-4 custom-scrollbar">
-        {files.map((file, index) => {
-          return (
-            <div className="min-w-[300px] w-full sm:max-w-[300px]" key={index}>
-              <UploadedFile
-                index={index}
-                file={file}
-                onClose={() => {
-                  setFiles((prev) => prev.filter((_, i) => i !== index));
-                }}
-                onChange={(isMain, isPreview, isHidden) => {
-                  setFiles((prev) => {
-                    const updatedFiles = [...prev];
-                    if (updatedFiles[index]) {
-                      updatedFiles[index] = {
-                        ...updatedFiles[index],
-                        isMain,
-                        isPreview,
-                        isHidden,
-                      };
-                    }
-                    return updatedFiles;
-                  });
-                }}
-              />
-            </div>
-          );
-        })}
+        {filesRender}
       </div>
     </div>
   );

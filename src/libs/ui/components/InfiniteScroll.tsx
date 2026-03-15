@@ -12,6 +12,9 @@ interface InfiniteScrollProps {
   loader: React.ReactNode;
 }
 
+/**
+ * A component that provides infinite scrolling functionality for the browser
+ */
 export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
   children,
   className,

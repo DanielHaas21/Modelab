@@ -13,6 +13,10 @@ interface HeaderProps {
   children?: React.ReactNode[];
 }
 
+/**
+ * The Header component serves as the top navigation bar for the application. It displays the application logo, title, and a user profile image. 
+ * When the user clicks on the profile image, it toggles the visibility of the UserPopup component, which contains user-related options. =
+ */
 export const Header: React.FC<HeaderProps> = ({ className, children, ...props }) => {
   const Dispatch = useDispatch<AppDispatch>();
   const Mode = useSelector((state: RootState) => state.Mode.value);

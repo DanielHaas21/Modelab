@@ -117,12 +117,16 @@ const Model = React.forwardRef<ModelType, ModelProps>(
       return clone;
     }, [model, modelVisualConfig]);
 
+    // Clamp the scale to prevent extreme zoom levels that could cause performance issues or make the model invisible. The scale can be adjusted via the dropdown menu in the top right corner of the model.
     const clampedScale = Math.max(0.01, Math.min(modelVisualConfig.scale, 100));
 
     return <primitive ref={ref} scale={clampedScale} object={clonedModel} />;
   }
 );
 
+
+// FocusCamera is a helper component that focuses the camera on the model when it is loaded and whenever the refocus action is triggered from the dropdown menu. 
+// It calculates the bounding box of the model and positions the camera accordingly to fit the entire model in view. It also updates the OrbitControls target to ensure that the controls are centered on the model.
 
 interface FocusCameraProps {
   modelRef: React.RefObject<ModelType | null>;
@@ -146,6 +150,9 @@ const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, o
     box.getCenter(center);
     box.getSize(size);
 
+
+    // The following calculations are based on the formula for the field of view of a perspective camera and the size of the model's bounding box. 
+    // It calculates the distance needed to fit the entire model in view based on both the height and width of the bounding box, and then positions the camera at that distance along the z-axis while looking at the center of the model.
     const fovInRad = fov * (Math.PI / 180);
     const distanceToFitHeight = size.y / (2 * Math.tan(fovInRad / 2));
     const hFovInRad = 2 * Math.atan(Math.tan(fovInRad / 2) * aspect);
