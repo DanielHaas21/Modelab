@@ -4,7 +4,9 @@ interface AssetTagProps {
   name: string;
   onClose?: React.MouseEventHandler<HTMLButtonElement>;
 }
-
+/**
+ * A component for displaying a tag or label representing an asset. It includes the asset name and an optional close button to remove the tag.
+ */
 export const AssetTag = React.forwardRef<HTMLDivElement, AssetTagProps>(
   ({ name, onClose }, ref) => {
     return (

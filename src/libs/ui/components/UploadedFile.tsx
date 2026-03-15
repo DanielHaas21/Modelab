@@ -20,6 +20,11 @@ const formatType = (file: FileOption) => {
   return file.name.split('.')[1].toUpperCase() || file.type;
 };
 
+/**
+ * A component for displaying an uploaded file with options to mark it as main, preview, or hidden. It includes a close button to remove the file.
+ * @param props The props for the UploadedFile component.
+ * @returns 
+ */
 export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onChange, index }) => {
   const [isMain, setIsMain] = React.useState<boolean>(file.isMain);
   const [isHidden, setIsHidden] = React.useState<boolean>(file.isHidden);

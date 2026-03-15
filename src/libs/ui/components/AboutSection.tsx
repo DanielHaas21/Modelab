@@ -6,6 +6,9 @@ interface AboutSectionProps {
   children: string;
 }
 
+/**
+ * A section component for displaying information about a specific topic. It includes a title and a description.
+ */
 export const AboutSection = React.forwardRef<HTMLDivElement, AboutSectionProps>(
   ({ title, children }, ref) => {
     return (

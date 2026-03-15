@@ -7,6 +7,11 @@ interface ScrollLabelProps extends LabelVariants {
   children?: React.ReactNode;
 }
 
+/**
+ * A component that displays a label which scrolls horizontally if its content exceeds the width of its container.
+ * @param props
+ * @returns 
+ */
 export const ScrollLabel: React.FC<ScrollLabelProps> = ({ className, children, ...props }) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const labelRef = React.useRef<HTMLLabelElement>(null);

@@ -6,8 +6,8 @@ import { Asset, AssetData, PaginatedInfo } from '../../../middleware/api';
 import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
 import { CategoryOption } from './CategorySelect';
-import { TagOption } from './TagSelect';
 import { useTranslation } from '../provider';
+import { TagOption } from '../types';
 
 export interface SearchQuery {
   categories: CategoryOption[];
