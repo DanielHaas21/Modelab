@@ -48,7 +48,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
         className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div
-          className={cn(className, 'flex flex-col items-center mb-2 bg-bg-50 border border-ui-border rounded-lg overflow-hidden shadowed-black')}
+          className={cn(className, 'flex flex-col items-center mb-2 bg-bg-50 border border-ui-border rounded-lg overflow-hidden shadow-[0_2px_4px_rgba(0,0,0,0.1)]')}
           style={{ width: `${width}px`, height: `${height}px` }}
           ref={ref}
           {...props}
@@ -61,10 +61,10 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
             />
           </div>
           <div className="w-[90%] py-2">
-            <ScrollLabel size="sm" className="text-left kanit-bold">
+            <ScrollLabel size="sm" className="text-left font-bold">
               {name}
             </ScrollLabel>
-            <div className="flex flex-row flex-wrap justify-start kanit-light text-xs text-text-500 mt-1">
+            <div className="flex flex-row flex-wrap justify-start font-light text-xs text-text-500 mt-1">
               {tags?.slice(0, 8).map((tag, index) => (
                 <AssetTag key={index} name={tag} />
               ))}

@@ -4,7 +4,7 @@ import { cn } from '../../utils';
 
 const buttonVariants = cva(
   `flex items-center justify-center 
-  lts-3 kanit-regular transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed
+  tracking-[0.3rem] font-normal transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed
    `,
   {
     variants: {
@@ -26,9 +26,9 @@ const buttonVariants = cva(
         lg: 'h-[50px] px-4 w-[300px]',
       },
       font: {
-        light: 'kanit-light',
-        regular: 'kanit-regular',
-        bold: 'kanit-bold',
+        light: 'font-light',
+        regular: 'font-normal',
+        bold: 'font-bold',
       },
       rounding: {
         xs: 'rounded-sm',
@@ -38,9 +38,9 @@ const buttonVariants = cva(
         xl: 'rounded-2xl',
       },
       font_size: {
-        sm: 'fs-1',
-        md: 'fs-2',
-        lg: 'fs-3',
+        sm: 'text-base',
+        md: 'text-xl',
+        lg: 'text-2xl',
       },
     },
     defaultVariants: {

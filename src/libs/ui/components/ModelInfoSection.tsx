@@ -13,7 +13,7 @@ export const ModelInfoSection = React.forwardRef<HTMLDivElement, ModelInfoSectio
     return (
       <div ref={ref} className={cn('mt-4 flex flex-row items-baseline border-b border-ui-border/50 pb-2', className)}>
         <div className="w-1/3">
-          <Label size="xxs" className="kanit-regular uppercase tracking-widest opacity-60">
+          <Label size="xxs" className="font-normal uppercase tracking-widest opacity-60">
             {name}
           </Label>
         </div>

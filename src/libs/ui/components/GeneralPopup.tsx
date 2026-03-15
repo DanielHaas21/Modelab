@@ -21,11 +21,11 @@ export const GeneralPopup: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-dark/60 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#040b08]/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="flex flex-col items-center justify-between w-[450px] bg-bg-100 border border-ui-border rounded-2xl p-6 shadow-2xl animate-in zoom-in-95 duration-300">
-        <h2 className="text-2xl kanit-regular w-full text-left mb-4">{Confirmation.text}</h2>
+        <h2 className="text-2xl font-normal w-full text-left mb-4">{Confirmation.text}</h2>
         {body !== undefined && (
-          <div className="w-full kanit-light pb-6 text-text-700">{body}</div>
+          <div className="w-full font-light pb-6 text-text-700">{body}</div>
         )}
         <div className="flex flex-row items-center justify-end gap-3 w-full">
           {Confirmation.isDeclinable ? (

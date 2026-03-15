@@ -14,12 +14,12 @@ const labelVariants = cva(
   {
     variants: {
       size: {
-        xxs: 'fs-1',
-        xs: 'fs-2',
-        sm: 'fs-3',
-        md: 'fs-4',
-        lg: 'fs-5',
-        xl: 'fs-8',
+        xxs: 'text-base',
+        xs: 'text-xl',
+        sm: 'text-2xl',
+        md: 'text-[1.75rem]',
+        lg: 'text-[2rem]',
+        xl: 'text-[2.75rem]',
       },
     },
     defaultVariants: {

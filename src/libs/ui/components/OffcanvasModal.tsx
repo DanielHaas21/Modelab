@@ -33,7 +33,7 @@ export const OffcanvasModal = React.forwardRef<OffcanvasHandle, OffcanvasProps>(
         {...props}
       >
         <div className="flex items-center justify-between p-4 border-b border-ui-border">
-          <h5 className="text-xl font-semibold kanit-regular">{title}</h5>
+          <h5 className="text-xl font-semibold font-normal">{title}</h5>
           <button
             type="button"
             className="p-2 text-2xl leading-none hover:opacity-70 transition-opacity"

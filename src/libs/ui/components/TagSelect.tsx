@@ -56,7 +56,7 @@ export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
                 onTagSelected(selectedTag.id);
             }
           }}
-          className="w-full bg-bg-100 border border-ui-border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm kanit-regular"
+          className="w-full bg-bg-100 border border-ui-border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all text-sm font-normal"
         />
         <datalist id="tag-options">
           {availableTags.map((tag) => (

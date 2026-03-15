@@ -307,7 +307,7 @@ const ModelManage: React.FC = () => {
 
         <div className="relative mb-4 group">
           <textarea
-            className="w-full bg-bg-100 border border-ui-border rounded-lg p-4 h-50 resize-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none text-text-950 transition-all kanit-light"
+            className="w-full bg-bg-100 border border-ui-border rounded-lg p-4 h-50 resize-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none text-text-950 transition-all font-light"
             rows={8}
             maxLength={maxAssetDescriptionLength}
             placeholder="Asset description"

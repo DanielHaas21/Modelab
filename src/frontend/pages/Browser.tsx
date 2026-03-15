@@ -151,7 +151,7 @@ const Browser: React.FC = () => {
       <div className="mt-4">
         <Button
           onClick={resetFilters}
-          className="w-full justify-content-center"
+          className="w-full justify-center"
           size={'sm'}
           variant="light"
         >
@@ -175,7 +175,7 @@ const Browser: React.FC = () => {
               }}
               inputGroupBefore={
                 <span className="flex items-center px-3 text-text-500 border-r border-ui-border">
-                  <FontAwesomeIcon icon={faMagnifyingGlass} className="fs-2" />
+                  <FontAwesomeIcon icon={faMagnifyingGlass} className="text-xl" />
                 </span>
               }
             />
@@ -187,7 +187,7 @@ const Browser: React.FC = () => {
                 className='w-full p-0 justify-center'
                 onClick={() => offcanvasHandleRef?.current?.open()}
               >
-                <FontAwesomeIcon icon={faFilter} className="fs-2" />
+                <FontAwesomeIcon icon={faFilter} className="text-xl" />
               </Button>
             </div>
           )}

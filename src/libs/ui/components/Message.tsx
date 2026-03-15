@@ -78,7 +78,7 @@ const Message = React.forwardRef<HTMLDivElement, MessageProps>(
               <FontAwesomeIcon icon={faClose} />
             </button>
           </div>
-          <p className="text-sm kanit-light text-text-700 leading-snug">{children}</p>
+          <p className="text-sm font-light text-text-700 leading-snug">{children}</p>
         </div>
       </div>
     );

@@ -63,17 +63,17 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
     >
       {children}
       <nav className={cn("flex flex-row justify-center", isDesktop && "mr-32")}>
-        <Link to={BrowserRoutes.About} className="fs-2 hover-underline-animation no-underline text-text-950">
+        <Link to={BrowserRoutes.About} className="text-xl hover-underline-animation no-underline text-text-950">
           {t('about')}
         </Link>
         <Link
           onClick={CheckAdminClearance}
           to={hasClearance(CLEARANCE.ADMIN) ? (BrowserRoutes.ModelManage + 'upload') : ''}
-          className="fs-2 hover-underline-animation no-underline text-text-950 middle-link"
+          className="text-xl hover-underline-animation no-underline text-text-950 mx-[10px] px-[10px] border-x border-ui-border"
         >
           {t('upload_assets')}
         </Link>
-        <Link to={BrowserRoutes.LandingPage} className="fs-2 hover-underline-animation no-underline text-text-950">
+        <Link to={BrowserRoutes.LandingPage} className="text-xl hover-underline-animation no-underline text-text-950">
           {t('home')}
         </Link>
       </nav>

@@ -14,7 +14,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ className, ...props }) => 
       )}
       {...props}
     >
-      <h1 className="lts-3 text-5xl font-light text-text-950">Modelab</h1>
+      <h1 className="tracking-[0.3rem] text-5xl font-light text-text-950">Modelab</h1>
       <div className="flex flex-row space-x-2 mt-6">
         {[...Array(5)].map((_, i) => (
           <div

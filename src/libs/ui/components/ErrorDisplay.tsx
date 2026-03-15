@@ -35,7 +35,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
       <Label size={'sm'} className="font-medium text-text-950 mb-4 tracking-wide uppercase">
         {message}
       </Label>
-      <div className="text-text-500 kanit-light max-w-md">
+      <div className="text-text-500 font-light max-w-md">
         {children}
       </div>
     </div>
