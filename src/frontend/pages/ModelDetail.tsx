@@ -53,7 +53,7 @@ const ModelDetail: React.FC = () => {
       <>
         <p>Following files will be downloaded:</p>
         <ul className="w-100 list-group">
-          {modelData?.files.map((file, index) => (
+          {modelData?.files.filter(file => file.download !== null).map((file, index) => (
             <li className="list-group-item" key={index}>
               {file.name}
             </li>
@@ -66,11 +66,17 @@ const ModelDetail: React.FC = () => {
 
     const zip = new JSZip();
 
-    await Promise.all(files.map(async (file) => {
-      if (file.download === null) return;
-      const blob = await file.download();
-      zip.file(file.name, blob);
-    }));
+    // TODO: Look into big files not downloading issue, shouldn't be because of backend
+    for (const file of files) {
+      if (file.download === null) continue;
+      try {
+        const blob = await file.download();
+        console.log(file);
+        zip.file(file.name, blob);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
 

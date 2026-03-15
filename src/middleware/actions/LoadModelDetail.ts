@@ -44,7 +44,6 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           break;
         case 'model':
           const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.type);
-          console.log(model);
           file = {
             ...fileBase,
             type: '3d',

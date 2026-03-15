@@ -35,7 +35,6 @@ export class File extends Service {
 
   public async loadModelFromUrl(url: string, fileType: string) {
     if (!LOADABLE_MODEL_FILES.includes(fileType as LoadableModelType)) {
-      console.log('not loadable', fileType);
       return null;
     }
 
