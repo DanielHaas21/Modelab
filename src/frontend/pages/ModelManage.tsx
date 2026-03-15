@@ -23,10 +23,10 @@ import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { useValidatePermission } from '../../libs/auth';
-import { useModelFromUpload } from '../../libs/hooks/useModelFromUpload';
 import { Add } from '../../store/slices/Message';
 import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
+import { ModelFileProp } from '../../middleware/types';
 
 const ModelManage: React.FC = () => {
   const { action } = useParams();
@@ -123,7 +123,7 @@ const ModelManage: React.FC = () => {
 
     const fetchAssetFiles = async (id: number) => {
       try {
-        const data = await assetApi.get_files(id);
+        const data = await assetApi.getFiles(id);
         return data.files;
       } catch (err) {
         if (err instanceof ApiError) {
@@ -265,15 +265,17 @@ const ModelManage: React.FC = () => {
   };
   if (isLoadingAsset) return <Preloader className="min-h-screen" />;
 
+  const fileProps: ModelFileProp[] = [];
+  for (const file of files) {
+    // TODO: Implement manage files
+    // fileProps.push();
+  }
+
   return (
     <>
       <GeneralPopup />
       <ModelDetailLayout
-        image={files.map((file) => ({
-          name: file.name,
-          bin: useModelFromUpload(file),
-          type: file.type,
-        }))}
+        files={fileProps}
         bordered={true}
         goBack={false}
         previewButtonId={asset?.id}

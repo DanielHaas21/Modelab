@@ -1,8 +1,9 @@
-/**
- * Represents a file returned by an API
- */
-export interface ModelFileProps {
-  bin: string;
-  name: string;
-  type: string;
-}
+// /**
+//  * Represents a file returned by an API
+//  */
+// export interface ModelFileProps {
+//   id: number | null;
+//   bin: string;
+//   name: string;
+//   type: string;
+// }

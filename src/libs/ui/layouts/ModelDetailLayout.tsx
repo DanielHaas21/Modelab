@@ -6,12 +6,12 @@ import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faEye, faPencil, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { ModelFileProps } from '../../types/ModelFileProps';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';
 import { ModelDetailImageCarousel } from '../components/ModelDetailImageCarousel';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
+import { ModelFileProp } from '../../../middleware/types';
 
 export interface UploadSaveButton {
   type: 'save' | 'upload';
@@ -20,7 +20,7 @@ export interface UploadSaveButton {
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  image?: ModelFileProps[] | null;
+  files?: ModelFileProp[] | null;
   bordered: boolean;
   goBack?: boolean;
   editButtonId?: number;
@@ -31,7 +31,7 @@ interface ModelDetailProps {
 
 export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   children,
-  image = null,
+  files = null,
   bordered = true,
   goBack = true,
   editButtonId,
@@ -101,7 +101,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
         {isDesktop && (
           <aside className={cn("flex flex-col items-center justify-center min-h-[70vh] overflow-hidden w-1/2 ml-10")}>
             <div className="w-full h-full overflow-hidden">
-              <ModelDetailImageCarousel image={image ?? []} />
+              <ModelDetailImageCarousel files={files ?? []} />
             </div>
           </aside>
         )}

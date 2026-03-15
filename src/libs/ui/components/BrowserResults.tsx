@@ -53,7 +53,7 @@ const fetchAssets = async (
       searchQuery.tags.length == 0 &&
       searchQuery.nameQuery.length == 0)
   ) {
-    const { assets, info } = await assetApi.get_all(page, count);
+    const { assets, info } = await assetApi.getAll(page, count);
     return formatResult(assets, info);
   }
 

@@ -2,8 +2,6 @@ import * as React from 'react';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Button } from '../../libs/ui/components/Button';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import {
   confirm,
   ErrorDisplay,
@@ -13,16 +11,15 @@ import {
   Preloader,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { ModelData } from '../../middleware/types';
-import LoadModelDetail from '../../middleware/actions/LoadModelDetail';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store/store';
+import { ModelData, ModelFileProp } from '../../middleware/types';
+import loadModelDetail from '../../middleware/actions/LoadModelDetail';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/store';
 import { Add } from '../../store/slices/Message';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { useCheckClearance, useValidatePermission } from '../../libs/auth';
 import JSZip from 'jszip';
-import { ModelFileProps } from '../../libs/types/ModelFileProps';
 import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
@@ -42,9 +39,11 @@ const ModelDetail: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const { isDesktop } = useResponsive();
+
+  const UserData = useSelector((state: RootState) => state.User);
   const { hasClearance } = useCheckClearance();
 
-  const downloadAllAsZip = async (files: ModelFileProps[]) => {
+  const downloadAllAsZip = async (files: ModelFileProp[]) => {
     const displayFilesConfirmed = await confirm(
       'Download',
       true,
@@ -67,13 +66,11 @@ const ModelDetail: React.FC = () => {
 
     const zip = new JSZip();
 
-    const fetchFile = async (file: ModelFileProps) => {
-      const response = await fetch(file.bin);
-      const blob = await response.blob();
+    await Promise.all(files.map(async (file) => {
+      if (file.download === null) return;
+      const blob = await file.download();
       zip.file(file.name, blob);
-    };
-
-    await Promise.all(files.map(fetchFile));
+    }));
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
 
@@ -90,19 +87,18 @@ const ModelDetail: React.FC = () => {
   };
 
   React.useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       setIsLoading(true);
       try {
-        const ModelData = await LoadModelDetail(parseInt(model.modelId!));
-        setModelData(ModelData);
+        const assetId = parseInt(model.modelId!);
+        const modelData = await loadModelDetail(assetId, UserData.auth.clearance);
+        setModelData(modelData);
       } catch (error) {
         console.error('Error fetching model data:', error);
       }
       setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
+    })();
+  }, [UserData.auth]);
 
   if (isLoading) return <Preloader className="min-h-100-vh" />;
 
@@ -120,7 +116,7 @@ const ModelDetail: React.FC = () => {
       <GeneralPopup />
       <ModelDetailLayout
         bordered={true}
-        image={modelData.files}
+        files={modelData.files}
         editButtonId={
           hasClearance(CLEARANCE.USER)
             ? modelData?.id
@@ -163,7 +159,7 @@ const ModelDetail: React.FC = () => {
         </div>
         {!isDesktop && (
           <OffcanvasModal ref={offcanvasHandleRef} title='Preview' >
-            <ModelDetailImageCarousel image={modelData.files} />
+            <ModelDetailImageCarousel files={modelData.files} />
           </OffcanvasModal>
         )}
       </ModelDetailLayout>

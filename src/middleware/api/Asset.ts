@@ -126,7 +126,7 @@ export class Asset extends Service {
     return this.POST(ROUTES.POST.Asset + id) as Promise<AssetGet>;
   }
 
-  public async get_all(page: number, count: number): Promise<AssetGetAll> {
+  public async getAll(page: number, count: number): Promise<AssetGetAll> {
     return this.POST(ROUTES.POST.Asset + 'all', { page, count }) as Promise<AssetGetAll>;
   }
 
@@ -153,7 +153,7 @@ export class Asset extends Service {
     return this.POST(ROUTES.POST.Asset + 'search', data) as Promise<AssetSearch>;
   }
 
-  public async get_files(id: number): Promise<AssetGetFiles> {
+  public async getFiles(id: number): Promise<AssetGetFiles> {
     return this.POST(ROUTES.POST.Asset + id + '/files') as Promise<AssetGetFiles>;
   }
 
