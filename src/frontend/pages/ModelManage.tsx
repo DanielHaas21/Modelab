@@ -23,6 +23,7 @@ import { FILE } from '../../middleware/ApiClients';
 import { Add } from '../../store/slices/Message';
 import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
+import deleteModel from '../../middleware/actions/DeleteModel';
 
 const createDetailFileFromLocalFile = async (localFile: LocalManageFile, supportedFileTypes: SupportedFileTypes): Promise<DetailFile | null> => {
   const blob = new Blob([localFile.localFile], { type: localFile.type });
@@ -158,6 +159,24 @@ const ModelManage: React.FC = () => {
     })();
   }, [filesInput, modelManageData]);
 
+  const handleDelete = async () => {
+    if (assetId === undefined) return;
+    const userConfirmedNo = await confirm(
+      'Delete asset?',
+      true,
+      dispatch,
+      'No',
+      'Yes',
+      <p>Are you sure you want to delete <span className='text-2xl'>`{modelManageData?.model?.name ?? assetNameInput}`</span>?<br /><b>This can't be undone.</b></p>
+    );
+
+    if (userConfirmedNo) return;
+    await deleteModel({
+      id: assetId
+    });
+    navigate(BrowserRoutes.Browser);
+  };
+
   const handleShowPreview = async (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
@@ -185,19 +204,18 @@ const ModelManage: React.FC = () => {
       return;
     }
 
-    const userConfirmed = await confirm(
+    const userConfirmedLeave = await confirm(
       'Unsaved changes!',
       true,
       dispatch,
-      undefined,
-      undefined,
+      'Leave',
+      'Go back',
       <p>Are you sure you want to leave?</p>
     );
 
-    if (userConfirmed) {
+    if (userConfirmedLeave) {
       navigate(BrowserRoutes.ModelDetail + assetId);
     }
-
   };
 
   const handleUploadOrSave = async () => {
@@ -257,8 +275,14 @@ const ModelManage: React.FC = () => {
         files={previewDetailFiles}
         bordered={true}
         goBack={false}
-        previewButtonId={assetId}
-        previewButtonOnCLick={handleShowPreview}
+        previewButton={assetId !== undefined ? {
+          id: assetId,
+          onClick: handleShowPreview
+        } : undefined}
+        deleteButton={assetId !== undefined ? {
+          id: assetId,
+          onClick: handleDelete
+        } : undefined}
         uploadSaveButton={{
           type: assetId ? 'save' : 'upload',
           onClick: handleUploadOrSave,

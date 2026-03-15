@@ -128,10 +128,9 @@ const ModelDetail: React.FC = () => {
       <ModelDetailLayout
         bordered={true}
         files={modelData.files}
-        editButtonId={
-          hasClearance(CLEARANCE.USER)
-            ? modelData.id
-            : undefined
+        editButton={hasClearance(CLEARANCE.USER)
+          ? { id: modelData.id }
+          : undefined
         }
       >
         <Label size="lg" className={"kanit-regular lts-1 overflow-y-auto"}>

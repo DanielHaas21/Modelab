@@ -5,7 +5,7 @@ import { MessageWrapper } from '../components';
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEye, faPencil, faSave, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faEye, faPencil, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';
@@ -18,15 +18,29 @@ export interface UploadSaveButton {
   onClick: () => void;
 }
 
+export interface DeleteButton {
+  id: number;
+  onClick: () => void;
+}
+
+export interface EditButton {
+  id: number;
+}
+
+export interface PreviewButton {
+  id: number;
+  onClick: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>;
+}
+
 interface ModelDetailProps {
   children?: React.ReactNode;
   files?: DetailFile[] | null;
   bordered: boolean;
   goBack?: boolean;
-  editButtonId?: number;
-  previewButtonId?: number;
-  previewButtonOnCLick?: (event: React.MouseEvent<HTMLAnchorElement>) => Promise<void>;
+  editButton?: EditButton;
+  previewButton?: PreviewButton;
   uploadSaveButton?: UploadSaveButton;
+  deleteButton?: DeleteButton;
 }
 
 export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
@@ -34,10 +48,10 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   files = null,
   bordered = true,
   goBack = true,
-  editButtonId,
-  previewButtonId,
-  previewButtonOnCLick,
+  editButton,
+  previewButton,
   uploadSaveButton,
+  deleteButton,
 }) => {
   const { isDesktop } = useResponsive();
 
@@ -58,9 +72,9 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
                 </Link>
               </div>
             )}
-            {editButtonId !== undefined && (
+            {editButton !== undefined && (
               <div className="w-1/2 p-1">
-                <Link className="no-underline" to={BrowserRoutes.ModelManage + editButtonId}>
+                <Link className="no-underline" to={BrowserRoutes.ModelManage + editButton.id}>
                   <Button variant="light" className="justify-between w-full">
                     <FontAwesomeIcon icon={faPencil} />
                     <span className="w-full">Edit</span>
@@ -68,12 +82,12 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
                 </Link>
               </div>
             )}
-            {previewButtonId !== undefined && (
+            {previewButton !== undefined && (
               <div className="w-1/2 p-1">
                 <Link
                   className="no-underline"
-                  onClick={previewButtonOnCLick}
-                  to={BrowserRoutes.ModelDetail + previewButtonId}
+                  onClick={previewButton.onClick}
+                  to={BrowserRoutes.ModelDetail + previewButton.id}
                 >
                   <Button variant="light" className="justify-between w-full">
                     <FontAwesomeIcon icon={faEye} />
@@ -93,6 +107,18 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
                   <span className="w-full">
                     {uploadSaveButton.type == 'upload' ? 'Upload' : 'Save'}
                   </span>
+                </Button>
+              </div>
+            )}
+            {deleteButton !== undefined && (
+              <div className="w-1/2 p-1">
+                <Button
+                  variant="accent"
+                  className="justify-between w-full"
+                  onClick={deleteButton.onClick}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                  <span className="w-full">Delete</span>
                 </Button>
               </div>
             )}
