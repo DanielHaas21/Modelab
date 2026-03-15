@@ -23,7 +23,7 @@ const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreivewProps>(
       <div className="w-full grow flex items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('w-100 h-100 object-fit-scale')}
+          className={cn('w-100 h-100 object-contain')}
           src={file.previewUrl}
           alt="Preview"
         />
@@ -44,7 +44,7 @@ const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
       <div className="w-full grow flex items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('w-100 h-100 object-fit-scale')}
+          className={cn('w-100 h-100 object-contain')}
           src={file.imageUrl}
           alt="Image"
         />
@@ -210,7 +210,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
             <Canvas
               scene={SceneConfig}
               key={canvasKey}
-              className="h-100 w-90 min-h-500-px"
+              className="h-100 w-90 min-h-[500px]"
               onCreated={({ gl }) => {
                 gl.domElement.addEventListener('webglcontextlost', (e) => {
                   e.preventDefault();
@@ -253,7 +253,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
                     <FontAwesomeIcon icon={faCameraRotate} />
                   </button>
                   <button onClick={handleToggleAutoRotate}>
-                    <FontAwesomeIcon className={autoRotate ? 'auto-spin' : ''} icon={faArrowsSpin} />
+                    <FontAwesomeIcon className={autoRotate ? 'animate-spin' : ''} icon={faArrowsSpin} />
                   </button>
                   <button onClick={handleToggleWireframe}>
                     <FontAwesomeIcon icon={faWrench} />

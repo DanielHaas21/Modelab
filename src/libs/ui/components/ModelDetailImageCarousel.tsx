@@ -33,7 +33,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
     return (
       <div ref={ref}>
         <Carousel
-          className='rounded-4 overflow-hidden bg-primary-500'
+          className='rounded-2xl overflow-hidden bg-primary-500'
           dynamicHeight={true}
           showThumbs={false}
           selectedItem={selectedItem}

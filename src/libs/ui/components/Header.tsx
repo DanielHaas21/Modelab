@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
             className="ml-3 w-[60px]"
             alt="logo"
           />
-          <h1 className="ml-1 mt-1 fs-5 kanit-extralight">Modelab</h1>
+          <h1 className="ml-1 mt-1 text-[2rem] font-extralight">Modelab</h1>
         </div>
         {children}
         <UserImage
@@ -72,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
           onClick={TogglePopup}
         />
       </header>
-      {Popup ?? <UserPopup ref={popupRef} />}
+      {Popup && <UserPopup ref={popupRef} />}
     </>
   );
 };

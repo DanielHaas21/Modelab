@@ -43,7 +43,7 @@ const LandingPage: React.FC = () => {
     <React.Suspense fallback={<Preloader />}>
       <BaseLayout bordered={false}>
         <main className="flex flex-col items-center overflow-hidden justify-between bg-[#0d0d0d] h-[86vh] bg-grid">
-          <Label className={cn("w-full slide-in-text text-white kanit-light text-center md:text-left ms-0 md:ms-[25%] fs-10 glowing lts-3 mt-10")}>
+          <Label className={cn("w-full slide-in-text text-white font-light text-center md:text-left ms-0 md:ms-[25%] text-[3.25rem] glowing tracking-[0.3rem] mt-10")}>
             {t("welcome")}
           </Label>
           <div className="flex flex-row w-full h-[84vh] justify-center items-end">
@@ -63,7 +63,7 @@ const LandingPage: React.FC = () => {
                 {(hasClearance(CLEARANCE.USER))
                   ? (
                     <div className="flex flex-col items-center justify-center">
-                      <p className="lts-3 fs-2 mt-2">{t("hello")} {UserData.user?.username}</p>
+                      <p className="tracking-[0.3rem] text-xl mt-2">{t("hello")} {UserData.user?.username}</p>
                       <Button
                         className="justify-center"
                         font="regular"
@@ -91,9 +91,9 @@ const LandingPage: React.FC = () => {
                           <FontAwesomeIcon icon={faGoogle} className="mr-2" />
                           {t("sign_in")}
                         </Button>
-                        <p className="lts-3 fs-2 mt-2">{t("features")}</p>
+                        <p className="tracking-[0.3rem] text-xl mt-2">{t("features")}</p>
                       </div>
-                      <div className="flex justify-center items-center gap-4 lts-1 w-full">
+                      <div className="flex justify-center items-center gap-4 tracking-[0.1rem] w-full">
                         <span className="grow h-[1px] bg-ui-border"></span>
                         <span className="text-text-500 uppercase">{t("or")}</span>
                         <span className="grow h-[1px] bg-ui-border"></span>
@@ -110,7 +110,7 @@ const LandingPage: React.FC = () => {
                             {t("browse")}
                           </Link>
                         </Button>
-                        <p className="lts-3 fs-2 mt-2">{t("without_downloads")}</p>
+                        <p className="tracking-[0.3rem] text-xl mt-2">{t("without_downloads")}</p>
                       </div>
                     </>
                   )

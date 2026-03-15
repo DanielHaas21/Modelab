@@ -63,10 +63,10 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
         </Label>
         {hasClearance(CLEARANCE.USER)
           ? (
-            <p className="text-sm kanit-light text-primary-500 mb-6">{UserData.user?.email || 'guest@modelab.com'}</p>
+            <p className="text-sm font-light text-primary-500 mb-6">{UserData.user?.email || 'guest@modelab.com'}</p>
           )
           : (
-            <p className="text-sm kanit-light text-primary-500 mb-6">{t('without_downloads')}</p>
+            <p className="text-sm font-light text-primary-500 mb-6">{t('without_downloads')}</p>
           )
         }
 

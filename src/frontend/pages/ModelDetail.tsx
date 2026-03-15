@@ -107,7 +107,7 @@ const ModelDetail: React.FC = () => {
     })();
   }, [UserData.auth.clearance]);
 
-  if (isLoading) return <Preloader className="min-h-100-vh" />;
+  if (isLoading) return <Preloader className="min-h-screen" />;
 
   if (!modelDetailData) {
     return (
@@ -135,27 +135,27 @@ const ModelDetail: React.FC = () => {
           : undefined
         }
       >
-        <Label size="lg" className={"kanit-regular lts-1 overflow-y-auto"}>
+        <Label size="lg" className={"font-normal tracking-[0.1rem] overflow-y-auto"}>
           {modelData.name}
         </Label>
-        <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData.description}</p>
+        <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{modelData.description}</p>
         <ModelInfoSection name="Category">
           <p className="m-0" key={modelData.category.id}>
             {modelData.category.name}
           </p>
         </ModelInfoSection>
         <ModelInfoSection name="Tags">
-          <div className="mt-2 d-flex flex-wrap">
+          <div className="mt-2 flex flex-wrap">
             {modelData.tags.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>
         </ModelInfoSection>
-        <div className={cn("sticky-bottom mt-6 pb-4 d-flex flex-column gap-2", isDesktop && "ms-4")}>
+        <div className={cn("sticky bottom-0 mt-6 pb-4 flex flex-col gap-2", isDesktop && "ms-4")}>
           <Button
             onClick={() => downloadAllAsZip(modelData.files)}
             disabled={!hasClearance(CLEARANCE.USER)}
-            className={cn("d-flex justify-content-center", !isDesktop && "w-100")}
+            className={cn("flex justify-center", !isDesktop && "w-100")}
           >
             Download
           </Button>
@@ -163,7 +163,7 @@ const ModelDetail: React.FC = () => {
             <Button
               variant="secondary"
               onClick={() => offcanvasHandleRef.current?.open()}
-              className="d-flex justify-content-center w-100"
+              className="flex justify-center w-100"
             >
               Preview
             </Button>

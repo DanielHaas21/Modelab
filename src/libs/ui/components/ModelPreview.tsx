@@ -47,14 +47,14 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
       <AssetTag key={index} name={tag} />
     ));
     const andMore = Array.isArray(tags) && tags.length > 8 && <span>{t('and_more', { count: tags.length - 8 })}</span>;
-    
+
     return (
       <Link
         to={BrowserRoutes.ModelDetail + id}
         className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div
-          className={cn(className, 'flex flex-col items-center mb-2 bg-bg-50 border border-ui-border rounded-lg overflow-hidden shadowed-black')}
+          className={cn(className, 'flex flex-col items-center mb-2 bg-bg-50 border border-ui-border rounded-lg overflow-hidden shadow-[0_2px_4px_rgba(0,0,0,0.1)]')}
           style={{ width: `${width}px`, height: `${height}px` }}
           ref={ref}
           {...props}
@@ -67,10 +67,10 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
             />
           </div>
           <div className="w-[90%] py-2">
-            <ScrollLabel size="sm" className="text-left kanit-bold">
+            <ScrollLabel size="sm" className="text-left font-bold">
               {name}
             </ScrollLabel>
-            <div className="flex flex-row flex-wrap justify-start kanit-light text-xs text-text-500 mt-1">
+            <div className="flex flex-row flex-wrap justify-start font-light text-xs text-text-500 mt-1">
               {tagsRender}
               {andMore}
             </div>
