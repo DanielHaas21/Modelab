@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ModelPreview } from './ModelPreview';
 import { Label } from './Label';
 import { Preloader } from './Preloader';
-import { Asset, AssetData, PaginatedInfo } from '../../../middleware/api';
+import { AssetService, AssetData, PaginatedInfo } from '../../../middleware/api';
 import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
 import { CategoryOption } from './CategorySelect';
@@ -31,7 +31,7 @@ const fetchAssets = async (
   page: number,
   count: number
 ): Promise<FetchResult> => {
-  const assetApi = new Asset();
+  const assetApi = new AssetService();
 
   const formatResult = (assets: AssetData[], info: PaginatedInfo): FetchResult => {
     return {

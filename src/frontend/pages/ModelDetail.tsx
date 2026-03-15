@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Button } from '../../libs/ui/components/Button';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   confirm,
   ErrorDisplay,
@@ -26,6 +26,8 @@ import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/Offcan
 import { ModelDetailImageCarousel } from '../../libs/ui/components/ModelDetailImageCarousel';
 import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
+import { faArrowLeft, faPencil } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
@@ -121,19 +123,38 @@ const ModelDetail: React.FC = () => {
 
   const modelData = modelDetailData.model;
 
+  const ActionButtons = (
+    <>
+      <div className="w-1/2 p-1">
+        <Link
+          className="no-underline"
+          to={BrowserRoutes.Browser}>
+          <Button variant="light" className="justify-between w-full">
+            <FontAwesomeIcon icon={faArrowLeft} />
+            <span className="w-full">Back</span>
+          </Button>
+        </Link>
+      </div>
+      {hasClearance(CLEARANCE.ADMIN) && (
+        <div className="w-1/2 p-1">
+          <Link className="no-underline" to={BrowserRoutes.ModelManage + modelData.id}>
+            <Button variant="light" className="justify-between w-full">
+              <FontAwesomeIcon icon={faPencil} />
+              <span className="w-full">Edit</span>
+            </Button>
+          </Link>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <>
       <GeneralPopup />
       <ModelDetailLayout
         bordered={true}
         files={modelData.files}
-        goBackButton={{
-          onClick: () => { }
-        }}
-        editButton={hasClearance(CLEARANCE.USER)
-          ? { id: modelData.id }
-          : undefined
-        }
+        buttons={ActionButtons}
       >
         <Label size="lg" className={"font-normal tracking-[0.1rem] overflow-y-auto"}>
           {modelData.name}

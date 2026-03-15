@@ -12,7 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
-import { Category, Tag } from '../../middleware/api';
+import { Category, TagService } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ import { useTranslation } from '../../libs/ui/provider';
 
 const Browser: React.FC = () => {
   const categoryApi = new Category();
-  const tagApi = new Tag();
+  const tagApi = new TagService();
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);

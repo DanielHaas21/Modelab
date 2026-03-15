@@ -23,7 +23,7 @@ export interface TagDelete {
   id: number;
 }
 
-export class Tag extends Service {
+export class TagService extends Service {
   constructor() {
     super(API_PATH);
   }

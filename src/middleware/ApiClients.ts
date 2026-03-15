@@ -1,8 +1,8 @@
-import { Asset, Category, FileService, Tag } from './api/';
-import { User } from './auth/User';
+import { AssetService, Category, FileService, TagService } from './api/';
+import { UserService } from './auth/User';
 
-export const ASSET = new Asset();
-export const TAG = new Tag();
+export const ASSET = new AssetService();
+export const TAG = new TagService();
 export const FILE = new FileService();
 export const CATEGORY = new Category();
-export const USER = new User();
+export const USER = new UserService();

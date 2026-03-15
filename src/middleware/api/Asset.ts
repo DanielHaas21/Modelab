@@ -67,7 +67,7 @@ export interface AssetDelete {
   id: number;
 }
 
-export class Asset extends Service {
+export class AssetService extends Service {
   constructor() {
     super(API_PATH);
   }

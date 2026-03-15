@@ -5,6 +5,9 @@ import { RootState } from '../../store/store';
 import { ASSET, CATEGORY, FILE, TAG, USER } from '../../middleware/ApiClients';
 import { UserStateActions } from '../../store/slices/User';
 
+/**
+ * Defines auth actions
+ */
 interface Auth {
   googleLogin: () => void;
   changeAccount: () => void;
@@ -17,7 +20,10 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-const AUTH_LS_KEY = 'authToken';
+/**
+ * Local storage auth key
+ */
+const AUTH_LS_KEY: string = 'authToken';
 
 export const useAuth = () => {
   const auth = useContext(AuthContext);
@@ -32,12 +38,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const UserData = useSelector((state: RootState) => state.User);
 
+  // Tries to login automatically
   useEffect(() => {
     if (!UserData.auth.isAuthenticated) {
       refreshAuth();
     }
   }, []);
 
+  // Sets the auth token to all api services
   const setToken = (token: string | null) => {
     if (token === null) {
       USER.setToken(token);
@@ -56,6 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // Refreshes the auth data
   const refreshAuth = async () => {
     const token = UserData.auth?.authToken ?? localStorage.getItem(AUTH_LS_KEY);
 
@@ -93,6 +102,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // Logs in with a google auth token provided by the google button
   const loginWithToken = async (googleToken: string) => {
     dispatch(UserStateActions.loginStart());
 
@@ -124,9 +134,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  // initiates google login or dev login
   const googleLogin = () => {
     dispatch(UserStateActions.loginStart());
-
 
     if (import.meta.env.DEV) {
       loginWithToken('dev_token');
@@ -144,11 +154,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login();
   };
 
+  // automatically logs out and initiates new login
   const changeAccount = () => {
     logout();
     googleLogin();
   };
 
+  // logs out
   const logout = () => {
     dispatch(UserStateActions.logout());
     setToken(null);
