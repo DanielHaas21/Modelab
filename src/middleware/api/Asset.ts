@@ -25,7 +25,7 @@ export interface AssetData {
 export interface FileInfoData {
   id: number;
   name: string;
-  type: string;
+  fileType: string;
   isHidden: boolean;
   isMain: boolean;
   isPreview: boolean;

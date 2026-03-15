@@ -8,13 +8,13 @@ import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/free-solid-svg-icons';
-import { Model3DFileProp, ModelAudioFileProp, ModelFileProp, ModelImageFileProp, ModelOtherFileProp, ModelPreviewFileProp } from '../../../middleware/types';
+import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFileOther, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
 
 // Preview
 
 interface ModelPreivewProps {
-  file: ModelPreviewFileProp;
+  file: DetailFilePreview;
 }
 
 const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreivewProps>(
@@ -35,7 +35,7 @@ const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreivewProps>(
 // Image
 
 interface ModelImageProps {
-  file: ModelImageFileProp;
+  file: DetailFileImage;
 }
 
 const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
@@ -155,7 +155,7 @@ const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, o
 };
 
 interface Model3DProps {
-  file: Model3DFileProp;
+  file: DetailFile3D;
   canvasKey?: number;
   onContextLoss?: (e: Event) => void;
 }
@@ -274,7 +274,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
 // Audio
 
 interface ModelAudioProps {
-  file: ModelAudioFileProp;
+  file: DetailFileAudio;
 }
 
 const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
@@ -284,13 +284,16 @@ const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
         ref={ref}
         className="w-full grow flex items-center"
       >
-        <audio
-          controls
-          src={file.audioUrl}
-          className="w-full h-10 outline-none"
-        >
-          Your browser does not support the audio element.
-        </audio>
+        <div className='px-16 flex flex-col justify-center items-start w-full'>
+          <Label size={'xs'}>{file.name}</Label>
+          <audio
+            controls
+            src={file.audioUrl}
+            className="w-full outline-none"
+          >
+            Your browser does not support the audio element.
+          </audio>
+        </div>
       </div>
     );
   }
@@ -301,7 +304,7 @@ export default ModelAudio;
 // --
 
 interface ModelDetailImageProps {
-  file: ModelFileProp;
+  file: DetailFile;
 }
 
 export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImageProps>(

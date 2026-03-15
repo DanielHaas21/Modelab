@@ -1,39 +1,27 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Label } from './Label';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { FileOption } from './FileSelect';
 import React from 'react';
 import { useTranslation } from '../provider';
+import { ManageFile } from '../../../middleware/types';
 
 interface UploadedFileProps {
   index: number;
-  file: FileOption;
+  file: ManageFile;
   onClose: () => void;
   onChange: (isMain: boolean, isPreview: boolean, isHidden: boolean) => void;
 }
 
-const formatName = (file: FileOption) => {
+const formatName = (file: ManageFile) => {
   return file.name.split('.')[0];
 };
 
-const formatType = (file: FileOption) => {
-  return file.name.split('.')[1].toUpperCase() || file.type;
+const formatType = (file: ManageFile) => {
+  return file.name.split('.')[1]?.toUpperCase() || file.fileType;
 };
 
 export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onChange, index }) => {
-  const [isMain, setIsMain] = React.useState<boolean>(file.isMain);
-  const [isHidden, setIsHidden] = React.useState<boolean>(file.isHidden);
-  const [isPreview, setIsPreview] = React.useState<boolean>(file.isPreview);
   const t = useTranslation('ui.uploaded_file');
-
-  React.useEffect(() => {
-    setIsMain(file.isMain);
-    setIsHidden(file.isHidden);
-  }, [file]);
-
-  React.useEffect(() => {
-    onChange(isMain, isPreview, isHidden);
-  }, [isMain, isPreview, isHidden]);
 
   return (
     <div className="w-full pl-1 flex flex-col bg-bg-100/50 p-3 rounded-lg border border-ui-border/30 hover:border-ui-border transition-colors">
@@ -56,9 +44,9 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
               className="peer hidden"
               autoComplete="off"
               id={`${index}a`}
-              disabled={isHidden}
-              checked={isMain}
-              onChange={() => setIsMain(!isMain)}
+              disabled={file.isHidden}
+              checked={file.isMain}
+              onChange={() => onChange(!file.isMain, file.isPreview, file.isHidden)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}a`}>
               {t('main')}
@@ -71,9 +59,9 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
               className="peer hidden"
               autoComplete="off"
               id={`${index}b`}
-              disabled={isHidden}
-              checked={isPreview}
-              onChange={() => setIsPreview(!isPreview)}
+              disabled={file.isHidden}
+              checked={file.isPreview}
+              onChange={() => onChange(file.isMain, !file.isPreview, file.isHidden)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}b`}>
               {t('preview')}
@@ -86,8 +74,8 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onCha
               className="peer hidden"
               autoComplete="off"
               id={`${index}c`}
-              checked={isHidden}
-              onChange={() => setIsHidden(!isHidden)}
+              checked={file.isHidden}
+              onChange={() => onChange(file.isMain, file.isPreview, !file.isHidden)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-accent-500 peer-checked:text-white hover:bg-accent-500/10 hover:text-accent-500 peer-checked:hover:bg-accent-600 peer-checked:hover:text-white" htmlFor={`${index}c`}>
               {t('hidden')}

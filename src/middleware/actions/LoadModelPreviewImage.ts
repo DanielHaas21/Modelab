@@ -13,7 +13,7 @@ export default async function LoadModelPreviewImage(id: number, userClearance: C
 
   const candidates = fileMetadata.files
     .filter((fileInfo) => {
-      return isFile(fileInfo.type, 'image', supportedFileTypes);
+      return isFile(fileInfo.fileType, 'image', supportedFileTypes);
     })
     .sort((a, b) => {
       if (a.isPreview === b.isPreview) return 0;
@@ -24,8 +24,8 @@ export default async function LoadModelPreviewImage(id: number, userClearance: C
   const fileInfo = candidates[0];
 
   const imageBlob = userCanDownload
-    ? await FILE.getBlob(fileInfo.id)
-    : await FILE.getPreviewBlob(fileInfo.id);
+    ? await FILE.getBlob(fileInfo.id, fileInfo.fileType)
+    : await FILE.getPreviewBlob(fileInfo.id, fileInfo.fileType);
 
   const imageUrl = URL.createObjectURL(imageBlob);
   return imageUrl;

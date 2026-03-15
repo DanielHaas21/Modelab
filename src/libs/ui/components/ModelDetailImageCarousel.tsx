@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { ModelDetailImage } from './ModelDetailImage';
 import { Preloader } from './Preloader';
-import { ModelFileProp } from '../../../middleware/types';
+import { DetailFile } from '../../../middleware/types';
 
 interface ModelDetailImageCarouselProps {
-  files: ModelFileProp[];
+  files: DetailFile[];
 }
 
 export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDetailImageCarouselProps>(
@@ -22,9 +22,25 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
       return false;
     });
 
+    const [selectedItem, setSelectedItem] = useState<number>(0);
+
+    useEffect(() => {
+      if (selectedItem >= showableFiles.length) {
+        setSelectedItem(showableFiles.length - 1);
+      }
+    }, [files]);
+
     return (
       <div ref={ref}>
-        <Carousel className='rounded-4 overflow-hidden bg-primary-500' dynamicHeight={true} showThumbs={false}>
+        <Carousel
+          className='rounded-4 overflow-hidden bg-primary-500'
+          dynamicHeight={true}
+          showThumbs={false}
+          selectedItem={selectedItem}
+          onChange={(index, _) => {
+            setSelectedItem(index);
+          }}
+        >
           {showableFiles.map((data) => {
             return (
               <React.Suspense key={data.name} fallback={<Preloader />}>

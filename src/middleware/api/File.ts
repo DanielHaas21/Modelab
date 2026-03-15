@@ -13,7 +13,11 @@ export const LOADABLE_MODEL_FILES = [
 
 export type LoadableModelType = typeof LOADABLE_MODEL_FILES[number];
 
-export class File extends Service {
+export interface GetSupportedFileTypes {
+  supportedFileTypes: SupportedFileTypes;
+}
+
+export class FileService extends Service {
   private objLoader = new OBJLoader();
   private fbxLoader = new FBXLoader();
 
@@ -25,6 +29,26 @@ export class File extends Service {
     const data = await this.GET(url, { responseType: 'arraybuffer' }) as ArrayBuffer;
     const blob = new Blob([data], { type: fileType });
     return blob;
+  }
+
+  public async loadModelFromLocalFile(file: File, fileType: string) {
+    if (!this.isModelFileLoadable(fileType)) {
+      return null;
+    }
+
+    switch (fileType) {
+      case 'model/obj':
+        const textData = await file.text();
+        return this.objLoader.parse(textData);
+
+      case 'model/fbx':
+      case 'application/octet-stream':
+        const bufferData = await file.arrayBuffer();
+        return this.fbxLoader.parse(bufferData, file.name);
+
+      default:
+        return null;
+    }
   }
 
   public async loadModelFromUrl(url: string, fileType: string) {
@@ -73,7 +97,7 @@ export class File extends Service {
     return await this.getBlobFromUrl(url, fileType);
   }
 
-  public async getSupportedFileTypes(): Promise<SupportedFileTypes> {
-    return await this.GET(this.baseURL + ROUTES.GET.File + 'supported') as SupportedFileTypes;
+  public async getSupportedFileTypes(): Promise<GetSupportedFileTypes> {
+    return await this.GET(this.baseURL + ROUTES.GET.File + 'supported') as GetSupportedFileTypes;
   }
 }

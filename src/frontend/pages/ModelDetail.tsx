@@ -11,7 +11,7 @@ import {
   Preloader,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { ModelData, ModelFileProp } from '../../middleware/types';
+import { ModelDetailData, DetailFile } from '../../middleware/types';
 import loadModelDetail from '../../middleware/actions/LoadModelDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
@@ -30,20 +30,24 @@ import { BrowserRoutes } from '../../global/BrowserRoutes';
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
 
-  const [modelData, setModelData] = React.useState<ModelData | null>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [modelDetailData, setModelDetailData] = React.useState<ModelDetailData | null>(null);
+
   const model = useParams();
   const Dispatch = useDispatch<AppDispatch>();
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const { isDesktop } = useResponsive();
 
   const UserData = useSelector((state: RootState) => state.User);
   const { hasClearance } = useCheckClearance();
 
-  const downloadAllAsZip = async (files: ModelFileProp[]) => {
+  const downloadAllAsZip = async (files: DetailFile[]) => {
+    if (modelDetailData === null) return;
+    const modelData = modelDetailData.model;
+
     const displayFilesConfirmed = await confirm(
       'Download',
       true,
@@ -53,7 +57,7 @@ const ModelDetail: React.FC = () => {
       <>
         <p>Following files will be downloaded:</p>
         <ul className="w-100 list-group">
-          {modelData?.files.filter(file => file.download !== null).map((file, index) => (
+          {modelData.files.filter(file => file.download !== null).map((file, index) => (
             <li className="list-group-item" key={index}>
               {file.name}
             </li>
@@ -80,7 +84,7 @@ const ModelDetail: React.FC = () => {
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(zipBlob);
-    link.download = modelData?.name ? modelData.name + '.zip' : 'asset.zip';
+    link.download = modelData.name ? modelData.name + '.zip' : 'asset.zip';
     document.body.appendChild(link);
 
     link.click();
@@ -96,7 +100,7 @@ const ModelDetail: React.FC = () => {
       try {
         const assetId = parseInt(model.modelId!);
         const modelData = await loadModelDetail(assetId, UserData.auth.clearance);
-        setModelData(modelData);
+        setModelDetailData(modelData);
       } catch (error) {
         console.error('Error fetching model data:', error);
       }
@@ -106,7 +110,7 @@ const ModelDetail: React.FC = () => {
 
   if (isLoading) return <Preloader className="min-h-100-vh" />;
 
-  if (!modelData)
+  if (!modelDetailData) {
     return (
       <BaseLayout bordered={true}>
         <ErrorDisplay image={icon_boom} code={404} message="Oops! Asset not found">
@@ -114,6 +118,9 @@ const ModelDetail: React.FC = () => {
         </ErrorDisplay>
       </BaseLayout>
     );
+  }
+
+  const modelData = modelDetailData.model;
 
   return (
     <>
@@ -123,14 +130,14 @@ const ModelDetail: React.FC = () => {
         files={modelData.files}
         editButtonId={
           hasClearance(CLEARANCE.USER)
-            ? modelData?.id
+            ? modelData.id
             : undefined
         }
       >
         <Label size="lg" className={"kanit-regular lts-1 overflow-y-auto"}>
           {modelData.name}
         </Label>
-        <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData?.desc}</p>
+        <p className="ms-3 mt-4 kanit-light w-80 overflow-auto max-h-20-vh">{modelData.description}</p>
         <ModelInfoSection name="Category">
           <p className="m-0" key={modelData.category.id}>
             {modelData.category.name}
@@ -138,7 +145,7 @@ const ModelDetail: React.FC = () => {
         </ModelInfoSection>
         <ModelInfoSection name="Tags">
           <div className="mt-2 d-flex flex-wrap">
-            {modelData.tags?.map((tag) => {
+            {modelData.tags.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>

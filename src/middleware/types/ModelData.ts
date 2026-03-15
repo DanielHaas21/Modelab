@@ -1,40 +1,75 @@
 import { Group, Object3DEventMap } from 'three';
 import { FileOption } from '../../libs/ui/components';
+import { SupportedFileTypes } from '../../libs/utils';
 
-export interface ModelData {
-  id: number;
-  name: string;
-  desc?: string;
-  category: ModelDataProp;
-  tags?: ModelDataProp[];
-  files: ModelFileProp[]
-}
-
-interface ModelDataProp {
+export interface ModelTagProp {
   id: number;
   name: string;
 }
 
-export interface CreateModelData {
-  name: string;
-  desc: string;
-  category: number;
-  tags: number[];
-  files: FileOption[];
-}
-
-export interface UpdateModelData {
+export interface ModelCategoryProp {
   id: number;
   name: string;
-  desc: string;
-  category: number;
-  tags: number[];
-  files: FileOption[];
 }
 
-export type ModelFileProp = ModelImageFileProp | Model3DFileProp | ModelAudioFileProp | ModelOtherFileProp | ModelPreviewFileProp;
+interface BaseModel {
+  id: number;
+  name: string;
+  description: string;
+  category: ModelTagProp;
+  tags: ModelCategoryProp[];
+}
 
-interface ModelFilePropBase {
+// Manage
+
+export interface ManageModel extends BaseModel {
+  files: ManageFile[];
+}
+
+export interface ManageConfigProps {
+  allCategories: ModelCategoryProp[];
+  allTags: ModelTagProp[];
+  supportedFileTypes: SupportedFileTypes;
+}
+
+export interface ModelManageData {
+  config: ManageConfigProps;
+  model: ManageModel | null;
+}
+
+interface BaseManageFile {
+  name: string;
+  fileType: string;
+  isHidden: boolean;
+  isMain: boolean;
+  isPreview: boolean;
+}
+
+export type ManageFile = FetchedManageFile | LocalManageFile;
+
+export interface FetchedManageFile extends BaseManageFile {
+  type: 'fetched';
+  detailFile: DetailFile;
+}
+
+export interface LocalManageFile extends BaseManageFile {
+  type: 'local';
+  localFile: File;
+}
+
+// Detail
+
+export interface DetailModel extends BaseModel {
+  files: DetailFile[];
+}
+
+export interface ModelDetailData {
+  model: DetailModel;
+}
+
+export type DetailFile = DetailFileImage | DetailFile3D | DetailFileAudio | DetailFileOther | DetailFilePreview;
+
+interface BaseDetailFile {
   id: number;
   name: string;
   fileType: string;
@@ -42,25 +77,43 @@ interface ModelFilePropBase {
   download: (() => Promise<Blob>) | null;
 }
 
-export interface ModelPreviewFileProp extends ModelFilePropBase {
+export interface DetailFilePreview extends BaseDetailFile {
   type: 'preview';
 }
 
-export interface ModelImageFileProp extends ModelFilePropBase {
+export interface DetailFileImage extends BaseDetailFile {
   type: 'image';
   imageUrl: string;
 }
 
-export interface Model3DFileProp extends ModelFilePropBase {
+export interface DetailFile3D extends BaseDetailFile {
   type: '3d';
   model: Group<Object3DEventMap> | null;
 }
 
-export interface ModelAudioFileProp extends ModelFilePropBase {
+export interface DetailFileAudio extends BaseDetailFile {
   type: 'audio';
   audioUrl: string;
 }
 
-export interface ModelOtherFileProp extends ModelFilePropBase {
+export interface DetailFileOther extends BaseDetailFile {
   type: 'other';
 }
+
+
+// export interface CreateModelData {
+//   name: string;
+//   desc: string;
+//   category: number;
+//   tags: number[];
+//   files: FileOption[];
+// }
+
+// export interface UpdateModelData {
+//   id: number;
+//   name: string;
+//   desc: string;
+//   category: number;
+//   tags: number[];
+//   files: FileOption[];
+// }

@@ -29,7 +29,7 @@ const Browser: React.FC = () => {
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
-  
+
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
   const BrowserFilter = useSelector((state: RootState) => state.BrowserFilter);
@@ -67,7 +67,7 @@ const Browser: React.FC = () => {
   React.useEffect(() => {
     const loadCategories = async () => {
       try {
-        const data = await categoryApi.get_all();
+        const data = await categoryApi.getAll();
         return data.categories.map((category) => ({
           ...category,
           isSelected:
@@ -86,7 +86,7 @@ const Browser: React.FC = () => {
 
     const loadTags = async () => {
       try {
-        const data = await tagApi.get_all();
+        const data = await tagApi.getAll();
         return data.tags.map((tag) => ({
           ...tag,
           isSelected:

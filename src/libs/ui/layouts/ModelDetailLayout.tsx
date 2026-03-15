@@ -11,7 +11,7 @@ import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';
 import { ModelDetailImageCarousel } from '../components/ModelDetailImageCarousel';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
-import { ModelFileProp } from '../../../middleware/types';
+import { DetailFile } from '../../../middleware/types';
 
 export interface UploadSaveButton {
   type: 'save' | 'upload';
@@ -20,7 +20,7 @@ export interface UploadSaveButton {
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  files?: ModelFileProp[] | null;
+  files?: DetailFile[] | null;
   bordered: boolean;
   goBack?: boolean;
   editButtonId?: number;

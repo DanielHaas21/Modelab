@@ -1,47 +1,40 @@
 import ApiError from '../api/ApiError';
-import { ModelData, ModelFileProp } from '../types';
+import { ModelDetailData, DetailFile, DetailModel } from '../types';
 import { ASSET, FILE } from '../ApiClients';
 import { FileGroup, getFileGroup } from '../../libs/utils/isFile';
 import { CLEARANCE, Clearance } from '../../store/types';
 import { FileInfoData } from '../api';
 
 const canShowPreview = (fileInfo: FileInfoData, group: FileGroup) => {
-  if (group === 'model' && !FILE.isModelFileLoadable(fileInfo.type))
+  if (group === 'model' && !FILE.isModelFileLoadable(fileInfo.fileType))
     return false;
   return true;
 };
 
-export default async function loadModelDetail(id: number, userClearance: Clearance): Promise<ModelData> {
+export default async function loadModelDetail(id: number, userClearance: Clearance): Promise<ModelDetailData> {
   const modelMetadata = await ASSET.get(id);
   const fileMetadata = await ASSET.getFiles(id);
-  const supportedFileTypes = await FILE.getSupportedFileTypes();
+  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
   const userCanDownload = userClearance >= CLEARANCE.USER;
 
   if (!fileMetadata) throw new ApiError('Failed to load file metadata', 404, 'service');
 
-  const name = modelMetadata.asset.name;
-  const desc = modelMetadata.asset.description;
-  const category = modelMetadata.asset.category;
-  const tags = modelMetadata.asset.tags;
-
-  const files: ModelFileProp[] = [];
+  const files: DetailFile[] = [];
   for (const fileInfo of fileMetadata.files) {
-    let file: ModelFileProp | null = null;
+    let file: DetailFile | null = null;
 
     const fileBase = {
-      id: fileInfo.id,
-      name: fileInfo.name,
-      fileType: fileInfo.type,
-      download: userCanDownload ? (async () => await FILE.getBlob(fileInfo.id, fileInfo.type)) : null,
+      ...fileInfo,
+      download: userCanDownload ? (async () => await FILE.getBlob(fileInfo.id, fileInfo.fileType)) : null,
       previewUrl: FILE.getPreviewURL(fileInfo.id),
     };
 
-    const group = getFileGroup(fileInfo.type, supportedFileTypes);
+    const group = getFileGroup(fileInfo.fileType, supportedFileTypes);
     if (userCanDownload) {
       switch (group) {
         case 'image':
-          const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.type);
+          const imageBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
           const imageUrl = URL.createObjectURL(imageBlob);
           file = {
             ...fileBase,
@@ -50,7 +43,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           };
           break;
         case 'model':
-          const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.type);
+          const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
           file = {
             ...fileBase,
             type: '3d',
@@ -59,7 +52,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           break;
         case 'audio':
           try {
-            const audioBlob = await FILE.getBlob(fileInfo.id, fileInfo.type);
+            const audioBlob = await FILE.getBlob(fileInfo.id, fileInfo.fileType);
             const audioUrl = URL.createObjectURL(audioBlob);
 
             file = {
@@ -79,7 +72,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           };
           break;
         default:
-          console.error('Unsuported file: ' + fileInfo.name + '. Ignoring.');
+          console.error('Unsuported file: ' + fileInfo.name + '.  Ignoring.');
           break;
       }
     } else if (group !== null && canShowPreview(fileInfo, group)) {
@@ -92,14 +85,16 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
     if (file !== null) files.push(file);
   }
 
-  const data: ModelData = {
-    id: id,
-    name: name,
-    desc: desc,
-    category: category,
-    tags: tags,
-    files: files,
+  const model: DetailModel = {
+    id: modelMetadata.asset.id,
+    name: modelMetadata.asset.name,
+    description: modelMetadata.asset.description,
+    category: modelMetadata.asset.category,
+    tags: modelMetadata.asset.tags,
+    files,
   };
 
-  return data;
+  return {
+    model,
+  };
 }
