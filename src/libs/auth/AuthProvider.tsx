@@ -147,7 +147,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const googleLogin = () => {
     dispatch(UserStateActions.loginStart());
 
-    if (import.meta.env.DEV) {
+    if (Number(import.meta.env.VITE_DEV_LOGIN) === 1) {
       loginWithToken('dev_token');
       return;
     }

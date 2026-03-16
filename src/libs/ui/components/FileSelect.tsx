@@ -81,13 +81,16 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         onChange={(isMain, isPreview, isHidden) => {
           setFiles((prev) => {
             const updatedFiles = [...prev];
-            if (updatedFiles[index]) {
-              updatedFiles[index] = {
-                ...updatedFiles[index],
-                isMain,
-                isPreview,
-                isHidden,
-              };
+            for (let i = 0; i < updatedFiles.length; i++) {
+              const updatedFile = updatedFiles[i];
+              if (i === index) {
+                updatedFile.isMain = isMain;
+                updatedFile.isPreview = isPreview;
+                updatedFile.isHidden = isHidden;
+              } else {
+                updatedFile.isPreview = false;
+              }
+              updatedFiles[i] = updatedFile;
             }
             return updatedFiles;
           });
