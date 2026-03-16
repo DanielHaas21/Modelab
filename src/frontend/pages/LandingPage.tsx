@@ -15,6 +15,8 @@ import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
 import { useAuth } from '../../libs/auth/AuthProvider';
 
+import grid from '../../libs/ui/assets/grid.svg';
+
 const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<ImageSize | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true); // New loading state
@@ -41,7 +43,12 @@ const LandingPage: React.FC = () => {
   return (
     <React.Suspense fallback={<Preloader />}>
       <BaseLayout bordered={false}>
-        <main className="flex flex-col items-center overflow-hidden justify-between bg-[#0d0d0d] h-[86vh] bg-grid">
+        <main
+          className="flex flex-col items-center overflow-hidden justify-between bg-[#0d0d0d] h-[86vh] bg-grid"
+          style={{
+            backgroundImage: `url("${grid}")`
+          }}
+        >
           <Label className={cn("w-full slide-in-text text-white font-light text-center md:text-left ms-0 md:ms-[25%] text-[3.25rem] glowing tracking-[0.3rem] mt-10")}>
             {t("welcome")}
           </Label>
