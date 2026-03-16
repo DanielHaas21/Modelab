@@ -117,8 +117,10 @@ const dirname = import.meta.dirname;
 const categories = ['3D Models', '2D Textures', 'Audio'];
 
 const ModelCateg = 1;
+const TextureCateg = 2;
+const AudioCateg = 3;
 
-const tags = ['Maya', 'FBX', 'OBJ', 'Prop', 'Shrine', 'Textured'];
+const tags = ['Maya', 'FBX', 'OBJ', 'Prop', 'Shrine', 'Textured', 'Music', 'SFX', 'Stylized'];
 
 const MayaTag = 1;
 const FBXTag = 2;
@@ -126,6 +128,9 @@ const OBJTag = 3;
 const PropTag = 4;
 const ShrineTag = 5;
 const TexturedTag = 6;
+const MusicTag = 7;
+const SFXTag = 8;
+const StylizedTag = 9;
 
 const assets = [
   createAsset('Chram', lorem, ModelCateg, [MayaTag, FBXTag, ShrineTag], `${dirname}/files/Chram/`, [
@@ -169,6 +174,13 @@ const assets = [
     createFile('Tumova_TajMahal.fbx', false, true, false),
     createFile('all.png', false, false, false),
     createFile('persp.png', false, false, true),
+  ]),
+  createAsset('Audio Test', lorem, AudioCateg, [MusicTag], `${dirname}/files/Audio/`, [
+    createFile('juhani-junkala.wav', false, false, false),
+    createFile('moon.jpg', false, true, false),
+  ]),
+  createAsset('Texture Test', lorem, TextureCateg, [StylizedTag], `${dirname}/files/Texture/`, [
+    createFile('colormap.png', false, true, false),
   ]),
 ];
 
