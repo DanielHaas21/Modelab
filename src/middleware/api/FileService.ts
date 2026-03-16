@@ -61,7 +61,8 @@ export class FileService extends Service {
         const textData = await this.GET(url, { responseType: 'text', timeout: 0 }) as unknown as string;
         return this.objLoader.parse(textData);
       }
-      case 'model/fbx': {
+      case 'model/fbx':
+      case 'application/octet-stream': {
         const bufferData = await this.GET(url, { responseType: 'arraybuffer', timeout: 0 }) as unknown as ArrayBuffer;
         return this.fbxLoader.parse(bufferData, url);
       }
