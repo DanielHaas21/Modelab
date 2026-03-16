@@ -131,7 +131,7 @@ const Browser: React.FC = () => {
   const BrowserFilters = (
     <>
       <div className="w-100">
-        <Label size="xs">Category</Label>
+        <Label size="xs">{t("categories")}</Label>
         <div className="w-100">
           <CategorySelect
             categories={categories}
@@ -142,7 +142,7 @@ const Browser: React.FC = () => {
       </div>
 
       <div className="mt-4">
-        <Label size="xs">{t("categories")}</Label>
+        <Label size="xs">{t("tags")}</Label>
         <div className="">
           <TagSelect tags={tags} setTags={setTags} />
         </div>

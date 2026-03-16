@@ -6,12 +6,17 @@
     },
     "browser": {
       "clear_filters": "Vymazat filtry",
-      "categories": "Kategorie"
+      "categories": "Kategorie",
+      "tags": "Tagy"
     },
     "about": {
       "about": "O Modelabu",
       "info": "Modelab je databáze modelů, textur a dalších zdrojů, které vytvářejí studenti pro studenty",
-      "offer": "Modelab nabízí 100% zdarma zdroje pro studenty pracující na hrách, webových stránkách nebo školních projektech"
+      "offer": "Modelab nabízí 100% zdarma zdroje pro studenty pracující na hrách, webových stránkách nebo školních projektech",
+      "whatIsModelab": "Co je Modelab?",
+      "whoIsModelabFor": "Pro koho je Modelab určen?",
+      "howToCredit": "Jak citovat?",
+      "noNeed": "Není potřeba"
     },
     "model_detail": {
       "confirm": {
@@ -79,6 +84,9 @@
       "main": "Hlavní",
       "preview": "Náhled",
       "hidden": "Skryté"
+    },
+    "tagSelect": {
+      "searchAndSelectTags": "Vyhledat a vybrat tagy..."
     }
   }
 }

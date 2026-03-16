@@ -6,12 +6,17 @@
     },
     "browser": {
       "clear_filters": "Clear filters",
-      "categories": "Categories"
+      "categories": "Categories",
+      "tags": "Tags"
     },
     "about": {
       "about": "About Modelab",
       "info": "Modelab is a database of models, textures and other assets that are made by students for  students",
-      "offer": "Modelab offers 100% free assets for students working on games, websites, or school any other projects"
+      "offer": "Modelab offers 100% free assets for students working on games, websites, or school any other projects",
+      "whatIsModelab": "What is Modelab?",
+      "whoIsModelabFor": "Who is Modelab for?",
+      "howToCredit": "How to credit?",
+      "noNeed": "No need"
     },
     "model_detail": {
       "confirm": {
@@ -79,6 +84,9 @@
       "main": "Main",
       "preview": "Preview",
       "hidden": "Hidden"
+    },
+    "tagSelect": {
+      "searchAndSelectTags": "Search and select tags..."
     }
   }
 }

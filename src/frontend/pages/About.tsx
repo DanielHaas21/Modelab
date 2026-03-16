@@ -15,13 +15,13 @@ const About: React.FC = () => {
       <main className={cn("pt-10 overflow-y-auto custom-scrollbar", isDesktop ? "ps-8" : "px-2")}>
         <Label size={'md'}>{t("about")}</Label>
         <div className="ps-2">
-          <AboutSection title="What is Modelab?">
+          <AboutSection title={t("whatIsModelab")}>
             {t("info")}
           </AboutSection>
-          <AboutSection title="Who is Modelab for?">
+          <AboutSection title={t("whoIsModelabFor")}>
             {t("offer")}
           </AboutSection>
-          <AboutSection title="How to credit?">No need</AboutSection>
+          <AboutSection title={t("howToCredit")}>{t("noNeed")}</AboutSection>
         </div>
       </main>
     </BaseLayout>
