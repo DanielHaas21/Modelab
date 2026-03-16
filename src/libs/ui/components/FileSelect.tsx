@@ -43,6 +43,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         isMain: false,
         isHidden: false,
         isPreview: false,
+        isRemoved: false,
       },
     ]);
   };
@@ -52,8 +53,30 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
       <UploadedFile
         index={index}
         file={file}
+        isRemoved={file.isRemoved}
+        onRestore={() => {
+          setFiles((prev) => {
+            const updatedFiles = [...prev];
+            if (updatedFiles[index]) {
+              updatedFiles[index] = {
+                ...updatedFiles[index],
+                isRemoved: false,
+              };
+            }
+            return updatedFiles;
+          });
+        }}
         onClose={() => {
-          setFiles((prev) => prev.filter((_, i) => i !== index));
+          setFiles((prev) => {
+            const updatedFiles = [...prev];
+            if (updatedFiles[index]) {
+              updatedFiles[index] = {
+                ...updatedFiles[index],
+                isRemoved: true,
+              };
+            }
+            return updatedFiles;
+          });
         }}
         onChange={(isMain, isPreview, isHidden) => {
           setFiles((prev) => {

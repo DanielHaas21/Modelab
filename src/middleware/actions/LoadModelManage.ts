@@ -86,6 +86,7 @@ export default async function loadModelManage(id: number | null): Promise<ModelM
         ...fileInfo,
         type: 'fetched',
         detailFile,
+        isRemoved: false,
       });
     }
 

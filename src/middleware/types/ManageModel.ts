@@ -23,6 +23,7 @@ interface BaseManageFile {
   isHidden: boolean;
   isMain: boolean;
   isPreview: boolean;
+  isRemoved: boolean;
 }
 
 export type ManageFile = FetchedManageFile | LocalManageFile;

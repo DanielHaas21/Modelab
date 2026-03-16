@@ -105,7 +105,7 @@ const ModelManage: React.FC = () => {
     if (!modelManageData) return;
     const config = modelManageData.config;
     (async () => {
-      const detailFiles = await createDetailFiles(filesInput, config.supportedFileTypes);
+      const detailFiles = await createDetailFiles(filesInput.filter((file) => !file.isRemoved && !file.isHidden), config.supportedFileTypes);
       setPreviewDetailFiles(detailFiles);
     })();
   }, [filesInput, modelManageData]);
@@ -205,7 +205,7 @@ const ModelManage: React.FC = () => {
         author: authorNameInput,
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
-        files: filesInput.filter((file) => file.type === 'local'),
+        files: filesInput,
       });
       setRefreshModel((i) => i + 1);
 

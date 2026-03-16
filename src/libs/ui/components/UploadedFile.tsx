@@ -8,7 +8,9 @@ import { ManageFile } from '../../../middleware/types';
 interface UploadedFileProps {
   index: number;
   file: ManageFile;
+  isRemoved: boolean;
   onClose: () => void;
+  onRestore: () => void;
   onChange: (isMain: boolean, isPreview: boolean, isHidden: boolean) => void;
 }
 
@@ -25,11 +27,24 @@ const formatType = (file: ManageFile) => {
  * @param props The props for the UploadedFile component.
  * @returns 
  */
-export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onChange, index }) => {
+export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onRestore, onChange, index, isRemoved }) => {
   const t = useTranslation('ui.uploaded_file');
 
   return (
-    <div className="w-full pl-1 flex flex-col bg-bg-100/50 p-3 rounded-lg border border-ui-border/30 hover:border-ui-border transition-colors">
+    <div className="relative overflow-hidden w-full pl-1 flex flex-col bg-bg-100/50 p-3 rounded-lg border border-ui-border/30 hover:border-ui-border transition-colors">
+      {isRemoved && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-[#ff0000a2] backdrop-blur-[2px]">
+          <span className="text-white font-bold mb-2">Removed</span>
+          <button
+            type="button"
+            className="bg-white text-red-600 px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-red-50 transition-colors shadow-sm"
+            onClick={onRestore}
+          >
+            Bring back
+          </button>
+        </div>
+      )}
+
       <div className="w-full flex justify-between items-center mb-1">
         <Label size={'xxs'} className="truncate font-medium max-w-[200px]">
           {formatName(file)}

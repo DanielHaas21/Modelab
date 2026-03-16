@@ -45,7 +45,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
         </React.Suspense>
       );
     })
-    
+
     return (
       <div ref={ref}>
         <Carousel

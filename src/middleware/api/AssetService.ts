@@ -93,17 +93,32 @@ export class AssetService extends Service {
     const form = new FormData();
 
     form.append('name', data.name.substring(0, 128));
-    form.append('description', data.description.substring(0, 320));
-    form.append('author', data.author);
+    form.append('description', data.description.replace(/\r\n/g, '\n').substring(0, 320));
+    form.append('author', data.author ?? '');
     form.append('categoryId', data.category.toString());
+
     data.tags.forEach((tagId) => {
       form.append('tagIds[]', tagId.toString());
     });
 
-    data.files.forEach((file, index) => {
-      form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
-      form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
-      form.append('files[]', file.localFile);
+    let metaIndex = 0;
+    data.files.forEach((file) => {
+      if (file.type === 'local' && file.isRemoved) {
+        return;
+      }
+
+      form.append(`filesMeta[${metaIndex}][isHidden]`, file.isHidden ? '1' : '0');
+      form.append(`filesMeta[${metaIndex}][isMain]`, file.isMain ? '1' : '0');
+      form.append(`filesMeta[${metaIndex}][isPreview]`, file.isPreview ? '1' : '0');
+      form.append(`filesMeta[${metaIndex}][isRemoved]`, file.isRemoved ? '1' : '0');
+
+      if (file.type === 'fetched') {
+        form.append(`filesMeta[${metaIndex}][id]`, file.detailFile.id.toString());
+      } else if (file.type === 'local') {
+        form.append('files[]', file.localFile);
+      }
+
+      metaIndex++;
     });
 
     return this.POST(ROUTES.POST.Asset + data.id + '/update', form, {
@@ -119,16 +134,18 @@ export class AssetService extends Service {
     const form = new FormData();
 
     form.append('name', data.name.substring(0, 128));
-    form.append('description', data.description.substring(0, 320));
-    form.append('author', data.author);
+    form.append('description', data.description.replace(/\r\n/g, '\n').substring(0, 320));
+    form.append('author', data.author ?? '');
     form.append('categoryId', data.category.toString());
+
     data.tags.forEach((tagId) => {
       form.append('tagIds[]', tagId.toString());
     });
 
     data.files.forEach((file, index) => {
-      form.append('filesMeta[' + index.toString() + '][isHidden]', file.isHidden ? '1' : '0');
-      form.append('filesMeta[' + index.toString() + '][isMain]', file.isMain ? '1' : '0');
+      form.append(`filesMeta[${index}][isHidden]`, file.isHidden ? '1' : '0');
+      form.append(`filesMeta[${index}][isMain]`, file.isMain ? '1' : '0');
+      form.append(`filesMeta[${index}][isPreview]`, file.isPreview ? '1' : '0');
       form.append('files[]', file.localFile);
     });
 

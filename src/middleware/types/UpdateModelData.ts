@@ -1,4 +1,4 @@
-import { LocalManageFile } from './ManageModel';
+import { ManageFile } from './ManageModel';
 
 export interface UpdateModelData {
   id: number;
@@ -7,5 +7,5 @@ export interface UpdateModelData {
   author: string | null;
   category: number;
   tags: number[];
-  files: LocalManageFile[];
+  files: ManageFile[];
 }
