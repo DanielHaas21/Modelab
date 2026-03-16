@@ -1,9 +1,9 @@
-import { img } from '../types/size';
+import { ImageSize } from '../ui/components';
 /**
  *
  * @returns image size variant
  */
-export function DecideImageSize(): img {
+export function DecideImageSize(): ImageSize {
   const width: number = window.innerWidth;
   const height: number = window.innerHeight;
 
