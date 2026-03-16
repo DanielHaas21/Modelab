@@ -26,6 +26,11 @@ export interface AssetData {
   updated: Date;
 }
 
+interface RawAssetData extends Omit<AssetData, 'created' | 'updated'> {
+  created: string;
+  updated: string;
+}
+
 export interface FileInfoData {
   id: number;
   name: string;
@@ -76,7 +81,7 @@ export class AssetService extends Service {
     super(API_PATH);
   }
 
-  private mapAssetDates(asset: any): AssetData {
+  private mapAssetDates(asset: RawAssetData): AssetData {
     return {
       ...asset,
       created: new Date(asset.created),
@@ -137,7 +142,7 @@ export class AssetService extends Service {
   }
 
   public async get(id: number): Promise<AssetGet> {
-    const response = await this.POST(ROUTES.POST.Asset + id) as any;
+    const response = await this.POST(ROUTES.POST.Asset + id) as { asset: RawAssetData };
     return {
       ...response,
       asset: this.mapAssetDates(response.asset)
@@ -145,10 +150,10 @@ export class AssetService extends Service {
   }
 
   public async getAll(page: number, count: number): Promise<AssetGetAll> {
-    const response = await this.POST(ROUTES.POST.Asset + 'all', { page, count }) as any;
+    const response = await this.POST(ROUTES.POST.Asset + 'all', { page, count }) as { assets: RawAssetData[], info: PaginatedInfo };
     return {
       ...response,
-      assets: response.assets.map((a: any) => this.mapAssetDates(a))
+      assets: response.assets.map((a: RawAssetData) => this.mapAssetDates(a))
     };
   }
 
@@ -172,10 +177,10 @@ export class AssetService extends Service {
       ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery.join(',') }),
     };
 
-    const response = await this.POST(ROUTES.POST.Asset + 'search', data) as any;
+    const response = await this.POST(ROUTES.POST.Asset + 'search', data) as { assets: RawAssetData[], info: PaginatedInfo };
     return {
       ...response,
-      assets: response.assets.map((a: any) => this.mapAssetDates(a))
+      assets: response.assets.map((a: RawAssetData) => this.mapAssetDates(a))
     };
   }
 

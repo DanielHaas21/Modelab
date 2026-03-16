@@ -3,7 +3,7 @@ import ApiError from './api/ApiError';
 
 // Base API response
 interface ApiResponse {
-  data: Object;
+  data: object;
   message?: string;
   cause?: string;
 }
@@ -65,14 +65,14 @@ export class Service {
   }
 
   // Axios request wrapper methods
-  protected async GET(url: string, config?: AxiosRequestConfig): Promise<Object> {
+  protected async GET(url: string, config?: AxiosRequestConfig): Promise<object> {
     config = this.addAuthHeader(config);
     const response: AxiosResponse<ApiResponse> = await this.axiosInstance.get(url, config);
     this.checkResponse(response);
     return response.data;
   }
 
-  protected async POST(url: string, data?: Object, config?: AxiosRequestConfig): Promise<Object> {
+  protected async POST(url: string, data?: object, config?: AxiosRequestConfig): Promise<object> {
     config = this.addAuthHeader(config);
     const response: AxiosResponse<ApiResponse> = await this.axiosInstance.post(url, data, config);
     this.checkResponse(response);

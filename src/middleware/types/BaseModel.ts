@@ -10,5 +10,6 @@ export interface BaseModel {
   description: string;
   category: DataProp;
   tags: DataProp[];
+  updated: Date;
   created: Date;
 }

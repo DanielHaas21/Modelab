@@ -37,15 +37,15 @@ export class FileService extends Service {
     }
 
     switch (fileType) {
-      case 'model/obj':
+      case 'model/obj': {
         const textData = await file.text();
         return this.objLoader.parse(textData);
-
+      }
       case 'model/fbx':
-      case 'application/octet-stream':
+      case 'application/octet-stream': {
         const bufferData = await file.arrayBuffer();
         return this.fbxLoader.parse(bufferData, file.name);
-
+      }
       default:
         return null;
     }
@@ -57,15 +57,14 @@ export class FileService extends Service {
     }
 
     switch (fileType) {
-      case 'model/obj':
+      case 'model/obj': {
         const textData = await this.GET(url, { responseType: 'text', timeout: 0 }) as unknown as string;
         return this.objLoader.parse(textData);
-
-      case 'model/fbx':
-        console.log(url);
+      }
+      case 'model/fbx': {
         const bufferData = await this.GET(url, { responseType: 'arraybuffer', timeout: 0 }) as unknown as ArrayBuffer;
         return this.fbxLoader.parse(bufferData, url);
-
+      }
       default:
         return null;
     }

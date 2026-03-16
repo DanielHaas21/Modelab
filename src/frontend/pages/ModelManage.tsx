@@ -27,7 +27,7 @@ import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid
 import { useToast } from '../../libs/ui/components/Toast';
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
-import { createDetailFiles } from '../../middleware/actions/CreateDetailFIle';
+import { createDetailFiles } from '../../middleware/actions/CreateDetailFile';
 import { useTranslation } from '../../libs/ui/provider';
 
 

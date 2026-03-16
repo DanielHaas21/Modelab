@@ -97,6 +97,7 @@ export default async function loadModelManage(id: number | null): Promise<ModelM
       category: modelMetadata.asset.category,
       tags: modelMetadata.asset.tags,
       created: modelMetadata.asset.created,
+      updated: modelMetadata.asset.updated,
       files,
     };
   }
