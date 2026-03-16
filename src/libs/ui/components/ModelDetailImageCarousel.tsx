@@ -48,17 +48,29 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
 
     return (
       <div ref={ref}>
-        <Carousel
-          className='rounded-2xl overflow-hidden bg-primary-500'
-          dynamicHeight={true}
-          showThumbs={false}
-          selectedItem={selectedItem}
-          onChange={(index, _) => {
-            setSelectedItem(index);
-          }}
-        >
-          {filesRender}
-        </Carousel>
+        {showableFiles.length > 1
+          ? (
+            <Carousel
+              swipeable={false}
+              className='rounded-2xl overflow-hidden bg-primary-500'
+              dynamicHeight={true}
+              showThumbs={false}
+              selectedItem={selectedItem}
+              onChange={(index, _) => {
+                setSelectedItem(index);
+              }}
+            >
+              {filesRender}
+            </Carousel>
+          )
+          : (
+            <div
+              className='flex justify-center rounded-2xl overflow-hidden bg-primary-500'
+            >
+              {filesRender}
+            </div>
+          )
+        }
       </div>
     );
   }
