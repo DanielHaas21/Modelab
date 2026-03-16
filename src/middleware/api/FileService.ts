@@ -5,13 +5,12 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { SupportedFileTypes } from '../../libs/utils/isFile';
 
-export const LOADABLE_MODEL_FILES = [
-  'model/obj',
-  'model/fbx',
-  'application/octet-stream',
+export const LOADABLE_MODEL_EXTENSIONS = [
+  '.obj',
+  '.fbx',
 ] as const;
 
-export type LoadableModelType = typeof LOADABLE_MODEL_FILES[number];
+export type LoadableModelExtension = typeof LOADABLE_MODEL_EXTENSIONS[number];
 
 export interface GetSupportedFileTypes {
   supportedFileTypes: SupportedFileTypes;
@@ -25,24 +24,38 @@ export class FileService extends Service {
     super(API_PATH);
   }
 
-  private async getBlobFromUrl(url: string, fileType: string): Promise<Blob> {
-    const data = await this.GET(url, { responseType: 'arraybuffer' }) as ArrayBuffer;
-    const blob = new Blob([data], { type: fileType });
-    return blob;
+  private getExtension(fileName: string): string {
+    const lastDot = fileName.lastIndexOf('.');
+    return lastDot !== -1 ? fileName.slice(lastDot).toLowerCase() : '';
   }
 
-  public async loadModelFromLocalFile(file: File, fileType: string) {
-    if (!this.isModelFileLoadable(fileType)) {
+  private getMimeFromExtension(extension: string): string {
+    switch (extension) {
+      case '.obj': return 'model/obj';
+      case '.fbx': return 'model/fbx';
+      default: return 'application/octet-stream';
+    }
+  }
+
+  private async getBlobFromUrl(url: string, fileName: string): Promise<Blob> {
+    const extension = this.getExtension(fileName);
+    const data = await this.GET(url, { responseType: 'arraybuffer' }) as ArrayBuffer;
+    return new Blob([data], { type: this.getMimeFromExtension(extension) });
+  }
+
+  public async loadModelFromLocalFile(file: File) {
+    const extension = this.getExtension(file.name);
+
+    if (!this.isModelFileLoadable(file.name)) {
       return null;
     }
 
-    switch (fileType) {
-      case 'model/obj': {
+    switch (extension) {
+      case '.obj': {
         const textData = await file.text();
         return this.objLoader.parse(textData);
       }
-      case 'model/fbx':
-      case 'application/octet-stream': {
+      case '.fbx': {
         const bufferData = await file.arrayBuffer();
         return this.fbxLoader.parse(bufferData, file.name);
       }
@@ -51,18 +64,19 @@ export class FileService extends Service {
     }
   }
 
-  public async loadModelFromUrl(url: string, fileType: string) {
-    if (!this.isModelFileLoadable(fileType)) {
+  public async loadModelFromUrl(url: string, fileName: string) {
+    const extension = this.getExtension(fileName);
+
+    if (!this.isModelFileLoadable(fileName)) {
       return null;
     }
 
-    switch (fileType) {
-      case 'model/obj': {
+    switch (extension) {
+      case '.obj': {
         const textData = await this.GET(url, { responseType: 'text', timeout: 0 }) as unknown as string;
         return this.objLoader.parse(textData);
       }
-      case 'model/fbx':
-      case 'application/octet-stream': {
+      case '.fbx': {
         const bufferData = await this.GET(url, { responseType: 'arraybuffer', timeout: 0 }) as unknown as ArrayBuffer;
         return this.fbxLoader.parse(bufferData, url);
       }
@@ -71,12 +85,13 @@ export class FileService extends Service {
     }
   }
 
-  public isModelFileLoadable(fileType: string) {
-    return LOADABLE_MODEL_FILES.includes(fileType as LoadableModelType);
+  public isModelFileLoadable(fileName: string) {
+    const extension = this.getExtension(fileName);
+    return LOADABLE_MODEL_EXTENSIONS.includes(extension as LoadableModelExtension);
   }
 
-  public async loadModelFromFile(id: number, fileType: string) {
-    return await this.loadModelFromUrl(this.getAssetURL(id), fileType);
+  public async loadModelFromFile(id: number, fileName: string) {
+    return await this.loadModelFromUrl(this.getAssetURL(id), fileName);
   }
 
   public getAssetURL(id: number): string {
@@ -87,14 +102,14 @@ export class FileService extends Service {
     return this.getAssetURL(id) + '/preview';
   }
 
-  public async getBlob(id: number, fileType: string): Promise<Blob> {
+  public async getBlob(id: number, fileName: string): Promise<Blob> {
     const url = this.getAssetURL(id);
-    return await this.getBlobFromUrl(url, fileType);
+    return await this.getBlobFromUrl(url, fileName);
   }
 
-  public async getPreviewBlob(id: number, fileType: string): Promise<Blob> {
+  public async getPreviewBlob(id: number, fileName: string): Promise<Blob> {
     const url = this.getPreviewURL(id);
-    return await this.getBlobFromUrl(url, fileType);
+    return await this.getBlobFromUrl(url, fileName);
   }
 
   public async getSupportedFileTypes(): Promise<GetSupportedFileTypes> {

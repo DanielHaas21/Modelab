@@ -45,7 +45,7 @@ export default async function loadModelManage(id: number | null): Promise<ModelM
           break;
         case 'model':
           try {
-            const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
+            const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.name);
             detailFile = {
               ...detailFileBase,
               type: '3d',

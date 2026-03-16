@@ -48,7 +48,7 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
           break;
         case 'model':
           try {
-            const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.fileType);
+            const model = await FILE.loadModelFromFile(fileInfo.id, fileInfo.name);
 
             file = {
               ...fileBase,
