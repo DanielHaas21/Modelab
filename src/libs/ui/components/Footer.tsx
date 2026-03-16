@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
-import { cva, type VariantProps } from 'class-variance-authority';
 import { useResponsive } from '../../hooks/useResponsive';
 import { useTranslation } from '../provider';
 import { useCheckClearance } from '../../auth';
@@ -9,33 +8,25 @@ import { CLEARANCE } from '../../../store/types';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
 import { useToast } from './Toast';
 
-const FooterVariants = cva('', {
-  variants: {
-    variant: {
-      borderless: '',
-      bordered: '',
-    },
-  },
-  defaultVariants: {
-    variant: 'bordered',
-  },
-});
-
-type FooterVariantProps = VariantProps<typeof FooterVariants>;
-
-interface FooterProps extends FooterVariantProps {
-  className?: string;
-  children?: React.ReactNode[];
+interface FooterProps extends React.HTMLAttributes<HTMLElement> {
+  variant?: 'borderless' | 'bordered';
+  children?: React.ReactNode;
 }
 
-export const Footer: React.FC<FooterProps> = ({ className, variant, children, ...props }) => {
+export const Footer: React.FC<FooterProps> = ({
+  className,
+  variant = 'borderless',
+  children,
+  ...props
+}) => {
   const { isDesktop } = useResponsive();
   const t = useTranslation('ui.footer');
   const { show } = useToast();
   const { hasClearance } = useCheckClearance();
 
-  const CheckAdminClearance = () => {
+  const handleAdminClick = (e: React.MouseEvent) => {
     if (!hasClearance(CLEARANCE.ADMIN)) {
+      e.preventDefault(); // Stop navigation
       show({
         variant: 'error',
         title: t('no_clearance'),
@@ -46,11 +37,10 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
   return (
     <footer
       className={cn(
-        variant,
-        className,
-        'flex flex-row items-center bg-bg-100',
+        'flex flex-row items-center bg-bg-100 py-3',
+        variant === 'bordered' ? 'border-t border-ui-border' : 'w-full',
         isDesktop ? 'justify-end' : 'justify-center',
-        'py-3 border-t border-ui-border'
+        className
       )}
       {...props}
     >
@@ -60,8 +50,8 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
           {t('about')}
         </Link>
         <Link
-          onClick={CheckAdminClearance}
-          to={hasClearance(CLEARANCE.ADMIN) ? (BrowserRoutes.ModelManage + 'upload') : ''}
+          onClick={handleAdminClick}
+          to={hasClearance(CLEARANCE.ADMIN) ? (BrowserRoutes.ModelManage + 'upload') : '#'}
           className="text-xl hover-underline-animation no-underline text-text-950 mx-[10px] px-[10px] border-x border-ui-border"
         >
           {t('upload_assets')}
@@ -73,4 +63,3 @@ export const Footer: React.FC<FooterProps> = ({ className, variant, children, ..
     </footer>
   );
 };
-// add actual routes in the future

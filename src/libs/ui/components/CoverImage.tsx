@@ -1,25 +1,21 @@
 import * as React from 'react';
 import { cn, loadImage } from '../../utils';
-import { cva, VariantProps } from 'class-variance-authority';
 
 const images = import.meta.glob('../assets/*.png'); // no idea what datatype this is
 const image_name: string = 'train_';
 
-const CoverImageVariants = cva('', {
-  variants: {
-    size: {
-      fullhd: image_name + 'fullhd.png',
-      wqhd: image_name + 'wqhd.png',
-      uhd: image_name + 'uhd.png',
-    },
-  },
-});
+const imageMap = {
+  fullhd: `${image_name}fullhd.png`,
+  wqhd: `${image_name}wqhd.png`,
+  uhd: `${image_name}uhd.png`,
+} as const;
 
-type CoverImageVariantProps = VariantProps<typeof CoverImageVariants>;
+export type ImageSize = keyof typeof imageMap;
 
-interface CoverImageProps extends CoverImageVariantProps {
-  className?: string;
+interface CoverImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  size?: ImageSize;
 }
+
 /**
  * Displays a cover image of the train based on the specified size variant. It dynamically loads the appropriate image and handles loading errors gracefully. If the image fails to load, it will not render anything.
  */
@@ -31,8 +27,9 @@ export const CoverImage = React.forwardRef<HTMLImageElement, CoverImageProps>(
     React.useEffect(() => {
       const fetchImage = async () => {
         try {
-          if (!size) return; // Don't load if size is undefined
-          const image = await loadImage(`../assets/train_${size}.png`, images as Record<string, () => Promise<{ default: string }>>);
+          if (!size) return; // dont load if size is undefined
+          const path = `../assets/${imageMap[size]}`;
+          const image = await loadImage(path, images as Record<string, () => Promise<{ default: string }>>);
           setImageSrc(image);
         } catch (err) {
           setError(true);
@@ -46,7 +43,7 @@ export const CoverImage = React.forwardRef<HTMLImageElement, CoverImageProps>(
     if (!imageSrc || error) return null;
 
     return (
-      <img className={cn(className)} src={imageSrc || ''} ref={ref} {...props} alt="Cover image" />
+      <img className={cn(className)} src={imageSrc} ref={ref} {...props} alt="Cover image" />
     );
   }
 );

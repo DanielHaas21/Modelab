@@ -11,6 +11,7 @@ import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/
 import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
 import { useTranslation } from '../provider';
+import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 
 // This file is renders a model using THREE
@@ -131,7 +132,7 @@ const Model = React.forwardRef<ModelType, ModelProps>(
 
 interface FocusCameraProps {
   modelRef: React.RefObject<ModelType | null>;
-  orbitControlsRef: React.RefObject<any>;
+  orbitControlsRef: React.RefObject<OrbitControlsImpl | null>;
   onRefocusLoaded: (refocusCamera: () => void) => void;
 }
 
@@ -189,7 +190,7 @@ interface Model3DProps {
 
 const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
   ({ file, canvasKey, onContextLoss }, ref) => {
-    const orbitControlsRef = React.useRef<any>(null);
+    const orbitControlsRef = React.useRef<OrbitControlsImpl>(null);
     const modelRef = React.useRef<ModelType | null>(null);
 
     const [refocusCameraAction, setRefocusCameraAction] = React.useState<() => void>(() => { });
@@ -368,4 +369,3 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
     }
   }
 );
-
