@@ -6,6 +6,7 @@ import {
   confirm,
   ErrorDisplay,
   GeneralPopup,
+  Input,
   Label,
   ModelInfoSection,
   Preloader,
@@ -29,6 +30,8 @@ import { BrowserRoutes } from '../../global/BrowserRoutes';
 import { faArrowLeft, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from '../../libs/ui/provider';
+import { CopyableField } from '../../libs/ui/components/CopyableField';
+import { generateCzechISO690 } from '../../libs/utils/generateIso';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
@@ -130,35 +133,57 @@ const ModelDetail: React.FC = () => {
   const GenerateCitationDataHandle = async () => {
     if (modelDetailData === null) return;
 
+    const czechISO690 = generateCzechISO690(
+      modelDetailData.model.author ?? 'Modelab',
+      modelDetailData.model.name,
+      `${window.location.origin}${location.pathname}${location.search}`,
+      modelDetailData.model.created,
+    );
+
     await confirm(
       t("citation.title"),
       false,
       Dispatch,
       t("citation.close"),
       undefined,
-      <>
+      <div>
         <Label size="xs" className='font-normal tracking-[0.1rem]'>
           {t("citation.copy")}
         </Label>
-        <div className='flex flex-row justify-center items-center gap-2'>
-          <Label size="xs" className='font-normal text-gray-700 cursor-pointer tracking-[0.1rem] hover:text-gray-500 active:text-gray-700 transition duration-150' onClick={() => navigator.clipboard.writeText(modelDetailData.model.name)}>
-            {modelDetailData.model.name}
-          </Label>
+        <div className='flex flex-col justify-center items-center gap-2'>
+          <CopyableField
+            fieldName={t("citation.name")}
+            fieldValue={modelDetailData.model.name}
+          />
+          <CopyableField
+            fieldName={t("citation.author")}
+            fieldValue={modelDetailData.model.author ?? 'Modelab'}
+          />
+          <CopyableField
+            fieldName={t("citation.created")}
+            fieldValue={modelDetailData.model.created.toLocaleDateString('cs-CZ')}
+          />
+          <CopyableField
+            fieldName={t("citation.url")}
+            fieldValue={modelDetailData.model.name}
+          />
+        </div>
+        <div className="grow h-px my-2 bg-ui-border" />
+        <div className='flex flex-col justify-start items-start'>
           <Label size="xs" className='font-normal tracking-[0.1rem]'>
-            |
+            {t("citation.cziso690")}
           </Label>
-          <Label size="xs" className='font-normal text-gray-700 cursor-pointer tracking-[0.1rem] hover:text-gray-500 active:text-gray-700 transition duration-150' onClick={() => navigator.clipboard.writeText(modelDetailData.model.author ?? '')}>
-            {modelDetailData.model.author}
-          </Label>
-          <Label size="xs" className='font-normal tracking-[0.1rem]'>
-            |
-          </Label>
-          <Label size="xs" className='font-normal text-gray-700 cursor-pointer tracking-[0.1rem] hover:text-gray-500 active:text-gray-700 transition duration-150' onClick={() => navigator.clipboard.writeText(modelDetailData.model.created.toLocaleDateString('cs-CZ'))}>
-            {modelDetailData.model.created.toLocaleDateString('cs-CZ')}
+          <Label size="xs"
+            className='font-normal tracking-[0.1rem] cursor-pointer hover:text-gray-500 active:text-gray-700 transition duration-150'
+            onClick={(e) => {
+              e.preventDefault();
+              navigator.clipboard.writeText(czechISO690);
+            }}
+          >
+            {czechISO690}
           </Label>
         </div>
-      </>
-
+      </div>
     );
   }
 

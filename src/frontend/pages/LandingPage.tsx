@@ -94,9 +94,9 @@ const LandingPage: React.FC = () => {
                         <p className="tracking-[0.3rem] text-xl mt-2">{t("features")}</p>
                       </div>
                       <div className="flex justify-center items-center gap-4 tracking-[0.1rem] w-full">
-                        <span className="grow h-[1px] bg-ui-border"></span>
+                        <span className="grow h-px bg-ui-border"></span>
                         <span className="text-text-500 uppercase">{t("or")}</span>
-                        <span className="grow h-[1px] bg-ui-border"></span>
+                        <span className="grow h-px bg-ui-border"></span>
                       </div>
                       <div className="flex flex-col items-center justify-center">
                         <Button

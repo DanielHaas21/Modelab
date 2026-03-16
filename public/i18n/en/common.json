@@ -20,20 +20,25 @@
     },
     "model_detail": {
       "confirm": {
-        "download": "Download",
+        "download": "Download All",
         "cancel": "Cancel",
         "note": "Following files will be downloaded:"
       },
       "citation": {
         "title": "Citation Data",
         "copy": "Click on the element to copy the data:",
-        "close": "Close"
+        "cziso690": "Czech 690 ISO:",
+        "close": "Close",
+        "name": "Name",
+        "author": "Author",
+        "created": "Created",
+        "url": "URL"
       },
       "notFound": "The asset you're looking for doesn't exist or has been moved.",
       "oops": "Oops! Asset not found",
       "back": "Back",
       "edit": "Edit",
-      "download_all": "Download all",
+      "download_all": "Download",
       "asset_name": "Asset name",
       "author_name": "Author name",
       "description": "Asset Description",
@@ -41,7 +46,7 @@
       "tags": "Tags",
       "preview": "Preview",
       "saved": "Asset saved successfully!",
-      "generate_citation": "Citate data"
+      "generate_citation": "Citate"
     },
     "model_manage": {
       "confirm": {

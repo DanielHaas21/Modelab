@@ -20,14 +20,19 @@
     },
     "model_detail": {
       "confirm": {
-        "download": "Stáhnout",
+        "download": "Stáhnout vše",
         "cancel": "Zrušit",
         "note": "Následující soubory budou staženy:"
       },
       "citation": {
         "title": "Data pro citaci",
         "copy": "Klikněte na prvek pro zkopírování dat:",
-        "close": "Zavřít"
+        "cziso690": "České 690 ISO:",
+        "close": "Zavřít",
+        "name": "Název",
+        "author": "Autor",
+        "created": "Vytvořeno",
+        "url": "URL"
       },
       "notFound": "Požadovaný asset neexistuje nebo byl přesunut.",
       "oops": "Oops! Asset nenalezen",
@@ -38,8 +43,8 @@
       "description": "Popis assetu",
       "category": "Kategorie",
       "tags": "Tagy",
-      "download_all": "Stáhnout vše",
-      "generate_citation": "Data pro citaci",
+      "download_all": "Stáhnout",
+      "generate_citation": "Citovat",
       "preview": "Náhled",
       "saved": "Asset úspěšně uložen!"
     },
