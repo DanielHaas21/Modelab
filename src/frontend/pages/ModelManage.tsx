@@ -246,7 +246,8 @@ const ModelManage: React.FC = () => {
       await editModel({
         id: assetId,
         name: assetNameInput,
-        desc: assetDescriptionInput,
+        description: assetDescriptionInput,
+        author: null, // TODO: Add author
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),
@@ -261,7 +262,8 @@ const ModelManage: React.FC = () => {
     } else {
       const createdId = await createModel({
         name: assetNameInput,
-        desc: assetDescriptionInput,
+        author: null, // TODO: Add author
+        description: assetDescriptionInput,
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),

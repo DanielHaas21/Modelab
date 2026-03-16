@@ -1,7 +1,7 @@
 import { ROUTES } from '../routes';
-import { CategoryData } from './Category';
+import { CategoryData } from './CategoryService';
 import { Service } from '../Service';
-import { TagData } from './Tag';
+import { TagData } from './TagService';
 import { CreateModelData, UpdateModelData } from '../types';
 import FormData from 'form-data';
 import { API_PATH } from '../apiPath';
@@ -76,7 +76,8 @@ export class AssetService extends Service {
     const form = new FormData();
 
     form.append('name', data.name.substring(0, 128));
-    form.append('description', data.desc.substring(0, 320));
+    form.append('description', data.description.substring(0, 320));
+    form.append('author', data.author);
     form.append('categoryId', data.category.toString());
     data.tags.forEach((tagId) => {
       form.append('tagIds[]', tagId.toString());
@@ -101,7 +102,8 @@ export class AssetService extends Service {
     const form = new FormData();
 
     form.append('name', data.name.substring(0, 128));
-    form.append('description', data.desc.substring(0, 320));
+    form.append('description', data.description.substring(0, 320));
+    form.append('author', data.author);
     form.append('categoryId', data.category.toString());
     data.tags.forEach((tagId) => {
       form.append('tagIds[]', tagId.toString());
