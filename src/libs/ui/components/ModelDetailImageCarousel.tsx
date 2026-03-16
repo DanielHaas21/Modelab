@@ -56,7 +56,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
               dynamicHeight={true}
               showThumbs={false}
               selectedItem={selectedItem}
-              onChange={(index, _) => {
+              onChange={(index) => {
                 setSelectedItem(index);
               }}
             >

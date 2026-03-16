@@ -42,7 +42,7 @@ export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
           </aside>
         )}
       </main >
-      <Footer className={'h-[6vh] ' + (bordered ? 'border-t border-ui-border' : 'w-full')} />
+      <Footer className={'h-[6vh]'} variant={bordered ? 'bordered' : 'borderless'} />
     </>
   );
 };

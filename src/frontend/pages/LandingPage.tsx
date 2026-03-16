@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { CoverImage, Label, Preloader } from '../../libs/ui/components';
+import { CoverImage, ImageSize, Label, Preloader } from '../../libs/ui/components';
 import { cn, DecideImageSize } from '../../libs/utils';
-import { img } from '../../libs/types/size';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { Button } from '../../libs/ui/components/Button';
 import { Link } from 'react-router-dom';
@@ -17,7 +16,7 @@ import { BrowserRoutes } from '../../global/BrowserRoutes';
 import { useAuth } from '../../libs/auth/AuthProvider';
 
 const LandingPage: React.FC = () => {
-  const [size, setSize] = React.useState<img | null>(null);
+  const [size, setSize] = React.useState<ImageSize | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true); // New loading state
   const { isDesktop } = useResponsive();
   const { googleLogin } = useAuth();
@@ -53,7 +52,7 @@ const LandingPage: React.FC = () => {
                   {loading ? ( // Conditionally render Preloader while image is loading
                     <Preloader />
                   ) : (
-                    <CoverImage className="w-full h-full object-contain" size={size} />
+                    <CoverImage className="w-full h-full object-contain" size={size ?? undefined} />
                   )}
                 </div>
               </section>

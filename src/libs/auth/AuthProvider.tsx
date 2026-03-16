@@ -134,6 +134,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const usedGoogleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse: TokenResponse) => {
+      loginWithToken(tokenResponse.access_token);
+    },
+    onError: () => {
+      dispatch(UserStateActions.loginFailure('Google login failed.'));
+    },
+  });
+
   // initiates google login or dev login
   const googleLogin = () => {
     dispatch(UserStateActions.loginStart());
@@ -143,15 +152,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return;
     }
 
-    const login = useGoogleLogin({
-      onSuccess: (tokenResponse: TokenResponse) => {
-        loginWithToken(tokenResponse.access_token);
-      },
-      onError: () => {
-        dispatch(UserStateActions.loginFailure('Google login failed.'));
-      },
-    });
-    login();
+    usedGoogleLogin();
   };
 
   // automatically logs out and initiates new login
