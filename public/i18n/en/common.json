@@ -24,13 +24,24 @@
         "cancel": "Cancel",
         "note": "Following files will be downloaded:"
       },
+      "citation": {
+        "title": "Citation Data",
+        "copy": "Click on the element to copy the data:",
+        "close": "Close"
+      },
       "notFound": "The asset you're looking for doesn't exist or has been moved.",
       "oops": "Oops! Asset not found",
       "back": "Back",
       "edit": "Edit",
       "download_all": "Download all",
+      "asset_name": "Asset name",
+      "author_name": "Author name",
+      "description": "Asset Description",
+      "category": "Category",
+      "tags": "Tags",
       "preview": "Preview",
-      "saved": "Asset saved successfully!"
+      "saved": "Asset saved successfully!",
+      "generate_citation": "Citate data"
     },
     "model_manage": {
       "confirm": {

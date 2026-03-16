@@ -127,6 +127,41 @@ const ModelDetail: React.FC = () => {
     );
   }
 
+  const GenerateCitationDataHandle = async () => {
+    if (modelDetailData === null) return;
+
+    await confirm(
+      t("citation.title"),
+      false,
+      Dispatch,
+      t("citation.close"),
+      undefined,
+      <>
+        <Label size="xs" className='font-normal tracking-[0.1rem]'>
+          {t("citation.copy")}
+        </Label>
+        <div className='flex flex-row justify-center items-center gap-2'>
+          <Label size="xs" className='font-normal text-gray-700 cursor-pointer tracking-[0.1rem] hover:text-gray-500 active:text-gray-700 transition duration-150' onClick={() => navigator.clipboard.writeText(modelDetailData.model.name)}>
+            {modelDetailData.model.name}
+          </Label>
+          <Label size="xs" className='font-normal tracking-[0.1rem]'>
+            |
+          </Label>
+          <Label size="xs" className='font-normal text-gray-700 cursor-pointer tracking-[0.1rem] hover:text-gray-500 active:text-gray-700 transition duration-150' onClick={() => navigator.clipboard.writeText(modelDetailData.model.author ?? '')}>
+            {modelDetailData.model.author}
+          </Label>
+          <Label size="xs" className='font-normal tracking-[0.1rem]'>
+            |
+          </Label>
+          <Label size="xs" className='font-normal text-gray-700 cursor-pointer tracking-[0.1rem] hover:text-gray-500 active:text-gray-700 transition duration-150' onClick={() => navigator.clipboard.writeText(modelDetailData.model.created.toLocaleDateString('cs-CZ'))}>
+            {modelDetailData.model.created.toLocaleDateString('cs-CZ')}
+          </Label>
+        </div>
+      </>
+
+    );
+  }
+
   const modelData = modelDetailData.model;
 
   const ActionButtons = (
@@ -166,36 +201,43 @@ const ModelDetail: React.FC = () => {
           {modelData.name}
         </Label>
         <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{modelData.description}</p>
-        <ModelInfoSection name="Author">
+        <ModelInfoSection name={t("author_name")}>
           <p className="m-0">
             {modelData.author}
           </p>
         </ModelInfoSection>
-        <ModelInfoSection name="Category">
+        <ModelInfoSection name={t("category")}>
           <p className="m-0" key={modelData.category.id}>
             {modelData.category.name}
           </p>
         </ModelInfoSection>
-        <ModelInfoSection name="Tags">
+        <ModelInfoSection name={t("tags")}>
           <div className="mt-2 flex flex-wrap">
             {modelData.tags.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>
         </ModelInfoSection>
-        <div className={cn("sticky bottom-0 mt-6 pb-4 flex flex-col gap-2", isDesktop && "ms-4")}>
+        <div className={cn("sticky bottom-0 mt-6 pb-4 flex flex-col md:flex-row gap-2", isDesktop && "ms-4")}>
           <Button
             onClick={() => downloadAllAsZip(modelData.files)}
             disabled={!hasClearance(CLEARANCE.USER)}
-            className={cn("flex justify-center", !isDesktop && "w-100")}
+            className={cn("flex justify-center", !isDesktop && "w-full")}
           >
             {t("download_all")}
+          </Button>
+          <Button
+            onClick={() => GenerateCitationDataHandle()}
+            disabled={!hasClearance(CLEARANCE.USER)}
+            className={cn("flex justify-center", !isDesktop && "w-full")}
+          >
+            {t("generate_citation")}
           </Button>
           {!isDesktop && (
             <Button
               variant="secondary"
               onClick={() => offcanvasHandleRef.current?.open()}
-              className="flex justify-center w-100"
+              className="flex justify-center w-full"
             >
               {t("preview")}
             </Button>

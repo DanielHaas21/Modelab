@@ -201,7 +201,7 @@ const ModelManage: React.FC = () => {
       await editModel({
         id: assetId,
         name: assetNameInput,
-        description: assetDescriptionInput,
+        description: assetDescriptionInput.trim(),
         author: authorNameInput,
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
@@ -218,7 +218,7 @@ const ModelManage: React.FC = () => {
       const createdId = await createModel({
         name: assetNameInput,
         author: authorNameInput,
-        description: assetDescriptionInput,
+        description: assetDescriptionInput.trim(),
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),

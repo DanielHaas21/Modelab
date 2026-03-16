@@ -24,11 +24,22 @@
         "cancel": "Zrušit",
         "note": "Následující soubory budou staženy:"
       },
+      "citation": {
+        "title": "Data pro citaci",
+        "copy": "Klikněte na prvek pro zkopírování dat:",
+        "close": "Zavřít"
+      },
       "notFound": "Požadovaný asset neexistuje nebo byl přesunut.",
       "oops": "Oops! Asset nenalezen",
       "back": "Zpět",
       "edit": "Upravit",
+      "asset_name": "Název assetu",
+      "author_name": "Autor",
+      "description": "Popis assetu",
+      "category": "Kategorie",
+      "tags": "Tagy",
       "download_all": "Stáhnout vše",
+      "generate_citation": "Data pro citaci",
       "preview": "Náhled",
       "saved": "Asset úspěšně uložen!"
     },

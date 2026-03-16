@@ -95,10 +95,12 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
 
   const model: DetailModel = {
     id: modelMetadata.asset.id,
+    author: modelMetadata.asset.author,
     name: modelMetadata.asset.name,
     description: modelMetadata.asset.description,
     category: modelMetadata.asset.category,
     tags: modelMetadata.asset.tags,
+    created: modelMetadata.asset.created,
     files,
   };
 

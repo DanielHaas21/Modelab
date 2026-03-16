@@ -91,10 +91,12 @@ export default async function loadModelManage(id: number | null): Promise<ModelM
 
     model = {
       id: modelMetadata.asset.id,
+      author: modelMetadata.asset.author,
       name: modelMetadata.asset.name,
       description: modelMetadata.asset.description,
       category: modelMetadata.asset.category,
       tags: modelMetadata.asset.tags,
+      created: modelMetadata.asset.created,
       files,
     };
   }
