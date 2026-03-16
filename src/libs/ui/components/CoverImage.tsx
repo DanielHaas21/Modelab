@@ -32,7 +32,7 @@ export const CoverImage = React.forwardRef<HTMLImageElement, CoverImageProps>(
       const fetchImage = async () => {
         try {
           if (!size) return; // Don't load if size is undefined
-          const image = await loadImage(`../assets/train_${size}.png`, images);
+          const image = await loadImage(`../assets/train_${size}.png`, images as Record<string, () => Promise<{ default: string }>>);
           setImageSrc(image);
         } catch (err) {
           setError(true);
