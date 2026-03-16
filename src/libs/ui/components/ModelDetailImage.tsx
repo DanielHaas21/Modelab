@@ -29,7 +29,7 @@ const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
       <div className="w-full grow flex items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('w-100 h-100 object-contain')}
+          className={cn('object-contain')}
           src={file.previewUrl}
           alt="Preview"
         />
@@ -47,10 +47,10 @@ interface ModelImageProps {
 const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
   ({ file }, ref) => {
     return (
-      <div className="w-full grow flex items-center">
+      <div className="w-full h-full grow flex items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('w-100 h-100 object-contain')}
+          className={cn('object-contain')}
           src={file.imageUrl}
           alt="Image"
         />
