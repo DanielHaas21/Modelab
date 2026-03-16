@@ -100,6 +100,8 @@ export default async function loadModelDetail(id: number, userClearance: Clearan
     description: modelMetadata.asset.description,
     category: modelMetadata.asset.category,
     tags: modelMetadata.asset.tags,
+    created: modelMetadata.asset.created,
+    updated: modelMetadata.asset.updated,
     files,
   };
 
