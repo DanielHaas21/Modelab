@@ -130,9 +130,9 @@ const Browser: React.FC = () => {
 
   const BrowserFilters = (
     <>
-      <div className="w-100">
+      <div className="w-full">
         <Label size="xs">{t("categories")}</Label>
-        <div className="w-100">
+        <div className="w-full">
           <CategorySelect
             categories={categories}
             setCategories={setCategories}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { CategoryCheckbox } from './CategoryCheckbox';
+import { useResponsive } from '../../hooks/useResponsive';
 
 export interface CategoryOption {
   name: string;
@@ -23,6 +24,8 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
   setCategories,
   isRadio,
 }) => {
+  const { isDesktop } = useResponsive();
+
   const selectCategory = (index: number, isSelected: boolean) => {
     const updatedCategories = [...categories];
 
@@ -46,8 +49,28 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     }
   }, [categories]);
 
+  if (isDesktop) {
+    return (
+      <div className="flex flex-wrap gap-2 mt-2">
+        {categories.map((category, index) => {
+          return (
+            <CategoryCheckbox
+              key={category.id}
+              id={'browserFilterCateg' + index}
+              label={category.name}
+              checked={category.isSelected !== undefined && category.isSelected}
+              onChanged={() => {
+                selectCategory(index, isRadio ? true : !category.isSelected);
+              }}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-wrap gap-2 mt-2">
+    <div className="flex flex-col content-stretch gap-2 mt-2">
       {categories.map((category, index) => {
         return (
           <CategoryCheckbox
