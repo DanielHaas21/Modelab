@@ -67,6 +67,7 @@
       "saveButton": "Uložit",
       "deleteButton": "Smazat",
       "uploadButton": "Nahrát",
+      "previewButton": "Náhled",
       "asset_name": "Název assetu",
       "author_name": "Autor",
       "description": "Popis assetu",

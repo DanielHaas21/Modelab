@@ -67,6 +67,7 @@
       "saveButton": "Save",
       "deleteButton": "Delete",
       "uploadButton": "Upload",
+      "previewButton": "Preview",
       "asset_name": "Asset name",
       "author_name": "Author name",
       "description": "Asset Description",

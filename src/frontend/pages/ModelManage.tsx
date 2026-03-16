@@ -251,7 +251,7 @@ const ModelManage: React.FC = () => {
           >
             <Button variant="light" className="justify-between w-full">
               <FontAwesomeIcon icon={faEye} />
-              <span className="w-full">Preview</span>
+              <span className="w-full">{t('previewButton')}</span>
             </Button>
           </Link>
         </div>
