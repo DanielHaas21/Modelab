@@ -97,6 +97,10 @@ export interface ToastItemProps {
   onRemove?: () => void;
 }
 
+/**
+ * A component that represents an individual toast message. It supports different variants (default, success, error, warning) which change the color and label of the toast. 
+ * It also supports an optional description, action buttons, and a progress bar. The toast can be dismissed by clicking the close button or automatically after a specified duration.
+ */
 export const ToastItem = React.forwardRef<HTMLDivElement, ToastItemProps>(
   ({ children, variant = 'default', description, actions, progressBar, onRemove }, ref) => {
     const strip = stripColors[variant];

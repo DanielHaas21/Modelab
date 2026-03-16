@@ -6,7 +6,7 @@ await i18n
   .use(Backend)
   .use(initReactI18next)
   .init({
-    lng: navigator.language !== 'cs-CZ' ? 'cs' : 'en',
+    lng: navigator.language === 'cs-CZ' ? 'cs' : 'en',
     fallbackLng: 'en',
     supportedLngs: ['en', 'cs'],
     ns: ['common'],

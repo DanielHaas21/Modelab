@@ -1,4 +1,7 @@
 
+/**
+ * A tuple of all the routes in the application. 
+ */
 export const BrowserRoutes = {
   LandingPage: '/',
   Browser: '/browser',

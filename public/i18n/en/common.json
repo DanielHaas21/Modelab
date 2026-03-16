@@ -13,6 +13,20 @@
       "info": "Modelab is a database of models, textures and other assets that are made by students for  students",
       "offer": "Modelab offers 100% free assets for students working on games, websites, or school any other projects"
     },
+    "model_detail": {
+      "confirm": {
+        "download": "Download",
+        "cancel": "Cancel",
+        "note": "Following files will be downloaded:"
+      },
+      "notFound": "The asset you're looking for doesn't exist or has been moved.",
+      "oops": "Oops! Asset not found",
+      "back": "Back",
+      "edit": "Edit",
+      "download_all": "Download all",
+      "preview": "Preview",
+      "saved": "Asset saved successfully!"
+    },
     "home": {
       "welcome": "Welcome to Modelab",
       "hello": "Hello",
@@ -46,6 +60,9 @@
       "error": "Error",
       "alert": "Alert",
       "info": "Info"
+    },
+    "model_detail": {
+      "unsupported_browser": "Your browser does not support the audio element."
     },
     "model_preview": {
       "login_required": "You must log in order to use this function",

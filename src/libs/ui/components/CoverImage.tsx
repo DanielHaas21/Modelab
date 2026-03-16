@@ -20,7 +20,9 @@ type CoverImageVariantProps = VariantProps<typeof CoverImageVariants>;
 interface CoverImageProps extends CoverImageVariantProps {
   className?: string;
 }
-
+/**
+ * Displays a cover image of the train based on the specified size variant. It dynamically loads the appropriate image and handles loading errors gracefully. If the image fails to load, it will not render anything.
+ */
 export const CoverImage = React.forwardRef<HTMLImageElement, CoverImageProps>(
   ({ className, size, ...props }, ref) => {
     const [imageSrc, setImageSrc] = React.useState<string | null>(null);

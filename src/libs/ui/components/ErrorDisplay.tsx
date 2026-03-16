@@ -10,6 +10,9 @@ interface ErrorDisplayProps {
   children?: React.ReactNode;
 }
 
+/**
+ * A component for displaying error messages in a user-friendly format.
+ */
 export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   className,
   children,

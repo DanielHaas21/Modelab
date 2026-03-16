@@ -32,6 +32,20 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
       }
     }, [files]);
 
+
+    const filesRender = showableFiles.map((data) => {
+      return (
+        <React.Suspense key={data.name} fallback={<Preloader />}>
+          <div className='min-w-100 min-h-100 flex flex-col'>
+            <ModelDetailImage
+              key={data.name}
+              file={data}
+            />
+          </div>
+        </React.Suspense>
+      );
+    })
+    
     return (
       <div ref={ref}>
         <Carousel
@@ -43,18 +57,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
             setSelectedItem(index);
           }}
         >
-          {showableFiles.map((data) => {
-            return (
-              <React.Suspense key={data.name} fallback={<Preloader />}>
-                <div className='min-w-100 min-h-100 flex flex-col'>
-                  <ModelDetailImage
-                    key={data.name}
-                    file={data}
-                  />
-                </div>
-              </React.Suspense>
-            );
-          })}
+          {filesRender}
         </Carousel>
       </div>
     );

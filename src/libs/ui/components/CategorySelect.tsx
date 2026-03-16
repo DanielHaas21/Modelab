@@ -10,9 +10,14 @@ export interface CategoryOption {
 interface CategorySelectProps {
   categories: CategoryOption[];
   setCategories: React.Dispatch<React.SetStateAction<CategoryOption[]>>;
-  isRadio: boolean;
+  isRadio: boolean; // If true, only one category can be selected at a time
 }
 
+/**
+ * A component for selecting categories. It displays a list of category options as checkboxes (or radio buttons if isRadio is true)
+ * @param props 
+ * @returns 
+ */
 export const CategorySelect: React.FC<CategorySelectProps> = ({
   categories,
   setCategories,

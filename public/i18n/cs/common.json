@@ -13,6 +13,20 @@
       "info": "Modelab je databáze modelů, textur a dalších zdrojů, které vytvářejí studenti pro studenty",
       "offer": "Modelab nabízí 100% zdarma zdroje pro studenty pracující na hrách, webových stránkách nebo školních projektech"
     },
+    "model_detail": {
+      "confirm": {
+        "download": "Stáhnout",
+        "cancel": "Zrušit",
+        "note": "Následující soubory budou staženy:"
+      },
+      "notFound": "Požadovaný asset neexistuje nebo byl přesunut.",
+      "oops": "Oops! Asset nenalezen",
+      "back": "Zpět",
+      "edit": "Upravit",
+      "download_all": "Stáhnout vše",
+      "preview": "Náhled",
+      "saved": "Asset úspěšně uložen!"
+    },
     "home": {
       "welcome": "Vítejte v Modelab",
       "hello": "Vítej",
@@ -57,6 +71,9 @@
     },
     "file_select": {
       "add_more": "Přidat další soubory..."
+    },
+    "model_detail": {
+      "unsupported_browser": "Váš prohlížeč nepodporuje audio prvek."
     },
     "uploaded_file": {
       "main": "Hlavní",

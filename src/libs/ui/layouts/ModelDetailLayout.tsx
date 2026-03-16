@@ -13,7 +13,9 @@ interface ModelDetailProps {
   bordered: boolean;
   buttons?: React.ReactNode;
 }
-
+/**
+ *  Layout used for the model detail page, it renders a header, a footer, a main section with the model information and an aside section with the model images.
+ */
 export const ModelDetailLayout: React.FC<ModelDetailProps> = ({
   children,
   files = null,

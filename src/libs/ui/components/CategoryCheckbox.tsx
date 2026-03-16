@@ -9,6 +9,9 @@ interface CategoryCheckboxProps {
   onChanged?: () => void;
 }
 
+/**
+ * A component that renders a checkbox with a label. 
+ */
 export const CategoryCheckbox = React.forwardRef<HTMLInputElement, CategoryCheckboxProps>(
   ({ id, checked, label, labelClassName, onChanged }, ref) => {
     return (
