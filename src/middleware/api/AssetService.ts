@@ -5,6 +5,7 @@ import { TagData } from './TagService';
 import { CreateModelData, UpdateModelData } from '../types';
 import FormData from 'form-data';
 import { API_PATH } from '../apiPath';
+
 interface SearchQuery {
   page: number;
   count: number;
@@ -17,9 +18,12 @@ interface SearchQuery {
 export interface AssetData {
   id: number;
   name: string;
+  author: string | null;
   description: string;
   category: CategoryData;
   tags: TagData[];
+  created: Date;
+  updated: Date;
 }
 
 export interface FileInfoData {
@@ -70,6 +74,14 @@ export interface AssetDelete {
 export class AssetService extends Service {
   constructor() {
     super(API_PATH);
+  }
+
+  private mapAssetDates(asset: any): AssetData {
+    return {
+      ...asset,
+      created: new Date(asset.created),
+      updated: new Date(asset.updated),
+    };
   }
 
   public async update(data: UpdateModelData): Promise<AssetUpdate> {
@@ -125,11 +137,19 @@ export class AssetService extends Service {
   }
 
   public async get(id: number): Promise<AssetGet> {
-    return this.POST(ROUTES.POST.Asset + id) as Promise<AssetGet>;
+    const response = await this.POST(ROUTES.POST.Asset + id) as any;
+    return {
+      ...response,
+      asset: this.mapAssetDates(response.asset)
+    };
   }
 
   public async getAll(page: number, count: number): Promise<AssetGetAll> {
-    return this.POST(ROUTES.POST.Asset + 'all', { page, count }) as Promise<AssetGetAll>;
+    const response = await this.POST(ROUTES.POST.Asset + 'all', { page, count }) as any;
+    return {
+      ...response,
+      assets: response.assets.map((a: any) => this.mapAssetDates(a))
+    };
   }
 
   public async search(query: SearchQuery): Promise<AssetSearch> {
@@ -152,7 +172,11 @@ export class AssetService extends Service {
       ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery.join(',') }),
     };
 
-    return this.POST(ROUTES.POST.Asset + 'search', data) as Promise<AssetSearch>;
+    const response = await this.POST(ROUTES.POST.Asset + 'search', data) as any;
+    return {
+      ...response,
+      assets: response.assets.map((a: any) => this.mapAssetDates(a))
+    };
   }
 
   public async getFiles(id: number): Promise<AssetGetFiles> {
