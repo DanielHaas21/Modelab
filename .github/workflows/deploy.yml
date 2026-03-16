@@ -23,6 +23,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_API_PATH: ${{ secrets.VITE_API_PATH }}
+          VITE_CLIENT_ID: ${{ secrets.VITE_CLIENT_ID }}
 
       - name: Upload dist via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
@@ -33,5 +36,5 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }} # remove if using SSH key
           # ssh_private_key: ${{ secrets.SFTP_KEY }} # uncomment for key-based auth
           local_path: './dist/*'
-          remote_path: "./files/modelab/web/"
+          remote_path: './files/modelab/web/'
           sftp_only: true
