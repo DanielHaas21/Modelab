@@ -25,11 +25,12 @@ jobs:
         run: npm run build
 
       - name: SFTP connectivity preflight
+        continue-on-error: true
         run: |
           echo "Checking DNS resolution for SFTP host"
           getent hosts "${{ secrets.SFTP_HOST }}" || true
           echo "Checking TCP connectivity to ${{ secrets.SFTP_HOST }}:${{ secrets.SFTP_PORT }}"
-          timeout 15 bash -c "cat < /dev/null > /dev/tcp/${{ secrets.SFTP_HOST }}/${{ secrets.SFTP_PORT }}" && echo "TCP port reachable" || (echo "TCP port NOT reachable" && exit 1)
+          timeout 15 bash -c "cat < /dev/null > /dev/tcp/${{ secrets.SFTP_HOST }}/${{ secrets.SFTP_PORT }}" && echo "TCP port reachable" || echo "TCP port NOT reachable"
 
       - name: Upload dist via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
@@ -40,6 +41,6 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }} # remove if using SSH key
           # ssh_private_key: ${{ secrets.SFTP_KEY }} # uncomment for key-based auth
           local_path: './dist/*'
-          remote_path: "./public/docroot/modelab/"
+          remote_path: './public/docroot/modelab/'
           sftp_only: true
           sftpArgs: '-vvv'
