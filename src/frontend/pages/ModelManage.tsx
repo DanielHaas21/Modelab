@@ -17,10 +17,8 @@ import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
-import { DetailFile, LocalManageFile, ManageFile, ModelManageData } from '../../middleware/types';
+import { DetailFile, ManageFile, ModelManageData } from '../../middleware/types';
 import loadModelManage from '../../middleware/actions/LoadModelManage';
-import { getFileGroup, SupportedFileTypes } from '../../libs/utils';
-import { FILE } from '../../middleware/ApiClients';
 import createModel from '../../middleware/actions/CreateModel';
 import editModel from '../../middleware/actions/EditModel';
 import deleteModel from '../../middleware/actions/DeleteModel';
@@ -29,70 +27,8 @@ import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid
 import { useToast } from '../../libs/ui/components/Toast';
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
+import { createDetailFiles } from '../../middleware/actions/CreateDetailFIle';
 
-const createDetailFileFromLocalFile = async (localFile: LocalManageFile, supportedFileTypes: SupportedFileTypes): Promise<DetailFile | null> => {
-  const blob = new Blob([localFile.localFile], { type: localFile.type });
-  const fileBase = {
-    id: -1,
-    download: async () => blob,
-    previewUrl: 'preview',
-    name: localFile.name,
-    fileType: localFile.fileType,
-  };
-
-  const group = getFileGroup(localFile.fileType, supportedFileTypes);
-  switch (group) {
-    case 'audio':
-      const audioUrl = URL.createObjectURL(blob);
-      return {
-        ...fileBase,
-        type: 'audio',
-        audioUrl: audioUrl,
-      };
-      break;
-    case 'image':
-      const imageUrl = URL.createObjectURL(blob);
-      return {
-        ...fileBase,
-        type: 'image',
-        imageUrl,
-      };
-      break;
-    case 'model':
-      const model = await FILE.loadModelFromLocalFile(localFile.localFile, localFile.fileType);
-      return {
-        ...fileBase,
-        type: '3d',
-        model,
-      };
-    case 'other':
-      return {
-        ...fileBase,
-        type: 'other',
-      };
-      break;
-  }
-  return null;
-}
-
-const createDetailFiles = async (manageFiles: ManageFile[], supportedFileTypes: SupportedFileTypes): Promise<DetailFile[]> => {
-  const files: DetailFile[] = [];
-  for (const manageFile of manageFiles) {
-    let file: DetailFile | null = null;
-
-    switch (manageFile.type) {
-      case 'fetched':
-        file = manageFile.detailFile;
-        break;
-      case 'local':
-        file = await createDetailFileFromLocalFile(manageFile, supportedFileTypes);
-        break;
-    }
-
-    if (file !== null) files.push(file);
-  }
-  return files;
-}
 
 const ModelManage: React.FC = () => {
   const { action } = useParams();

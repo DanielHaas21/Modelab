@@ -1,3 +1,4 @@
+import { useTranslation } from '../provider';
 import { AssetTag } from './AssetTag';
 import React from 'react';
 
@@ -22,7 +23,7 @@ interface TagSelectProps {
  */
 export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
   const [searchValue, setSearchValue] = React.useState('');
-
+  const t = useTranslation("ui.tagSelect");
   const onTagSelected = (tagId: number) => {
     const tagIndex = tags.findIndex((tag) => tag.id === tagId);
     if (tagIndex === -1) return;
@@ -73,7 +74,7 @@ export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
       <div className="relative">
         <input
           list="tag-options"
-          placeholder="Search and select tags..."
+          placeholder={t("searchAndSelectTags")}
           value={searchValue}
           onChange={(e) => {
             setSearchValue(e.target.value);
