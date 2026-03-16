@@ -1,0 +1,11 @@
+/* TEAM */
+	Developer: Radek Titěra
+  GitHub: https://github.com/Rodak123
+
+	Developer: Daniel Haas
+  GitHub: https://github.com/DanielHaas21
+
+/* SITE */
+	Language: Czech / English
+  Web Code: https://github.com/DanielHaas21/Modelab
+  API Code: https://github.com/DanielHaas21/Modelab-api
