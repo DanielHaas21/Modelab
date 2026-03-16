@@ -32,6 +32,37 @@
       "preview": "Náhled",
       "saved": "Asset úspěšně uložen!"
     },
+    "model_manage": {
+      "confirm": {
+        "yes": "Ano",
+        "no": "Ne",
+        "delete": "Smazat asset",
+        "sure_delete": "Opravdu chcete smazat",
+        "cant_undo": "Toto nelze vrátit zpět."
+      },
+      "unsaved": {
+        "title": "Neuložené změny!",
+        "leave": "Opustit",
+        "go_back": "Vrátit se zpět",
+        "sure_leave": "Opravdu chcete opustit?"
+      },
+      "save": {
+        "not_enough": "Nedostatek dat!",
+        "requiered": "název, popis, soubory a tag jsou povinné",
+        "saved": "Asset úspěšně uložen!",
+        "uploaded": "Asset úspěšně nahrán!",
+        "go_to_edit": "Přejít na úpravy"
+      },
+      "saveButton": "Uložit",
+      "deleteButton": "Smazat",
+      "uploadButton": "Nahrát",
+      "asset_name": "Název assetu",
+      "author_name": "Autor",
+      "description": "Popis assetu",
+      "category": "Kategorie",
+      "tags": "Tagy",
+      "files": "Soubory"
+    },
     "home": {
       "welcome": "Vítejte v Modelab",
       "hello": "Vítej",

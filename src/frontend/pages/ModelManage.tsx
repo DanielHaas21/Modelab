@@ -28,12 +28,14 @@ import { useToast } from '../../libs/ui/components/Toast';
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { createDetailFiles } from '../../middleware/actions/CreateDetailFIle';
+import { useTranslation } from '../../libs/ui/provider';
 
 
 const ModelManage: React.FC = () => {
   const { action } = useParams();
   const assetId = isFinite(Number(action)) ? Number(action) : undefined;
   const { show } = useToast();
+  const t = useTranslation("pages.model_manage");
 
   useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
 
@@ -41,6 +43,7 @@ const ModelManage: React.FC = () => {
   const navigate = useNavigate();
 
   const maxAssetNameLength = 128;
+  const maxAuthorNameLength = 128;
   const maxAssetDescriptionLength = 320;
 
   const [refreshModel, setRefreshModel] = React.useState<number>(0);
@@ -49,6 +52,7 @@ const ModelManage: React.FC = () => {
   const [modelManageData, setModelManageData] = React.useState<ModelManageData | null>(null);
 
   const [assetNameInput, setAssetNameInput] = React.useState<string>('');
+  const [authorNameInput, setAuthorNameInput] = React.useState<string>('');
   const [assetDescriptionInput, setAssetDescriptionInput] = React.useState<string>('');
   const [categoriesInput, setCategoriesInput] = React.useState<CategoryOption[]>([]);
   const [tagsInput, setTagsInput] = React.useState<TagOption[]>([]);
@@ -57,6 +61,8 @@ const ModelManage: React.FC = () => {
   const [previewDetailFiles, setPreviewDetailFiles] = React.useState<DetailFile[]>([]);
 
   React.useEffect(() => {
+
+    // model load
     (async () => {
       setIsLoading(true);
       try {
@@ -69,6 +75,7 @@ const ModelManage: React.FC = () => {
     })();
   }, [assetId, refreshModel]);
 
+  // set data
   React.useEffect(() => {
     if (!modelManageData) return;
 
@@ -89,9 +96,11 @@ const ModelManage: React.FC = () => {
     setFilesInput(model?.files ?? []);
 
     setAssetNameInput(model?.name ?? '');
+    setAuthorNameInput(model?.author ?? '');
     setAssetDescriptionInput(model?.description ?? '');
   }, [modelManageData]);
 
+  // uploaded files added to preview
   React.useEffect(() => {
     if (!modelManageData) return;
     const config = modelManageData.config;
@@ -101,15 +110,16 @@ const ModelManage: React.FC = () => {
     })();
   }, [filesInput, modelManageData]);
 
+  // delete model and return to browser
   const handleDelete = async () => {
     if (assetId === undefined) return;
     const userConfirmedNo = await confirm(
-      'Delete asset?',
+      t('confirm.delete'),
       true,
       dispatch,
-      'No',
-      'Yes',
-      <p>Are you sure you want to delete <span className='text-2xl'>`{modelManageData?.model?.name ?? assetNameInput}`</span>?<br /><b>This can't be undone.</b></p>
+      t('confirm.no'),
+      t('confirm.yes'),
+      <p>{t("confirm.sure_delete")}<span className='text-2xl'>`{modelManageData?.model?.name ?? assetNameInput}`</span>?<br /><b>{t("confirm.cant_undo")}</b></p>
     );
 
     if (userConfirmedNo) return;
@@ -119,16 +129,23 @@ const ModelManage: React.FC = () => {
     navigate(BrowserRoutes.Browser);
   };
 
+  // check if there are unsaved changes and show preview
+  // preview is a read only page, that looks the same as model detail page, but with the current input data instead of the original model data
   const handleShowPreview = async (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
+    // check if there are unsaved changes
     if (modelManageData === null || modelManageData.model === null) return;
     const model = modelManageData.model;
 
+    // check if there are changes in name, description, category, tags or files
+    // There musnt be any change for the user to be able to see the preview without confirmation, even if there are changes in files
+    // The user must confirm, because the preview files are generated from the current files input, and if there are changes in files, the preview might look different than the model detail page, which can be confusing for the user
     const selectedCategory = categoriesInput.find((category) => category.isSelected);
     const selectedTags = tagsInput.filter(tag => tag.isSelected);
 
     if (assetNameInput === model.name
+      && authorNameInput === model.author
       && assetDescriptionInput === model.description
       && selectedCategory?.id === model.category.id
       && selectedTags.length === model.tags.length
@@ -147,12 +164,12 @@ const ModelManage: React.FC = () => {
     }
 
     const userConfirmedLeave = await confirm(
-      'Unsaved changes!',
+      t('unsaved.title'),
       true,
       dispatch,
-      'Leave',
-      'Go back',
-      <p>Are you sure you want to leave?</p>
+      t('unsaved.leave'),
+      t('unsaved.go_back'),
+      <p>{t('unsaved.sure_leave')}</p>
     );
 
     if (userConfirmedLeave) {
@@ -160,6 +177,7 @@ const ModelManage: React.FC = () => {
     }
   };
 
+  // upload new model or save changes to existing model
   const handleUploadOrSave = async () => {
     if (
       assetNameInput.length === 0 ||
@@ -168,22 +186,23 @@ const ModelManage: React.FC = () => {
       tagsInput.filter((tag) => tag.isSelected).length === 0
     ) {
       await confirm(
-        'Not enough data!',
+        t('save.not_enough'),
         false,
         dispatch,
         undefined,
         undefined,
-        <p>name, description, files, and a tag is requiered</p>
+        <p>{t('save.requiered')}</p>
       );
       return;
     }
 
+    // if assetId is defined, edit model, otherwise create new model
     if (assetId !== undefined) {
       await editModel({
         id: assetId,
         name: assetNameInput,
         description: assetDescriptionInput,
-        author: null, // TODO: Add author
+        author: authorNameInput,
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
         files: filesInput.filter((file) => file.type === 'local'),
@@ -191,14 +210,14 @@ const ModelManage: React.FC = () => {
       setRefreshModel((i) => i + 1);
 
       show({
-        title: 'Saved!',
+        title: t('save.saved'),
         variant: 'success',
       });
 
     } else {
       const createdId = await createModel({
         name: assetNameInput,
-        author: null, // TODO: Add author
+        author: authorNameInput,
         description: assetDescriptionInput,
         category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
         tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
@@ -207,12 +226,12 @@ const ModelManage: React.FC = () => {
       // setRefreshModel((i) => i + 1);
 
       show({
-        title: 'Uploaded!',
+        title: t('save.uploaded'),
         variant: 'success',
         actions: (
           <Button variant='light' onClick={() => navigate(BrowserRoutes.ModelManage + createdId)}>
             <FontAwesomeIcon icon={faPen} />
-            <span className="w-full">Go to edit</span>
+            <span className="w-full">{t('save.go_to_edit')}</span>
           </Button>
         )
       });
@@ -245,7 +264,7 @@ const ModelManage: React.FC = () => {
         >
           <FontAwesomeIcon icon={assetId === undefined ? faUpload : faSave} />
           <span className="w-full">
-            {assetId === undefined ? 'Upload' : 'Save'}
+            {assetId === undefined ? t('uploadButton') : t('saveButton')}
           </span>
         </Button>
       </div>
@@ -257,7 +276,7 @@ const ModelManage: React.FC = () => {
             onClick={handleDelete}
           >
             <FontAwesomeIcon icon={faTrash} />
-            <span className="w-full">Delete</span>
+            <span className="w-full">{t('deleteButton')}</span>
           </Button>
         </div>
       )}
@@ -279,7 +298,7 @@ const ModelManage: React.FC = () => {
             inputClassName="text-xl font-medium tracking-wide"
             size={'xl'}
             maxLength={maxAssetNameLength}
-            placeholder="Asset name"
+            placeholder={t('asset_name')}
             value={assetNameInput}
             onChange={(event) => {
               setAssetNameInput(event.target.value.substring(0, maxAssetNameLength));
@@ -289,13 +308,29 @@ const ModelManage: React.FC = () => {
             {assetNameInput.length} / {maxAssetNameLength}
           </p>
         </div>
-
+        <div className="relative mb-4 group">
+          <Input
+            type="text"
+            className="w-full"
+            inputClassName="text-xl font-medium tracking-wide"
+            size={'xl'}
+            maxLength={maxAuthorNameLength}
+            placeholder={t('author_name')}
+            value={authorNameInput}
+            onChange={(event) => {
+              setAuthorNameInput(event.target.value.substring(0, maxAuthorNameLength));
+            }}
+          />
+          <p className="absolute right-3 bottom-2 text-xs opacity-40 group-focus-within:opacity-100 transition-opacity">
+            {authorNameInput.length} / {maxAuthorNameLength}
+          </p>
+        </div>
         <div className="relative mb-4 group">
           <textarea
             className="w-full bg-bg-100 border border-ui-border rounded-lg p-4 h-50 resize-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none text-text-950 transition-all font-light"
             rows={8}
             maxLength={maxAssetDescriptionLength}
-            placeholder="Asset description"
+            placeholder={t('description')}
             value={assetDescriptionInput}
             onChange={(event) => {
               setAssetDescriptionInput(event.target.value.substring(0, maxAssetDescriptionLength));
@@ -306,15 +341,15 @@ const ModelManage: React.FC = () => {
           </p>
         </div>
 
-        <ModelInfoSection name="Category">
+        <ModelInfoSection name={t('category')}>
           <CategorySelect categories={categoriesInput} setCategories={setCategoriesInput} isRadio={true} />
         </ModelInfoSection>
 
-        <ModelInfoSection name="Tags" className="mt-6">
+        <ModelInfoSection name={t('tags')} className="mt-6">
           <TagSelect tags={tagsInput} setTags={setTagsInput} />
         </ModelInfoSection>
 
-        <ModelInfoSection name="Files" className="mt-6">
+        <ModelInfoSection name={t('files')} className="mt-6">
           <FileSelect files={filesInput} setFiles={setFilesInput} />
         </ModelInfoSection>
       </ModelDetailLayout>

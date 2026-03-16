@@ -1,9 +1,4 @@
-export interface ModelTagProp {
-  id: number;
-  name: string;
-}
-
-export interface ModelCategoryProp {
+export interface DataProp {
   id: number;
   name: string;
 }
@@ -11,7 +6,8 @@ export interface ModelCategoryProp {
 export interface BaseModel {
   id: number;
   name: string;
+  author: string | null;
   description: string;
-  category: ModelTagProp;
-  tags: ModelCategoryProp[];
+  category: DataProp;
+  tags: DataProp[];
 }

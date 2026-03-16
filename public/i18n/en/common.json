@@ -32,6 +32,37 @@
       "preview": "Preview",
       "saved": "Asset saved successfully!"
     },
+    "model_manage": {
+      "confirm": {
+        "yes": "Yes",
+        "no": "No",
+        "delete": "Delete asset",
+        "sure_delete": "Are you sure you want to delete",
+        "cant_undo": "This can't be undone."
+      },
+      "unsaved": {
+        "title": "Unsaved changes!",
+        "leave": "Leave",
+        "go_back": "Go back",
+        "sure_leave": "Are you sure you want to leave?"
+      },
+      "save": {
+        "not_enough": "Not enough data!",
+        "requiered": "name, description, files, and a tag is requiered",
+        "saved": "Asset saved successfully!",
+        "uploaded": "Asset uploaded successfully!",
+        "go_to_edit": "Go to edit"
+      },
+      "saveButton": "Save",
+      "deleteButton": "Delete",
+      "uploadButton": "Upload",
+      "asset_name": "Asset name",
+      "author_name": "Author name",
+      "description": "Asset Description",
+      "category": "Category",
+      "tags": "Tags",
+      "files": "Files"
+    },
     "home": {
       "welcome": "Welcome to Modelab",
       "hello": "Hello",

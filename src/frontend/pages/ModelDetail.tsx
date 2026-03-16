@@ -166,6 +166,11 @@ const ModelDetail: React.FC = () => {
           {modelData.name}
         </Label>
         <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{modelData.description}</p>
+        <ModelInfoSection name="Author">
+          <p className="m-0">
+            {modelData.author}
+          </p>
+        </ModelInfoSection>
         <ModelInfoSection name="Category">
           <p className="m-0" key={modelData.category.id}>
             {modelData.category.name}
@@ -192,7 +197,7 @@ const ModelDetail: React.FC = () => {
               onClick={() => offcanvasHandleRef.current?.open()}
               className="flex justify-center w-100"
             >
-          {t("preview")}
+              {t("preview")}
             </Button>
           )}
         </div>

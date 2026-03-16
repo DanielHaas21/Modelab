@@ -1,5 +1,5 @@
 import { SupportedFileTypes } from '../../libs/utils';
-import { BaseModel, ModelCategoryProp, ModelTagProp } from './BaseModel';
+import { BaseModel, DataProp } from './BaseModel';
 import { DetailFile } from './DetailModel';
 
 export interface ManageModel extends BaseModel {
@@ -7,8 +7,8 @@ export interface ManageModel extends BaseModel {
 }
 
 export interface ManageConfigProps {
-  allCategories: ModelCategoryProp[];
-  allTags: ModelTagProp[];
+  allCategories: DataProp[];
+  allTags: DataProp[];
   supportedFileTypes: SupportedFileTypes;
 }
 
