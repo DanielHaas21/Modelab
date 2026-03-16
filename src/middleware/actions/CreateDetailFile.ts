@@ -20,32 +20,36 @@ export const createDetailFileFromLocalFile = async (localFile: LocalManageFile, 
 
   const group = getFileGroup(localFile.fileType, supportedFileTypes);
   switch (group) {
-    case 'audio':
+    case 'audio': {
       const audioUrl = URL.createObjectURL(blob);
       return {
         ...fileBase,
         type: 'audio',
         audioUrl: audioUrl,
       };
-    case 'image':
+    }
+    case 'image': {
       const imageUrl = URL.createObjectURL(blob);
       return {
         ...fileBase,
         type: 'image',
         imageUrl,
       };
-    case 'model':
+    }
+    case 'model': {
       const model = await FILE.loadModelFromLocalFile(localFile.localFile, localFile.fileType);
       return {
         ...fileBase,
         type: '3d',
         model,
       };
-    case 'other':
+    }
+    case 'other': {
       return {
         ...fileBase,
         type: 'other',
       };
+    }
   }
   return null;
 }

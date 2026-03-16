@@ -4,8 +4,8 @@ import { img } from '../types/size';
  * @returns image size variant
  */
 export function DecideImageSize(): img {
-  let width: number = window.innerWidth;
-  let height: number = window.innerHeight;
+  const width: number = window.innerWidth;
+  const height: number = window.innerHeight;
 
   if (width < 2560 && height < 1440) {
     return 'fullhd';
