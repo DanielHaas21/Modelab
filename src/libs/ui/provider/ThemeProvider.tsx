@@ -7,7 +7,6 @@ const LS_THEME_KEY = 'theme-current-theme' as const;
 const getThemeIndex = (theme: string) => ALL_THEME_MODES.findIndex((otherTheme) => otherTheme === theme);
 const getStoredIndex = (defaultValue: number) => {
   const stored = getThemeIndex(localStorage.getItem(LS_THEME_KEY) ?? '');
-  console.log(stored);
   if (!isFinite(stored) || stored < 0 || stored >= ALL_THEME_MODES.length) return defaultValue;
   return stored;
 }
