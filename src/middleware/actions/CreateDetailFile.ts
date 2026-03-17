@@ -37,7 +37,7 @@ export const createDetailFileFromLocalFile = async (localFile: LocalManageFile, 
       };
     }
     case 'model': {
-      const model = await FILE.loadModelFromLocalFile(localFile.localFile, localFile.fileType);
+      const model = await FILE.loadModelFromLocalFile(localFile.localFile);
       return {
         ...fileBase,
         type: '3d',
