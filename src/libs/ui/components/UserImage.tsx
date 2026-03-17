@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import userIconLight from '../assets/user-circle-light.svg';
 import userIconDark from '../assets/user-circle-dark.svg';
 import { cn } from '../../utils';
+import { useTheme } from '../../hooks';
 
 /**
  * A component for displaying the user's profile image. It retrieves the user's profile picture from the Redux store and displays it. If no profile picture is available, it falls back to a default user icon based on the current theme (light or dark).
@@ -11,11 +12,12 @@ import { cn } from '../../utils';
 export const UserImage = React.forwardRef<HTMLImageElement, React.ImgHTMLAttributes<HTMLImageElement>>(
   ({ className, ...props }, ref) => {
     const UserData = useSelector((state: RootState) => state.User);
-    const Mode = useSelector((state: RootState) => state.Mode.value);
+
+    const { theme } = useTheme();
 
     const userImage = UserData.user?.picture
       ? UserData.user?.picture
-      : Mode === 'dark'
+      : theme === 'dark'
         ? userIconDark
         : userIconLight;
 

@@ -27,23 +27,25 @@ import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { createDetailFiles } from '../../middleware/actions/CreateDetailFile';
-import { useToast, useTranslation } from '../../libs/ui/provider';
+import { useToast, useTranslation } from '../../libs/hooks';
 
 
 const ModelManage: React.FC = () => {
-  const { action } = useParams();
-  const assetId = isFinite(Number(action)) ? Number(action) : undefined;
-  const { show } = useToast();
+  const maxAssetNameLength = 128;
+  const maxAuthorNameLength = 128;
+  const maxAssetDescriptionLength = 320;
+
   const t = useTranslation("pages.model_manage");
+
+  const { action } = useParams();
+  const { show } = useToast();
+
+  const assetId = isFinite(Number(action)) ? Number(action) : undefined;
 
   useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (BrowserRoutes.ModelDetail + assetId) : BrowserRoutes.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  const maxAssetNameLength = 128;
-  const maxAuthorNameLength = 128;
-  const maxAssetDescriptionLength = 320;
 
   const [refreshModel, setRefreshModel] = React.useState<number>(0);
 

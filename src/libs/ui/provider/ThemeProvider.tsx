@@ -1,8 +1,27 @@
-import { useTheme } from '../../hooks/useTheme';
+import { useEffect, useState } from 'react';
+import { ThemeContext } from '../../hooks/useTheme';
+import { ALL_THEME_MODES, ThemeMode } from '../../../store/types';
 
-// This file contains the ThemeProvider component, which is used to provide the theme context to the entire application.
-// It also contains the useTheme hook, which is used to access the theme context in the application.
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  useTheme();
-  return <>{children}</>;
+  const [theme, setTheme] = useState<ThemeMode>(ALL_THEME_MODES[0]);
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove(...ALL_THEME_MODES);
+    root.classList.add(theme);
+  }, [theme]);
+
+  const cycleThemes = () => {
+    const currentThemeIndex = ALL_THEME_MODES.findIndex((otherTheme) => otherTheme === theme);
+    setTheme(ALL_THEME_MODES[(currentThemeIndex + 1) % ALL_THEME_MODES.length]);
+  };
+
+  return (
+    <ThemeContext.Provider value={{
+      theme,
+      cycleThemes,
+    }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };

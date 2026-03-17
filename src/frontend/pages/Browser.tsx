@@ -17,12 +17,15 @@ import ApiError from '../../middleware/api/ApiError';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clear, Set } from '../../store/slices/BrowserFilter';
-import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
-import { useTranslation } from '../../libs/ui/provider';
+import { useResponsive, useTranslation } from '../../libs/hooks';
 
 const Browser: React.FC = () => {
+  const t = useTranslation("pages.browser");
+
+  const { isDesktop } = useResponsive();
+
   const categoryApi = new Category();
   const tagApi = new TagService();
 
@@ -41,9 +44,6 @@ const Browser: React.FC = () => {
     categories: categories.filter((category) => category.isSelected),
     tags: tags.filter((tag) => tag.isSelected),
   });
-
-  const { isDesktop } = useResponsive();
-  const t = useTranslation("pages.browser");
 
   const resetFilters = () => {
     setSearchText('');

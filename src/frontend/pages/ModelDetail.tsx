@@ -19,7 +19,6 @@ import icon_boom from '../../libs/ui/assets/icon_boom.png';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { useCheckClearance, useValidatePermission } from '../../libs/auth';
 import JSZip from 'jszip';
-import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { ModelDetailImageCarousel } from '../../libs/ui/components/ModelDetailImageCarousel';
@@ -27,28 +26,28 @@ import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
 import { faArrowLeft, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useToast, useTranslation } from '../../libs/ui/provider';
 import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
+import { useResponsive, useToast, useTranslation } from '../../libs/hooks';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
 
   const t = useTranslation("pages.model_detail");
 
+  const { show } = useToast();
+  const { isDesktop } = useResponsive();
+  const { hasClearance } = useCheckClearance();
+
+  const Dispatch = useDispatch<AppDispatch>();
+  const UserData = useSelector((state: RootState) => state.User);
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [modelDetailData, setModelDetailData] = React.useState<ModelDetailData | null>(null);
 
   const model = useParams();
-  const Dispatch = useDispatch<AppDispatch>();
-  const { show } = useToast();
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
-
-  const { isDesktop } = useResponsive();
-
-  const UserData = useSelector((state: RootState) => state.User);
-  const { hasClearance } = useCheckClearance();
 
   // zip download of all files
 

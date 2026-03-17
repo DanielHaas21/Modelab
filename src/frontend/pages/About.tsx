@@ -2,13 +2,13 @@ import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { Label } from '../../libs/ui/components';
 import { AboutSection } from '../../libs/ui/components/AboutSection';
-import { useResponsive } from '../../libs/hooks/useResponsive';
 import { cn } from '../../libs/utils';
-import { useTranslation } from '../../libs/ui/provider';
+import { useResponsive, useTranslation } from '../../libs/hooks';
 
 const About: React.FC = () => {
-  const { isDesktop } = useResponsive();
   const t = useTranslation("pages.about");
+
+  const { isDesktop } = useResponsive();
 
   return (
     <BaseLayout bordered={true}>

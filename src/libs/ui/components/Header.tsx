@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../store/store';
 import { Hide, Toggle } from '../../../store/slices/Popup';
 import { UserImage } from './UserImage';
+import { useTheme } from '../../hooks';
 
 interface HeaderProps {
   className?: string;
@@ -19,8 +20,10 @@ interface HeaderProps {
  */
 export const Header: React.FC<HeaderProps> = ({ className, children, ...props }) => {
   const Dispatch = useDispatch<AppDispatch>();
-  const Mode = useSelector((state: RootState) => state.Mode.value);
   const Popup = useSelector((state: RootState) => state.Popup.value);
+
+  const { theme } = useTheme();
+
   const popupRef = React.useRef<HTMLDivElement>(null);
   const userImageRef = React.useRef<HTMLImageElement>(null);
 
@@ -64,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
       >
         <div className="flex flex-row items-center">
           <img
-            src={Mode === 'dark' ? lightIcon : darkIcon}
+            src={theme === 'dark' ? lightIcon : darkIcon}
             className="ml-3 w-[60px]"
             alt="logo"
           />

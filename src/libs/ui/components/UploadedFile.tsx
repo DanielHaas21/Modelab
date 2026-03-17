@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Label } from './Label';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import { useTranslation } from '../provider';
 import { ManageFile } from '../../../middleware/types';
+import { useTranslation } from '../../hooks';
 
 interface UploadedFileProps {
   index: number;

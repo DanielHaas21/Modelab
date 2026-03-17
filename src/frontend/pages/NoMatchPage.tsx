@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BaseLayout } from '../../libs/ui/layouts';
 import { ErrorDisplay } from '../../libs/ui/components';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
-import { useTranslation } from '../../libs/ui/provider';
+import { useTranslation } from '../../libs/hooks';
 
 const NoMatchPage: React.FC = () => {
   const t = useTranslation("pages.no_match");

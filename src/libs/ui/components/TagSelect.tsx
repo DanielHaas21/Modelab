@@ -1,4 +1,4 @@
-import { useTranslation } from '../provider';
+import { useTranslation } from '../../hooks';
 import { AssetTag } from './AssetTag';
 import React from 'react';
 
@@ -24,6 +24,9 @@ interface TagSelectProps {
 export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
   const [searchValue, setSearchValue] = React.useState('');
   const t = useTranslation("ui.tagSelect");
+
+  const availableTags = tags.filter(({ isSelected }) => !isSelected);
+
   const onTagSelected = (tagId: number) => {
     const tagIndex = tags.findIndex((tag) => tag.id === tagId);
     if (tagIndex === -1) return;
@@ -48,8 +51,6 @@ export const TagSelect: React.FC<TagSelectProps> = ({ tags, setTags }) => {
     };
     setTags(updatedTags);
   };
-
-  const availableTags = tags.filter(({ isSelected }) => !isSelected);
 
   const renderAvailableTag = availableTags.map((tag) => (
     <option key={tag.id} value={tag.name} />

@@ -6,26 +6,27 @@ import { Button } from '../../libs/ui/components/Button';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useResponsive } from '../../libs/hooks/useResponsive';
-import { useTranslation } from '../../libs/ui/provider';
 import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useCheckClearance } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
-import { useAuth } from '../../libs/auth/AuthProvider';
 
 import grid from '../../libs/ui/assets/grid.svg';
+import { useResponsive, useTranslation } from '../../libs/hooks';
+import { useAuth } from '../../libs/auth/AuthProvider';
 
 const LandingPage: React.FC = () => {
-  const [size, setSize] = React.useState<ImageSize | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true); // New loading state
+  const t = useTranslation("pages.home");
+
   const { isDesktop } = useResponsive();
   const { googleLogin } = useAuth();
   const { hasClearance } = useCheckClearance();
+
+  const [size, setSize] = React.useState<ImageSize | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true); // New loading state
   const UserData = useSelector((state: RootState) => state.User);
 
-  const t = useTranslation("pages.home");
 
   React.useEffect(() => {
     const loadImage = async () => {

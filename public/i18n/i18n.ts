@@ -2,8 +2,9 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import Backend from 'i18next-http-backend';
 
-export const ALL_LANGUAGES = ['en', 'cs'];
-export type Language = typeof ALL_LANGUAGES[number];
+const languages = ['en', 'cs'] as const;
+export type Language = typeof languages[number];
+export const ALL_LANGUAGES = languages as unknown as Language[];
 
 await i18n
   .use(Backend)
@@ -11,7 +12,7 @@ await i18n
   .init({
     lng: navigator.language === 'cs-CZ' ? 'cs' : 'en',
     fallbackLng: 'en',
-    supportedLngs: ALL_LANGUAGES,
+    supportedLngs: languages,
     ns: ['common'],
     defaultNS: 'common',
     backend: {

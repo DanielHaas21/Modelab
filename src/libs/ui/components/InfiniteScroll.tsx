@@ -28,6 +28,16 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 
   const scrollDivRef = React.useRef<HTMLDivElement>(null);
 
+  React.useEffect(() => {
+    if (itemCount < lastItemCount) {
+      const div = scrollDivRef.current;
+      if (div) div.scrollTo({ top: 0 });
+    }
+
+    tryLoadMore();
+    setLastItemCount(itemCount);
+  }, [itemCount, hasMore]);
+
   const isReadyToLoad = (): boolean => {
     const div = scrollDivRef.current;
     if (!div) return false;
@@ -44,16 +54,6 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
     await loadMore();
     setIsLoading(false);
   };
-
-  React.useEffect(() => {
-    if (itemCount < lastItemCount) {
-      const div = scrollDivRef.current;
-      if (div) div.scrollTo({ top: 0 });
-    }
-
-    tryLoadMore();
-    setLastItemCount(itemCount);
-  }, [itemCount, hasMore]);
 
   return (
     <div

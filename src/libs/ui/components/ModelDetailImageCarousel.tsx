@@ -33,7 +33,6 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
       }
     }, [files]);
 
-
     const filesRender = showableFiles.map((data) => {
       return (
         <React.Suspense key={data.name} fallback={<Preloader />}>

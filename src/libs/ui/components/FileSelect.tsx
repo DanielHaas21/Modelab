@@ -2,9 +2,9 @@ import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useRef } from 'react';
 import { UploadedFile } from './UploadedFile';
-import { useToast, useTranslation } from '../provider';
 import { ManageFile } from '../../../middleware/types';
 import { getFileType } from '../../utils/getFileType';
+import { useToast, useTranslation } from '../../hooks';
 
 interface FileSelectProps {
   files: ManageFile[];
@@ -12,9 +12,10 @@ interface FileSelectProps {
 }
 
 export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslation('ui.file_select');
   const { show } = useToast();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;

@@ -10,8 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/free-solid-svg-icons';
 import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
-import { useTranslation } from '../provider';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+import { useTranslation } from '../../hooks';
 
 
 // This file is renders a model using THREE
@@ -311,6 +311,7 @@ interface ModelAudioProps {
 const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
   ({ file }, ref) => {
     const t = useTranslation('ui.model_detail');
+
     return (
       <div
         ref={ref}

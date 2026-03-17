@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import placeholder from '../assets/placeholder.png';
 import { ScrollLabel } from './ScrollLabel';
 import { AssetTag } from './AssetTag';
-import { useTranslation } from '../provider';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
 import LoadModelPreviewImage from '../../../middleware/actions/LoadModelPreviewImage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
+import { useTranslation } from '../../hooks';
 
 interface ModelPreviewProps {
   className?: string;

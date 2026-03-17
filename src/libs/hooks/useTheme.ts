@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { createContext, useContext } from 'react';
+import { ThemeMode } from '../../store/types';
 
-/**
- * A hook that applies the current theme (light or dark) to the root element of the document.
- */
+interface ThemeType {
+  theme: ThemeMode;
+  cycleThemes: () => void;
+}
+
+export const ThemeContext = createContext<ThemeType | null>(null);
+
 export const useTheme = () => {
-  const mode = useSelector((state: RootState) => state.Mode.value);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(mode);
-  }, [mode]);
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error('useThemne must be used inside <ThemeProvider/>');
+  return ctx;
 };

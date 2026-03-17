@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
-import { useResponsive } from '../../hooks/useResponsive';
-import { useToast, useTranslation } from '../provider';
+import { useToast, useTranslation, useResponsive } from '../../hooks';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
@@ -18,8 +17,9 @@ export const Footer: React.FC<FooterProps> = ({
   children,
   ...props
 }) => {
-  const { isDesktop } = useResponsive();
   const t = useTranslation('ui.footer');
+
+  const { isDesktop } = useResponsive();
   const { show } = useToast();
   const { hasClearance } = useCheckClearance();
 

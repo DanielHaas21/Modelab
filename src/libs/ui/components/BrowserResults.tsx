@@ -6,8 +6,8 @@ import { AssetService, AssetData, PaginatedInfo } from '../../../middleware/api'
 import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
 import { CategoryOption } from './CategorySelect';
-import { useTranslation } from '../provider';
 import { TagOption } from './TagSelect';
+import { useTranslation } from '../../hooks';
 
 export interface SearchQuery {
   categories: CategoryOption[];
@@ -79,6 +79,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
   const loadPerPage = 8; // Assets per page
   const previewWidth = 350;
   const previewHeight = 250;
+
   const t = useTranslation('ui.browser_results');
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);

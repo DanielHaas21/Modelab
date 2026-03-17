@@ -26,6 +26,13 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
 }) => {
   const { isDesktop } = useResponsive();
 
+  React.useEffect(() => {
+    if (categories.length == 0) return;
+    if (isRadio && categories.find((category) => category.isSelected) === undefined) {
+      selectCategory(0, true);
+    }
+  }, [categories]);
+
   const selectCategory = (index: number, isSelected: boolean) => {
     const updatedCategories = [...categories];
 
@@ -41,13 +48,6 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     };
     setCategories(updatedCategories);
   };
-
-  React.useEffect(() => {
-    if (categories.length == 0) return;
-    if (isRadio && categories.find((category) => category.isSelected) === undefined) {
-      selectCategory(0, true);
-    }
-  }, [categories]);
 
   if (isDesktop) {
     return (

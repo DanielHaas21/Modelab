@@ -2,23 +2,7 @@
 import * as React from 'react';
 import { Toast } from '../components/Toast/Toast';
 import { uid } from 'uid';
-
-type ToastMessage = {
-  id: string;
-  title: string;
-  description?: string;
-  variant?: 'default' | 'success' | 'error' | 'warning';
-  tint?: boolean;
-  duration?: number;
-  actions?: React.ReactNode;
-  progressBar?: number;
-};
-
-type ToastContextType = {
-  show: (toast: Omit<ToastMessage, 'id'>) => void;
-};
-
-const ToastContext = React.createContext<ToastContextType | null>(null);
+import { ToastContext, ToastMessage } from '../../hooks/useToast';
 
 /**
  * A provider component that manages the state of toasts and provides a function to show new toasts. It renders the Toast component and passes the current toasts as children. 
@@ -69,8 +53,3 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useToast() {
-  const ctx = React.useContext(ToastContext);
-  if (!ctx) throw new Error('useToast must be used inside <ToastProvider>');
-  return ctx;
-}
