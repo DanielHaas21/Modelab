@@ -1,2 +1,13 @@
 ### TODO
-- Finish deployment 
+- Radek 
+  - Add logging to API
+  - Add health endpoint to API  
+  - Add levels to users
+  - Add email origin prefix field to Oauth client
+- Daniel
+ - animations
+ - Admin panel frontend 
+  - panel page (api health, logs, email origin prefix field)
+  - assets page 
+  - user page (manage user level, mass delete)
+  - tags?
