@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BaseLayout } from '../../libs/ui/layouts';
+import { BaseLayout } from '../../../libs/ui/layouts';
 
 const AdminPanel: React.FC = () => {
   return (

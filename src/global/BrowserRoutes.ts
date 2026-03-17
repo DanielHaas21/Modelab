@@ -1,4 +1,3 @@
-
 /**
  * A tuple of all the routes in the application. 
  */
@@ -8,5 +7,15 @@ export const BrowserRoutes = {
   About: '/about',
   ModelDetail: '/models/',
   ModelManage: '/manage/',
-  AdminPanel: '/admin/',
+  AdminRoot: '/admin/',
+} as const;
+
+/**
+ * A tuple of all the routes in the application. 
+ */
+export const AdminRoutes = {
+  Panel: '/',
+  Login: '/login/',
+  Users: '/users/',
+  Assets: '/assets/',
 } as const;
