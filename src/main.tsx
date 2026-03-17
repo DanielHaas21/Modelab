@@ -1,17 +1,16 @@
 import { StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
-import i18n from '../public/i18n/i18n.ts';
+import { store } from './store/store.ts';
 
 import './index.css';
 
 import { Preloader } from './libs/ui/components/Preloader.tsx';
+
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { UiProvider } from './libs/ui/provider/index.ts';
-import { ThemeProvider } from './libs/ui/provider/ThemeProvider.tsx';
-import { Provider } from 'react-redux';
-import { store } from './store/store.ts';
 import { AuthProvider } from './libs/auth/AuthProvider.tsx';
+import { I18NProvider, ToastProvider, ThemeProvider } from './libs/ui/provider/index.ts';
+import { Provider } from 'react-redux';
 
 (async () => {
   createRoot(document.getElementById('root')!).render(
@@ -19,13 +18,15 @@ import { AuthProvider } from './libs/auth/AuthProvider.tsx';
       <Suspense fallback={<Preloader />}>
         <Provider store={store}>
           <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
-            <UiProvider i18nValue={i18n}>
-              <AuthProvider>
-                <ThemeProvider>
-                  <App />
-                </ThemeProvider>
-              </AuthProvider>
-            </UiProvider>
+            <I18NProvider>
+              <ToastProvider>
+                <AuthProvider>
+                  <ThemeProvider>
+                    <App />
+                  </ThemeProvider>
+                </AuthProvider>
+              </ToastProvider>
+            </I18NProvider>
           </GoogleOAuthProvider>
         </Provider>
       </Suspense>

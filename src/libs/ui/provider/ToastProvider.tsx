@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import { Toast } from './Toast';
+import { Toast } from '../components/Toast/Toast';
 import { uid } from 'uid';
 
 type ToastMessage = {

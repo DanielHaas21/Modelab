@@ -9,7 +9,6 @@ import {
   Label,
   ModelInfoSection,
   Preloader,
-  useToast,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
 import { ModelDetailData, DetailFile } from '../../middleware/types';
@@ -28,7 +27,7 @@ import { CLEARANCE } from '../../store/types';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
 import { faArrowLeft, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useTranslation } from '../../libs/ui/provider';
+import { useToast, useTranslation } from '../../libs/ui/provider';
 import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
 

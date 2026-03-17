@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { Button } from './Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShuffle, faArrowRightFromBracket, faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
+import { faShuffle, faArrowRightFromBracket, faSun, faMoon, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { Label } from './Label';
 import { DarkMode, LightMode } from '../../../store/slices/Mode';
 import { UserImage } from './UserImage';
-import { useTranslation } from '../provider';
+import { useI18n, useTranslation } from '../provider';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -25,8 +25,9 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
     const dispatch = useDispatch();
     const UserData = useSelector((state: RootState) => state.User);
     const Mode = useSelector((state: RootState) => state.Mode.value);
-    const t = useTranslation('ui.user_popup');
     const { hasClearance } = useCheckClearance();
+    const t = useTranslation('ui.user_popup');
+    const { cycleLanguages } = useI18n();
 
     const handleToggleTheme = () => {
       if (Mode === 'light') {
@@ -34,6 +35,10 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
       } else {
         dispatch(LightMode());
       }
+    };
+
+    const handleCycleLanguage = () => {
+      cycleLanguages();
     };
 
     const handleChangeAccount = () => {
@@ -71,16 +76,24 @@ export const UserPopup = React.forwardRef<HTMLDivElement, UserPopupProps>(
         }
 
         <div className="flex flex-col w-full gap-2">
-          <Button
-            className="w-full justify-center"
-            font_size="sm"
-            variant="light"
-            font="regular"
-            onClick={handleToggleTheme}
-          >
-            <FontAwesomeIcon icon={Mode === 'light' ? faMoon : faSun} className="mr-2" />
-            {Mode === 'light' ? t('dark_mode') : t('light_mode')}
-          </Button>
+          <div className='w-full flex justify-between gap-2'>
+            <Button
+              className="flex justify-center grow"
+              font_size="sm" variant="light" font="regular"
+              onClick={handleToggleTheme}
+            >
+              <FontAwesomeIcon icon={Mode === 'light' ? faMoon : faSun} className='mr-2' />
+              {Mode === 'light' ? t('dark_mode') : t('light_mode')}
+            </Button>
+            <Button
+              className="flex justify-center grow"
+              font_size="sm" variant="light" font="regular"
+              onClick={handleCycleLanguage}
+            >
+              <FontAwesomeIcon icon={faGlobe} className='mr-2' />
+              {t('language')}
+            </Button>
+          </div>
 
           {hasClearance(CLEARANCE.USER)
             ? (

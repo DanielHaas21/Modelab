@@ -2,11 +2,10 @@ import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
 import { useResponsive } from '../../hooks/useResponsive';
-import { useTranslation } from '../provider';
+import { useToast, useTranslation } from '../provider';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
-import { useToast } from './Toast';
 
 interface FooterProps extends React.HTMLAttributes<HTMLElement> {
   variant?: 'borderless' | 'bordered';

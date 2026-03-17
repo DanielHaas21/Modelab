@@ -101,8 +101,9 @@
     "user_popup": {
       "guest_user": "Guest User",
       "without_downloads": "Without downloads",
-      "dark_mode": "Dark Mode",
-      "light_mode": "Light Mode",
+      "dark_mode": "Dark",
+      "light_mode": "Light",
+      "language": "English",
       "switch_account": "Switch account",
       "logout": "Logout",
       "sign_in": "Sign in"

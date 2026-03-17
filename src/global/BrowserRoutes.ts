@@ -8,4 +8,5 @@ export const BrowserRoutes = {
   About: '/about',
   ModelDetail: '/models/',
   ModelManage: '/manage/',
+  AdminPanel: '/admin/',
 } as const;

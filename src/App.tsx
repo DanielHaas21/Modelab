@@ -24,6 +24,7 @@ function App(): React.ReactElement {
           <Route path={BrowserRoutes.About} element={<About />} />
           <Route path={BrowserRoutes.ModelDetail + ':modelId'} element={<ModelDetail />} />
           <Route path={BrowserRoutes.ModelManage + ':action'} element={<ModelManage />} />
+          {/* <Route path={BrowserRoutes.AdminPanel} element={<AdminPanel />} /> */}
           <Route path="*" element={<NoMatchPage />} />
         </Routes>
       </BrowserRouter>
