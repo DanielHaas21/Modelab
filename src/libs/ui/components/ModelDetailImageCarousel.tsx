@@ -7,6 +7,7 @@ import { DetailFile } from '../../../middleware/types';
 interface ModelDetailImageCarouselProps {
   files: DetailFile[];
 }
+
 /**
  * A carousel component that displays images and previews for a model's detail view. 
  */
@@ -53,7 +54,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
             <Carousel
               swipeable={false}
               className='rounded-2xl overflow-hidden bg-primary-500'
-              dynamicHeight={true}
+              dynamicHeight={false}
               showThumbs={false}
               selectedItem={selectedItem}
               onChange={(index) => {

@@ -24,11 +24,10 @@ import editModel from '../../middleware/actions/EditModel';
 import deleteModel from '../../middleware/actions/DeleteModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { useToast } from '../../libs/ui/components/Toast';
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { createDetailFiles } from '../../middleware/actions/CreateDetailFile';
-import { useTranslation } from '../../libs/ui/provider';
+import { useToast, useTranslation } from '../../libs/ui/provider';
 
 
 const ModelManage: React.FC = () => {

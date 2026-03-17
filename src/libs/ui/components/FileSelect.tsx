@@ -2,10 +2,9 @@ import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useRef } from 'react';
 import { UploadedFile } from './UploadedFile';
-import { useTranslation } from '../provider';
+import { useToast, useTranslation } from '../provider';
 import { ManageFile } from '../../../middleware/types';
 import { getFileType } from '../../utils/getFileType';
-import { useToast } from './Toast';
 
 interface FileSelectProps {
   files: ManageFile[];
