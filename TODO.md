@@ -4,6 +4,8 @@
   - Add health endpoint to API  
   - Add levels to users
   - Add email origin prefix field to Oauth client
+  - Landing page 3D model
+  - Dynamic tab title
 - Daniel
  - animations
  - Admin panel frontend 
