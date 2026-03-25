@@ -190,8 +190,8 @@ export class AssetService extends Service {
       count: query.count,
       ...(query.nameQuery !== undefined && { nameQuery: query.nameQuery }),
       ...(query.descriptionQuery !== undefined && { descriptionQuery: query.descriptionQuery }),
-      ...(query.categoryQuery !== undefined && { categoryQuery: query.categoryQuery.join(',') }),
-      ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery.join(',') }),
+      ...(query.categoryQuery !== undefined && { categoryQuery: query.categoryQuery }),
+      ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery }),
     };
 
     const response = await this.POST(ROUTES.POST.Asset + 'search', data) as { assets: RawAssetData[], info: PaginatedInfo };
