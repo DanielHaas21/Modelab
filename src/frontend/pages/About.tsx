@@ -32,7 +32,7 @@ const About: React.FC = () => {
               to={'https://github.com/DanielHaas21/Modelab'}
               className="text-xl hover-underline-animation no-underline text-text-950 mx-[10px] px-[10px]"
             >
-              Modelab on GitHub
+              {t("modelabOnGithub")}
             </Link>
           </AboutSection>
         </div>

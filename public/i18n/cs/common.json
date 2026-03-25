@@ -18,7 +18,8 @@
       "howToCredit": "Jak citovat?",
       "noNeed": "Není potřeba",
       "howToContribute": "Jak přispět?",
-      "contributing": "Tento projekt je open-source a je k dispozici na GitHubu. Neváhejte a pošlete pull request."
+      "contributing": "Tento projekt je open-source a je k dispozici na GitHubu. Neváhejte a pošlete pull request.",
+      "modelabOnGithub": "Modelab na GitHubu"
     },
     "model_detail": {
       "confirm": {
