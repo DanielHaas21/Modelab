@@ -11,12 +11,14 @@
     },
     "about": {
       "about": "About Modelab",
-      "info": "Modelab is a database of models, textures and other assets that are made by students for  students",
+      "info": "Modelab is a database of models, textures and other assets that are made by students for students",
       "offer": "Modelab offers 100% free assets for students working on games, websites, or school any other projects",
       "whatIsModelab": "What is Modelab?",
       "whoIsModelabFor": "Who is Modelab for?",
       "howToCredit": "How to credit?",
-      "noNeed": "No need"
+      "noNeed": "No need",
+      "howToContribute": "How to contribute?",
+      "contributing": "This project is open-source and is avaiable on GitHub. Feel free to make a pull request."
     },
     "model_detail": {
       "confirm": {

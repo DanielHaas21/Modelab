@@ -4,6 +4,7 @@ import { Label } from '../../libs/ui/components';
 import { AboutSection } from '../../libs/ui/components/AboutSection';
 import { cn } from '../../libs/utils';
 import { useResponsive, useTranslation } from '../../libs/hooks';
+import { Link } from 'react-router-dom';
 
 const About: React.FC = () => {
   const t = useTranslation("pages.about");
@@ -21,7 +22,19 @@ const About: React.FC = () => {
           <AboutSection title={t("whoIsModelabFor")}>
             {t("offer")}
           </AboutSection>
-          <AboutSection title={t("howToCredit")}>{t("noNeed")}</AboutSection>
+          <AboutSection title={t("howToCredit")}>
+            {t("noNeed")}
+          </AboutSection>
+          <AboutSection title={t("howToContribute")}>
+            {t("contributing")}
+            <br />
+            <Link
+              to={'https://github.com/DanielHaas21/Modelab'}
+              className="text-xl hover-underline-animation no-underline text-text-950 mx-[10px] px-[10px]"
+            >
+              Modelab on GitHub
+            </Link>
+          </AboutSection>
         </div>
       </main>
     </BaseLayout>

@@ -16,7 +16,9 @@
       "whatIsModelab": "Co je Modelab?",
       "whoIsModelabFor": "Pro koho je Modelab určen?",
       "howToCredit": "Jak citovat?",
-      "noNeed": "Není potřeba"
+      "noNeed": "Není potřeba",
+      "howToContribute": "Jak přispět?",
+      "contributing": "Tento projekt je open-source a je k dispozici na GitHubu. Neváhejte a pošlete pull request."
     },
     "model_detail": {
       "confirm": {

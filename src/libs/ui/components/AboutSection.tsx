@@ -3,7 +3,7 @@ import { Label } from './Label';
 
 interface AboutSectionProps {
   title: string;
-  children: string;
+  children: React.ReactNode;
 }
 
 /**
