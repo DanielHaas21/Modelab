@@ -1,6 +1,6 @@
 import ApiError from '../api/ApiError';
 import { ModelDetailData, DetailFile, DetailModel } from '../types';
-import { ASSET, FILE } from '../ApiClients';
+import { ASSET, FILE } from '../ApiServices';
 import { FileGroup, getFileGroup } from '../../libs/utils/isFile';
 import { CLEARANCE, Clearance } from '../../store/types';
 import { FileInfoData } from '../api';

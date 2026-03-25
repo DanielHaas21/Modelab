@@ -1,5 +1,5 @@
 import { DetailFile, ManageConfigProps, ManageFile, ManageModel, ModelManageData } from '../types';
-import { ASSET, CATEGORY, FILE, TAG } from '../ApiClients';
+import { ASSET, CATEGORY, FILE, TAG } from '../ApiServices';
 import { getFileGroup } from '../../libs/utils/isFile';
 
 export default async function loadModelManage(id: number | null): Promise<ModelManageData> {

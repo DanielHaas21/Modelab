@@ -1,4 +1,4 @@
-import { ASSET } from "../ApiClients";
+import { ASSET } from "../ApiServices";
 import { DeleteModelData } from "../types";
 
 export default async function deleteModel(data: DeleteModelData): Promise<number> {

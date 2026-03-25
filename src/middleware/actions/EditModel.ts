@@ -1,4 +1,4 @@
-import { ASSET } from "../ApiClients";
+import { ASSET } from "../ApiServices";
 import { UpdateModelData } from "../types";
 
 export default async function editModel(data: UpdateModelData): Promise<number> {

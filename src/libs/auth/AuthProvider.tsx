@@ -2,8 +2,8 @@ import React, { createContext, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { RootState } from '../../store/store';
-import { ASSET, CATEGORY, FILE, TAG, USER } from '../../middleware/ApiClients';
 import { UserStateActions } from '../../store/slices/User';
+import { ALL_SERVICES, USER } from '../../middleware/ApiServices';
 
 /**
  * Defines auth actions
@@ -48,19 +48,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Sets the auth token to all api services
   const setToken = (token: string | null) => {
     if (token === null) {
-      USER.setToken(token);
-      ASSET.setToken(token);
-      FILE.setToken(token);
-      TAG.setToken(token);
-      CATEGORY.setToken(token);
       localStorage.removeItem(AUTH_LS_KEY);
+      for (const service of ALL_SERVICES) {
+        service.setToken(token);
+      }
     } else {
       localStorage.setItem(AUTH_LS_KEY, token);
-      USER.setToken(token);
-      ASSET.setToken(token);
-      FILE.setToken(token);
-      TAG.setToken(token);
-      CATEGORY.setToken(token);
+      for (const service of ALL_SERVICES) {
+        service.setToken(token);
+      }
     }
   };
 

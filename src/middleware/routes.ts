@@ -7,7 +7,8 @@ export const ROUTES = {
     Category: '/category/',
     Tag: '/tag/',
     Asset: '/asset/',
-    User: '/user/'
+    User: '/user/',
+    Admin: '/admin/',
   },
   GET: {
     File: '/file/',

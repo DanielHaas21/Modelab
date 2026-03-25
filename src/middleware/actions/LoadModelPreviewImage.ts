@@ -1,5 +1,5 @@
 import ApiError from '../api/ApiError';
-import { ASSET, FILE } from '../ApiClients';
+import { ASSET, FILE } from '../ApiServices';
 import { isFile } from '../../libs/utils/isFile';
 import { CLEARANCE, Clearance } from '../../store/types';
 

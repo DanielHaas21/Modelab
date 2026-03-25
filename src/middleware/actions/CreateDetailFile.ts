@@ -1,5 +1,5 @@
 import { getFileGroup, SupportedFileTypes } from '../../libs/utils';
-import { FILE } from '../ApiClients';
+import { FILE } from '../ApiServices';
 import { DetailFile, LocalManageFile, ManageFile } from '../types';
 
 /**
