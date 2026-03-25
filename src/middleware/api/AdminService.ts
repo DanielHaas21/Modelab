@@ -26,7 +26,7 @@ interface RawLogData extends Omit<LogData, 'date'> {
   date: string;
 }
 
-export interface PaginatedInfo {
+export interface AdminPaginatedInfo {
   page: number;
   count: number;
   pageCount: number;
@@ -34,12 +34,12 @@ export interface PaginatedInfo {
 
 export interface LogGetAll {
   assets: LogData[];
-  info: PaginatedInfo;
+  info: AdminPaginatedInfo;
 }
 
 export interface LogSearch {
   assets: LogData[];
-  info: PaginatedInfo;
+  info: AdminPaginatedInfo;
 }
 
 export class AdminService extends Service {
@@ -55,7 +55,7 @@ export class AdminService extends Service {
   }
 
   public async getAllLogs(page: number, count: number): Promise<LogGetAll> {
-    const response = await this.POST(ROUTES.POST.Admin + 'log/all', { page, count }) as { logs: RawLogData[], info: PaginatedInfo };
+    const response = await this.POST(ROUTES.Admin + 'log/all', { page, count }) as { logs: RawLogData[], info: AdminPaginatedInfo };
     return {
       ...response,
       assets: response.logs.map((log: RawLogData) => this.mapLogDates(log))
@@ -80,7 +80,7 @@ export class AdminService extends Service {
       ...(query.dateStartQuery !== undefined && { dateStartQuery: query.dateStartQuery }),
     };
 
-    const response = await this.POST(ROUTES.POST.Asset + 'log/search', data) as { logs: RawLogData[], info: PaginatedInfo };
+    const response = await this.POST(ROUTES.Asset + 'log/search', data) as { logs: RawLogData[], info: AdminPaginatedInfo };
     return {
       ...response,
       assets: response.logs.map((log: RawLogData) => this.mapLogDates(log))

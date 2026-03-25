@@ -25,10 +25,10 @@ export class UserService extends Service {
   }
 
   public async login(accessToken: string): Promise<UserLogin> {
-    return this.POST(ROUTES.POST.User + 'login', { accessToken }) as Promise<UserLogin>;
+    return this.POST(ROUTES.User + 'login', { accessToken }) as Promise<UserLogin>;
   }
 
   public async getInfo(): Promise<GetUserInfo> {
-    return this.POST(ROUTES.POST.User + 'info') as Promise<GetUserInfo>;
+    return this.POST(ROUTES.User + 'info') as Promise<GetUserInfo>;
   }
 }

@@ -29,18 +29,18 @@ export class Category extends Service {
   }
 
   public async create(name: string): Promise<CategoryCreate> {
-    return this.POST(ROUTES.POST.Category + 'create', { name: name }) as Promise<CategoryCreate>;
+    return this.POST(ROUTES.Category + 'create', { name: name }) as Promise<CategoryCreate>;
   }
 
   public async get(id: number): Promise<CategoryGet> {
-    return this.POST(ROUTES.POST.Category + id) as Promise<CategoryGet>;
+    return this.POST(ROUTES.Category + id) as Promise<CategoryGet>;
   }
 
   public async getAll(): Promise<CategoryGetAll> {
-    return this.POST(ROUTES.POST.Category + 'all') as Promise<CategoryGetAll>;
+    return this.POST(ROUTES.Category + 'all') as Promise<CategoryGetAll>;
   }
 
   public async delete(id: number): Promise<CategoryDelete> {
-    return this.POST(ROUTES.POST.Category + id + '/delete') as Promise<CategoryDelete>;
+    return this.POST(ROUTES.Category + id + '/delete') as Promise<CategoryDelete>;
   }
 }

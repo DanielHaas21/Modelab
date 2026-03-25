@@ -121,7 +121,7 @@ export class AssetService extends Service {
       metaIndex++;
     });
 
-    return this.POST(ROUTES.POST.Asset + data.id + '/update', form, {
+    return this.POST(ROUTES.Asset + data.id + '/update', form, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -149,7 +149,7 @@ export class AssetService extends Service {
       form.append('files[]', file.localFile);
     });
 
-    return this.POST(ROUTES.POST.Asset + 'create', form, {
+    return this.POST(ROUTES.Asset + 'create', form, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -159,7 +159,7 @@ export class AssetService extends Service {
   }
 
   public async get(id: number): Promise<AssetGet> {
-    const response = await this.POST(ROUTES.POST.Asset + id) as { asset: RawAssetData };
+    const response = await this.POST(ROUTES.Asset + id) as { asset: RawAssetData };
     return {
       ...response,
       asset: this.mapAssetDates(response.asset)
@@ -167,7 +167,7 @@ export class AssetService extends Service {
   }
 
   public async getAll(page: number, count: number): Promise<AssetGetAll> {
-    const response = await this.POST(ROUTES.POST.Asset + 'all', { page, count }) as { assets: RawAssetData[], info: PaginatedInfo };
+    const response = await this.POST(ROUTES.Asset + 'all', { page, count }) as { assets: RawAssetData[], info: PaginatedInfo };
     return {
       ...response,
       assets: response.assets.map((a: RawAssetData) => this.mapAssetDates(a))
@@ -194,7 +194,7 @@ export class AssetService extends Service {
       ...(query.tagQuery !== undefined && { tagQuery: query.tagQuery }),
     };
 
-    const response = await this.POST(ROUTES.POST.Asset + 'search', data) as { assets: RawAssetData[], info: PaginatedInfo };
+    const response = await this.POST(ROUTES.Asset + 'search', data) as { assets: RawAssetData[], info: PaginatedInfo };
     return {
       ...response,
       assets: response.assets.map((a: RawAssetData) => this.mapAssetDates(a))
@@ -202,10 +202,10 @@ export class AssetService extends Service {
   }
 
   public async getFiles(id: number): Promise<AssetGetFiles> {
-    return this.POST(ROUTES.POST.Asset + id + '/files') as Promise<AssetGetFiles>;
+    return this.POST(ROUTES.Asset + id + '/files') as Promise<AssetGetFiles>;
   }
 
   public async delete(id: number): Promise<AssetDelete> {
-    return this.POST(ROUTES.POST.Asset + id + '/delete') as Promise<AssetDelete>;
+    return this.POST(ROUTES.Asset + id + '/delete') as Promise<AssetDelete>;
   }
 }

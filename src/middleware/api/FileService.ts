@@ -95,7 +95,7 @@ export class FileService extends Service {
   }
 
   public getAssetURL(id: number): string {
-    return this.baseURL + ROUTES.GET.File + id;
+    return this.baseURL + ROUTES.File + id;
   }
 
   public getPreviewURL(id: number): string {
@@ -113,6 +113,6 @@ export class FileService extends Service {
   }
 
   public async getSupportedFileTypes(): Promise<GetSupportedFileTypes> {
-    return await this.POST(this.baseURL + ROUTES.GET.File + 'supported') as GetSupportedFileTypes;
+    return await this.POST(this.baseURL + ROUTES.File + 'supported') as GetSupportedFileTypes;
   }
 }

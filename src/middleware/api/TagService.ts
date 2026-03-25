@@ -29,18 +29,18 @@ export class TagService extends Service {
   }
 
   public async create(): Promise<TagCreate> {
-    return this.POST(ROUTES.POST.Tag + 'create') as Promise<TagCreate>;
+    return this.POST(ROUTES.Tag + 'create') as Promise<TagCreate>;
   }
 
   public async get(id: number): Promise<TagGet> {
-    return this.POST(ROUTES.POST.Tag + id) as Promise<TagGet>;
+    return this.POST(ROUTES.Tag + id) as Promise<TagGet>;
   }
 
   public async getAll(): Promise<TagGetAll> {
-    return this.POST(ROUTES.POST.Tag + 'all') as Promise<TagGetAll>;
+    return this.POST(ROUTES.Tag + 'all') as Promise<TagGetAll>;
   }
 
   public async delete(id: number): Promise<TagDelete> {
-    return this.POST(ROUTES.POST.Tag + id + '/delete') as Promise<TagDelete>;
+    return this.POST(ROUTES.Tag + id + '/delete') as Promise<TagDelete>;
   }
 }
