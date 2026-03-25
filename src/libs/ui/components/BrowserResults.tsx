@@ -2,12 +2,13 @@ import * as React from 'react';
 import { ModelPreview } from './ModelPreview';
 import { Label } from './Label';
 import { Preloader } from './Preloader';
-import { AssetService, AssetData, AdminPaginatedInfo } from '../../../middleware/api';
+import { AssetData, AdminPaginatedInfo } from '../../../middleware/api';
 import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
 import { CategoryOption } from './CategorySelect';
 import { TagOption } from './TagSelect';
 import { useTranslation } from '../../hooks';
+import { ASSET } from '../../../middleware/ApiServices';
 
 export interface SearchQuery {
   categories: CategoryOption[];
@@ -31,7 +32,6 @@ const fetchAssets = async (
   page: number,
   count: number
 ): Promise<FetchResult> => {
-  const assetApi = new AssetService();
 
   const formatResult = (assets: AssetData[], info: AdminPaginatedInfo): FetchResult => {
     return {
@@ -50,11 +50,11 @@ const fetchAssets = async (
       searchQuery.tags.length === 0 &&
       searchQuery.nameQuery.length === 0)
   ) {
-    const { assets, info } = await assetApi.getAll(page, count);
+    const { assets, info } = await ASSET.getAll(page, count);
     return formatResult(assets, info);
   }
 
-  const { assets, info } = await assetApi.search({
+  const { assets, info } = await ASSET.search({
     page,
     count,
     categoryQuery: searchQuery.categories.length > 0 ? searchQuery.categories.map(c => c.id) : undefined,

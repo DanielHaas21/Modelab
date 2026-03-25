@@ -12,7 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
-import { Category, TagService } from '../../middleware/api';
+import { Category } from '../../middleware/api';
 import ApiError from '../../middleware/api/ApiError';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { useResponsive, useTranslation } from '../../libs/hooks';
+import { TAG } from '../../middleware/ApiServices';
 
 const Browser: React.FC = () => {
   const t = useTranslation("pages.browser");
@@ -27,7 +28,6 @@ const Browser: React.FC = () => {
   const { isDesktop } = useResponsive();
 
   const categoryApi = new Category();
-  const tagApi = new TagService();
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
@@ -85,7 +85,7 @@ const Browser: React.FC = () => {
 
     const loadTags = async () => {
       try {
-        const data = await tagApi.getAll();
+        const data = await TAG.getAll();
         return data.tags.map((tag) => ({
           ...tag,
           isSelected:
