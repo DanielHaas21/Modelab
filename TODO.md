@@ -1,15 +1,15 @@
 ### TODO
 - Radek 
-  - Add logging to API
-  - Add health endpoint to API  
-  - Add levels to users
-  - Add email origin prefix field to Oauth client
-  - Landing page 3D model
-  - Dynamic tab title
+  - [x] Add logging to API
+  - [x] Add health endpoint to API  
+  - [x] Add levels to users
+  - [ ] Add email origin prefix field to Oauth client
+  - [ ] Landing page 3D model
+  - [ ] Dynamic tab title
 - Daniel
- - animations
- - Admin panel frontend 
-  - panel page (api health, logs, email origin prefix field)
-  - assets page 
-  - user page (manage user level, mass delete)
-  - tags?
+ - [ ] animations
+ - [ ] Admin panel frontend 
+  - [ ] panel page (api health, logs, email origin prefix field)
+  - [ ] assets page 
+  - [ ] user page (manage user level, mass delete)
+  - [ ] tags?
