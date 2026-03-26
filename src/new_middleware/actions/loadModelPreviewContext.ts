@@ -1,7 +1,7 @@
 import { isFile } from '../../libs/utils';
 import { CLEARANCE, Clearance } from '../../store/types';
 import { ASSET, FILE } from '../services';
-import { ModelPreviewContext } from '../types/actions/modelPreview';
+import { ModelPreviewContext } from '../types/actions';
 
 export const loadModelPreviewContext = async (id: number, userClearance: Clearance): Promise<ModelPreviewContext> => {
   const fileMetas = (await ASSET.getFiles({ id: id })).files;
@@ -10,7 +10,7 @@ export const loadModelPreviewContext = async (id: number, userClearance: Clearan
   const userCanDownload = userClearance >= CLEARANCE.USER;
 
   const previewImageModel = fileMetas
-    .filter((fileMeta) => {
+    ?.filter((fileMeta) => {
       return isFile(fileMeta.fileType, 'image', supportedFileTypes);
     })
     .sort((a, b) => {

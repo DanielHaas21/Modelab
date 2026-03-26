@@ -49,8 +49,22 @@ const ModelDetail: React.FC = () => {
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
-  // zip download of all files
+  // load context
+  React.useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      try {
+        const assetId = parseInt(model.modelId!);
+        const context = await loadModelDetailContext(assetId, UserData.auth.clearance);
+        setModelDetailContext(context);
+      } catch (error) {
+        console.error('Error fetching model data:', error);
+      }
+      setIsLoading(false);
+    })();
+  }, [UserData.auth.clearance]);
 
+  // zip download of all files
   const downloadAllAsZip = async (files: AssetFile[]) => {
     if (modelDetailContext === null) return;
     const asset = modelDetailContext.asset;
@@ -100,20 +114,6 @@ const ModelDetail: React.FC = () => {
     document.body.removeChild(link);
     URL.revokeObjectURL(link.href);
   };
-
-  React.useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const assetId = parseInt(model.modelId!);
-        const context = await loadModelDetailContext(assetId, UserData.auth.clearance);
-        setModelDetailContext(context);
-      } catch (error) {
-        console.error('Error fetching model data:', error);
-      }
-      setIsLoading(false);
-    })();
-  }, [UserData.auth.clearance]);
 
   if (isLoading) return <Preloader className="min-h-screen" />;
 

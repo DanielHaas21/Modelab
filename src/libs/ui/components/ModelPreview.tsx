@@ -10,15 +10,13 @@ import { RootState } from '../../../store/store';
 import { useTranslation } from '../../hooks';
 import { ModelPreviewContext } from '../../../new_middleware/types/actions/modelPreview';
 import { loadModelPreviewContext } from '../../../new_middleware/actions/loadModelPreviewContext';
+import { AssetModel } from '../../../new_middleware/types/models';
 
 interface ModelPreviewProps {
   className?: string;
-  id: number;
-
-  name: string;
+  asset: AssetModel;
   width: number;
   height: number;
-  tags?: string[];
 }
 
 /**
@@ -27,7 +25,7 @@ interface ModelPreviewProps {
  * tags are limited to 8, if more is passed there will be ...and tags.length-8 more shown instead
  */
 export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
-  ({ className, name, id, tags, width, height, ...props }, ref) => {
+  ({ className, asset, width, height, ...props }, ref) => {
     const t = useTranslation('ui.model_preview');
 
     const UserData = useSelector((state: RootState) => state.User);
@@ -39,25 +37,25 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
       (async () => {
         setIsLoading(true);
         try {
-          const context = await loadModelPreviewContext(id, UserData.auth.clearance);
+          const context = await loadModelPreviewContext(asset.id, UserData.auth.clearance);
           setModelPreviewContext(context);
         } catch (error) {
-          console.error('Error fetching model data:', error);
+          console.error('Error fetching preview context:', error);
         }
         setIsLoading(false);
       })();
-    }, [id, UserData.auth]);
+    }, [asset, UserData.auth]);
 
     const previewUrl = modelPreviewContext?.previewUrl ?? null;
 
-    const tagsRender = tags?.slice(0, 8).map((tag, index) => (
-      <AssetTag key={index} name={tag} />
+    const tagsRender = asset.tags.slice(0, 8).map((tag, index) => (
+      <AssetTag key={index} name={tag.name} />
     ));
-    const andMore = Array.isArray(tags) && tags.length > 8 && <span>{t('and_more', { count: tags.length - 8 })}</span>;
+    const andMore = asset.tags.length > 8 && <span>{t('and_more', { count: asset.tags.length - 8 })}</span>;
 
     return (
       <Link
-        to={BrowserRoutes.ModelDetail + id}
+        to={BrowserRoutes.ModelDetail + asset.id}
         className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div
@@ -70,12 +68,12 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
             <img
               src={(isLoading || previewUrl === null) ? placeholder : previewUrl}
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-              alt={name}
+              alt={asset.name}
             />
           </div>
           <div className="w-[90%] py-2">
             <ScrollLabel size="sm" className="text-left font-bold">
-              {name}
+              {asset.name}
             </ScrollLabel>
             <div className="flex flex-row flex-wrap justify-start font-light text-xs text-text-500 mt-1">
               {tagsRender}

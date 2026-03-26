@@ -4,7 +4,7 @@ import { Tag } from './tag';
 import { AssetFile } from './file';
 
 export interface ModelManageContext {
-  config: ManageConfigProps;
+  config: ManageConfig;
   asset: ManageAsset | null;
   create: ManageCreateAssetAction;
   edit: ManageEditAssetAction;
@@ -13,7 +13,7 @@ export interface ModelManageContext {
 
 // Config
 
-export interface ManageConfigProps {
+export interface ManageConfig {
   allCategories: Category[];
   allTags: Tag[];
 }
@@ -26,7 +26,7 @@ export interface ManageAsset extends AssetBase {
 
 // Create
 
-export interface ManageCreateAssetQuery {
+export interface ManageCreateAssetParams {
   name: string;
   description: string;
   author: string | null;
@@ -39,11 +39,11 @@ export interface ManageCreateAssetResponse {
   createdAssetId: number;
 }
 
-export type ManageCreateAssetAction = (query: ManageCreateAssetQuery) => Promise<ManageCreateAssetResponse>;
+export type ManageCreateAssetAction = (params: ManageCreateAssetParams) => Promise<ManageCreateAssetResponse>;
 
 // Update
 
-export interface ManageEditAssetQuery {
+export interface ManageEditAssetParams {
   id: number;
   name: string;
   description: string;
@@ -57,11 +57,11 @@ export interface ManageEditAssetResponse {
   editedAssetId: number;
 }
 
-export type ManageEditAssetAction = (query: ManageEditAssetQuery) => Promise<ManageEditAssetResponse>;
+export type ManageEditAssetAction = (params: ManageEditAssetParams) => Promise<ManageEditAssetResponse>;
 
 // Delete
 
-export interface ManageDeleteAssetQuery {
+export interface ManageDeleteAssetParams {
   id: number;
 }
 
@@ -69,7 +69,7 @@ export interface ManageDeleteAssetResponse {
   deletedAssetId: number;
 }
 
-export type ManageDeleteAssetAction = (query: ManageDeleteAssetQuery) => Promise<ManageDeleteAssetResponse>;
+export type ManageDeleteAssetAction = (params: ManageDeleteAssetParams) => Promise<ManageDeleteAssetResponse>;
 
 // File
 

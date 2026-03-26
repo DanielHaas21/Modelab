@@ -57,9 +57,8 @@ const ModelManage: React.FC = () => {
 
   const [previewDetailFiles, setPreviewDetailFiles] = React.useState<AssetFile[]>([]);
 
+  // load context
   React.useEffect(() => {
-
-    // model load
     (async () => {
       setIsLoading(true);
       try {
@@ -72,7 +71,7 @@ const ModelManage: React.FC = () => {
     })();
   }, [assetId, refreshModel]);
 
-  // set data
+  // setup data
   React.useEffect(() => {
     if (!modelManageContext) return;
 

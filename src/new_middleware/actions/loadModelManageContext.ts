@@ -1,17 +1,17 @@
-import { AssetFile, ManageCreateAssetQuery, ManageCreateAssetResponse, ManageDeleteAssetQuery, ManageDeleteAssetResponse, ManageEditAssetQuery, ManageEditAssetResponse, ManageFile, ModelManageContext } from '../types/actions';
+import { AssetFile, ManageCreateAssetParams, ManageCreateAssetResponse, ManageDeleteAssetParams, ManageDeleteAssetResponse, ManageEditAssetParams, ManageEditAssetResponse, ManageFile, ModelManageContext } from '../types/actions';
 import { ASSET, CATEGORY, FILE, TAG } from '../services';
 import { getFileGroup } from '../../libs/utils';
 import { load3DModel } from './loadModel';
 import { AssetUpdateFile, FetchedAssetUpdateFile, LocalAssetUpdateFile } from '../types/services';
 
-const createAsset = async (query: ManageCreateAssetQuery): Promise<ManageCreateAssetResponse> => {
+const createAsset = async (params: ManageCreateAssetParams): Promise<ManageCreateAssetResponse> => {
   const createdAssetId = (await ASSET.create({
-    author: query.author,
-    name: query.name,
-    description: query.description,
-    categoryId: query.category.id,
-    tagIds: query.tags.map((tag) => tag.id),
-    files: query.files.map((file) => {
+    author: params.author,
+    name: params.name,
+    description: params.description,
+    categoryId: params.category.id,
+    tagIds: params.tags.map((tag) => tag.id),
+    files: params.files.map((file) => {
       return {
         ...file,
         file: file.localFile,
@@ -24,9 +24,9 @@ const createAsset = async (query: ManageCreateAssetQuery): Promise<ManageCreateA
   };
 };
 
-const editAsset = async (query: ManageEditAssetQuery): Promise<ManageEditAssetResponse> => {
+const editAsset = async (params: ManageEditAssetParams): Promise<ManageEditAssetResponse> => {
   const updateFiles: AssetUpdateFile[] = [];
-  for (const manageFile of query.files) {
+  for (const manageFile of params.files) {
     let updateFile: AssetUpdateFile | null = null;
 
     switch (manageFile.type) {
@@ -55,12 +55,12 @@ const editAsset = async (query: ManageEditAssetQuery): Promise<ManageEditAssetRe
   }
 
   const editedAssetId = (await ASSET.update({
-    id: query.id,
-    author: query.author,
-    name: query.name,
-    description: query.description,
-    categoryId: query.category.id,
-    tagIds: query.tags.map((tag) => tag.id),
+    id: params.id,
+    author: params.author,
+    name: params.name,
+    description: params.description,
+    categoryId: params.category.id,
+    tagIds: params.tags.map((tag) => tag.id),
     files: updateFiles,
   })).id;
 
@@ -69,9 +69,9 @@ const editAsset = async (query: ManageEditAssetQuery): Promise<ManageEditAssetRe
   };
 };
 
-const deleteAsset = async (query: ManageDeleteAssetQuery): Promise<ManageDeleteAssetResponse> => {
+const deleteAsset = async (params: ManageDeleteAssetParams): Promise<ManageDeleteAssetResponse> => {
   const deletedAssetId = (await ASSET.delete({
-    id: query.id
+    id: params.id
   })).id;
 
   return {
