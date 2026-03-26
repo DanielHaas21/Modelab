@@ -11,7 +11,7 @@ export class UserService extends AxiosService {
     const data: UserLoginData = {
       accessToken: query.accessToken
     };
-    return await this.POST<UserLoginResponse>(`create`, data);
+    return await this.POST<UserLoginResponse>(`login`, data);
   }
 
   public async info() {
