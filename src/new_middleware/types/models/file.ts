@@ -1,4 +1,3 @@
-
 export interface SupportedFileTypesModel {
   model: string[];
   audio: string[];

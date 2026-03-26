@@ -4,7 +4,7 @@ import { CategoryModel } from '../models/category';
 // All
 
 export interface CategoryAllResponse extends BaseResponse {
-  tags: CategoryModel;
+  categories: CategoryModel[];
 }
 
 // Select
@@ -14,7 +14,7 @@ export interface CategorySelectQuery {
 }
 
 export interface CategorySelectResponse extends BaseResponse {
-  tag: CategoryModel;
+  category: CategoryModel;
 }
 
 // Create

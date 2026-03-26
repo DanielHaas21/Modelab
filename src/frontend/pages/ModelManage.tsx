@@ -17,18 +17,14 @@ import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { BrowserRoutes } from '../../global/BrowserRoutes';
-import { DetailFile, ManageFile, ModelManageData } from '../../middleware/types';
-import loadModelManage from '../../middleware/actions/LoadModelManage';
-import createModel from '../../middleware/actions/CreateModel';
-import editModel from '../../middleware/actions/EditModel';
-import deleteModel from '../../middleware/actions/DeleteModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
-import { createDetailFiles } from '../../middleware/actions/CreateDetailFile';
 import { useToast, useTranslation } from '../../libs/hooks';
-
+import { AssetFile, ManageFile, ModelManageContext } from '../../new_middleware/types/actions';
+import { loadModelManageContext } from '../../new_middleware/actions/loadModelManageContext';
+import { loadAssetFiles } from '../../new_middleware/actions/loadAssetFiles';
 
 const ModelManage: React.FC = () => {
   const maxAssetNameLength = 128;
@@ -50,7 +46,7 @@ const ModelManage: React.FC = () => {
   const [refreshModel, setRefreshModel] = React.useState<number>(0);
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [modelManageData, setModelManageData] = React.useState<ModelManageData | null>(null);
+  const [modelManageContext, setModelManageContext] = React.useState<ModelManageContext | null>(null);
 
   const [assetNameInput, setAssetNameInput] = React.useState<string>('');
   const [authorNameInput, setAuthorNameInput] = React.useState<string>('');
@@ -59,7 +55,7 @@ const ModelManage: React.FC = () => {
   const [tagsInput, setTagsInput] = React.useState<TagOption[]>([]);
   const [filesInput, setFilesInput] = React.useState<ManageFile[]>([]);
 
-  const [previewDetailFiles, setPreviewDetailFiles] = React.useState<DetailFile[]>([]);
+  const [previewDetailFiles, setPreviewDetailFiles] = React.useState<AssetFile[]>([]);
 
   React.useEffect(() => {
 
@@ -67,10 +63,10 @@ const ModelManage: React.FC = () => {
     (async () => {
       setIsLoading(true);
       try {
-        const modelData = await loadModelManage(assetId ?? null);
-        setModelManageData(modelData);
+        const context = await loadModelManageContext(assetId ?? null);
+        setModelManageContext(context);
       } catch (error) {
-        console.error('Error fetching model data:', error);
+        console.error('Error fetching context:', error);
       }
       setIsLoading(false);
     })();
@@ -78,15 +74,15 @@ const ModelManage: React.FC = () => {
 
   // set data
   React.useEffect(() => {
-    if (!modelManageData) return;
+    if (!modelManageContext) return;
 
-    const model = modelManageData.model;
-    const config = modelManageData.config;
-    const tagIds = model?.tags.map(t => t.id) ?? [];
+    const asset = modelManageContext.asset;
+    const config = modelManageContext.config;
+    const tagIds = asset?.tags.map(t => t.id) ?? [];
 
     setCategoriesInput(config.allCategories.map(category => ({
       ...category,
-      isSelected: category.id === model?.category.id
+      isSelected: category.id === asset?.category.id
     })) ?? []);
 
     setTagsInput(config.allTags.map(tag => ({
@@ -94,22 +90,21 @@ const ModelManage: React.FC = () => {
       isSelected: tagIds.includes(tag.id)
     })) ?? []);
 
-    setFilesInput(model?.files ?? []);
+    setFilesInput(asset?.files ?? []);
 
-    setAssetNameInput(model?.name ?? '');
-    setAuthorNameInput(model?.author ?? '');
-    setAssetDescriptionInput(model?.description ?? '');
-  }, [modelManageData]);
+    setAssetNameInput(asset?.name ?? '');
+    setAuthorNameInput(asset?.author ?? '');
+    setAssetDescriptionInput(asset?.description ?? '');
+  }, [modelManageContext]);
 
   // uploaded files added to preview
   React.useEffect(() => {
-    if (!modelManageData) return;
-    const config = modelManageData.config;
+    if (!modelManageContext) return;
     (async () => {
-      const detailFiles = await createDetailFiles(filesInput.filter((file) => !file.isRemoved && !file.isHidden), config.supportedFileTypes);
-      setPreviewDetailFiles(detailFiles);
+      const assetFiles = await loadAssetFiles(filesInput.filter((file) => !file.isRemoved && !file.isHidden));
+      setPreviewDetailFiles(assetFiles);
     })();
-  }, [filesInput, modelManageData]);
+  }, [filesInput, modelManageContext]);
 
   // delete model and return to browser
   const handleDelete = async () => {
@@ -120,11 +115,11 @@ const ModelManage: React.FC = () => {
       dispatch,
       t('confirm.no'),
       t('confirm.yes'),
-      <p>{t("confirm.sure_delete")}<span className='text-2xl'>`{modelManageData?.model?.name ?? assetNameInput}`</span>?<br /><b>{t("confirm.cant_undo")}</b></p>
+      <p>{t("confirm.sure_delete")}<span className='text-2xl'>`{modelManageContext?.asset?.name ?? assetNameInput}`</span>?<br /><b>{t("confirm.cant_undo")}</b></p>
     );
 
     if (userConfirmedNo) return;
-    await deleteModel({
+    await modelManageContext?.delete({
       id: assetId
     });
     navigate(BrowserRoutes.Browser);
@@ -136,8 +131,8 @@ const ModelManage: React.FC = () => {
     event.preventDefault();
 
     // check if there are unsaved changes
-    if (modelManageData === null || modelManageData.model === null) return;
-    const model = modelManageData.model;
+    if (modelManageContext === null || modelManageContext.asset === null) return;
+    const asset = modelManageContext.asset;
 
     // check if there are changes in name, description, category, tags or files
     // There musnt be any change for the user to be able to see the preview without confirmation, even if there are changes in files
@@ -145,18 +140,18 @@ const ModelManage: React.FC = () => {
     const selectedCategory = categoriesInput.find((category) => category.isSelected);
     const selectedTags = tagsInput.filter(tag => tag.isSelected);
 
-    if (assetNameInput === model.name
-      && authorNameInput === model.author
-      && assetDescriptionInput === model.description
-      && selectedCategory?.id === model.category.id
-      && selectedTags.length === model.tags.length
-      && selectedTags.every((tag) => model.tags.find((modelTag) => tag.id === modelTag.id) !== undefined)
-      && filesInput.length === model.files.length
+    if (assetNameInput === asset.name
+      && authorNameInput === asset.author
+      && assetDescriptionInput === asset.description
+      && selectedCategory?.id === asset.category.id
+      && selectedTags.length === asset.tags.length
+      && selectedTags.every((tag) => asset.tags.find((modelTag) => tag.id === modelTag.id) !== undefined)
+      && filesInput.length === asset.files.length
       && filesInput.every((file) =>
         file.type === 'fetched'
-        && model.files.find((modelFile) =>
+        && asset.files.find((modelFile) =>
           modelFile.type === 'fetched'
-          && file.detailFile.id === modelFile.detailFile.id
+          && file.fetchedFile.id === modelFile.fetchedFile.id
         ) !== undefined
       )
     ) {
@@ -180,6 +175,7 @@ const ModelManage: React.FC = () => {
 
   // upload new model or save changes to existing model
   const handleUploadOrSave = async () => {
+    if (modelManageContext === null) return;
     if (
       assetNameInput.length === 0 ||
       assetDescriptionInput.length === 0 ||
@@ -199,13 +195,13 @@ const ModelManage: React.FC = () => {
 
     // if assetId is defined, edit model, otherwise create new model
     if (assetId !== undefined) {
-      await editModel({
+      await modelManageContext.edit({
         id: assetId,
         name: assetNameInput,
         description: assetDescriptionInput.trim(),
         author: authorNameInput,
-        category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
-        tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
+        category: categoriesInput.find((category) => category.isSelected)!,
+        tags: tagsInput.filter((tag) => tag.isSelected),
         files: filesInput,
       });
       setRefreshModel((i) => i + 1);
@@ -216,12 +212,12 @@ const ModelManage: React.FC = () => {
       });
 
     } else {
-      const createdId = await createModel({
+      const created = await modelManageContext.create({
         name: assetNameInput,
         author: authorNameInput,
         description: assetDescriptionInput.trim(),
-        category: categoriesInput.find((category) => category.isSelected)?.id ?? 1,
-        tags: tagsInput.filter((tag) => tag.isSelected).map((tag) => tag.id),
+        category: categoriesInput.find((category) => category.isSelected)!,
+        tags: tagsInput.filter((tag) => tag.isSelected),
         files: filesInput.filter((file) => file.type === 'local'),
       });
       // setRefreshModel((i) => i + 1);
@@ -230,7 +226,7 @@ const ModelManage: React.FC = () => {
         title: t('save.uploaded'),
         variant: 'success',
         actions: (
-          <Button variant='light' onClick={() => navigate(BrowserRoutes.ModelManage + createdId)}>
+          <Button variant='light' onClick={() => navigate(BrowserRoutes.ModelManage + created.createdAssetId)}>
             <FontAwesomeIcon icon={faPen} />
             <span className="w-full">{t('save.go_to_edit')}</span>
           </Button>
@@ -239,7 +235,7 @@ const ModelManage: React.FC = () => {
     }
   };
 
-  if (isLoading || modelManageData === null) return <Preloader className="min-h-screen" />;
+  if (isLoading || modelManageContext === null) return <Preloader className="min-h-screen" />;
 
   const ActionButtons = (
     <>

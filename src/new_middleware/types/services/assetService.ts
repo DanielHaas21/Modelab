@@ -122,7 +122,7 @@ export interface AssetUpdateQuery {
   id: number;
   name: string;
   description: string;
-  author: string;
+  author: string | null;
   categoryId: number;
   tagIds: number[];
   files: AssetUpdateFile[];

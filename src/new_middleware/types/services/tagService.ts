@@ -4,7 +4,7 @@ import { TagModel } from '../models/tag';
 // All
 
 export interface TagAllResponse extends BaseResponse {
-  tags: TagModel;
+  tags: TagModel[];
 }
 
 // Select

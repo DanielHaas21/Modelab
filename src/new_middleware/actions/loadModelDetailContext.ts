@@ -1,5 +1,5 @@
 import { CLEARANCE, Clearance } from '../../store/types'
-import { DetailFile, ModelDetailData } from '../types/actions';
+import { AssetFile, ModelDetailContext } from '../types/actions';
 import { ASSET, FILE } from '../services';
 import { FileGroup, getFileGroup } from '../../libs/utils';
 import { load3DModel } from './loadModel';
@@ -12,16 +12,16 @@ const canShowPreview = (fileInfo: FileInfoData, group: FileGroup) => {
   return true;
 };
 
-export const loadModelDetail = async (id: number, userClearance: Clearance): Promise<ModelDetailData> => {
+export const loadModelDetailContext = async (id: number, userClearance: Clearance): Promise<ModelDetailContext> => {
   const asset = (await ASSET.get({ id: id })).asset;
   const fileMetas = (await ASSET.getFiles({ id: id })).files;
   const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
   const userCanDownload = userClearance >= CLEARANCE.USER;
 
-  const files: DetailFile[] = [];
+  const files: AssetFile[] = [];
   for (const fileMeta of fileMetas) {
-    let file: DetailFile | null = null;
+    let file: AssetFile | null = null;
 
     const fileBase = {
       ...fileMeta,
