@@ -4,6 +4,7 @@ import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { RootState } from '../../store/store';
 import { UserStateActions } from '../../store/slices/User';
 import { ALL_SERVICES, USER } from '../../middleware/ApiServices';
+import { SERVICES } from '../../new_middleware/services';
 
 /**
  * Defines auth actions
@@ -52,9 +53,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       for (const service of ALL_SERVICES) {
         service.setToken(token);
       }
+      for (const service of SERVICES) {
+        service.setToken(token);
+      }
     } else {
       localStorage.setItem(AUTH_LS_KEY, token);
       for (const service of ALL_SERVICES) {
+        service.setToken(token);
+      }
+      for (const service of SERVICES) {
         service.setToken(token);
       }
     }

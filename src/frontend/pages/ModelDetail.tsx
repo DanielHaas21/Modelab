@@ -11,8 +11,7 @@ import {
   Preloader,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { ModelDetailData, DetailFile } from '../../middleware/types';
-import loadModelDetail from '../../middleware/actions/LoadModelDetail';
+import { loadModelDetail } from '../../new_middleware/actions/loadModelDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
@@ -29,6 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
 import { useResponsive, useToast, useTranslation } from '../../libs/hooks';
+import { DetailFile, ModelDetailData } from '../../new_middleware/types/actions';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
@@ -53,7 +53,7 @@ const ModelDetail: React.FC = () => {
 
   const downloadAllAsZip = async (files: DetailFile[]) => {
     if (modelDetailData === null) return;
-    const modelData = modelDetailData.model;
+    const modelData = modelDetailData.asset;
 
     const displayFilesConfirmed = await confirm(
       t("confirm.download"),
@@ -131,10 +131,10 @@ const ModelDetail: React.FC = () => {
     if (modelDetailData === null) return;
 
     const czechISO690 = generateCzechISO690(
-      modelDetailData.model.author ?? 'Modelab',
-      modelDetailData.model.name,
+      modelDetailData.asset.author ?? 'Modelab',
+      modelDetailData.asset.name,
       `${window.location.origin}${location.pathname}${location.search}`,
-      modelDetailData.model.created,
+      modelDetailData.asset.created,
     );
 
     await confirm(
@@ -150,19 +150,19 @@ const ModelDetail: React.FC = () => {
         <div className='flex flex-col justify-center items-center gap-2'>
           <CopyableField
             fieldName={t("citation.name")}
-            fieldValue={modelDetailData.model.name}
+            fieldValue={modelDetailData.asset.name}
           />
           <CopyableField
             fieldName={t("citation.author")}
-            fieldValue={modelDetailData.model.author ?? 'Modelab'}
+            fieldValue={modelDetailData.asset.author ?? 'Modelab'}
           />
           <CopyableField
             fieldName={t("citation.created")}
-            fieldValue={modelDetailData.model.created.toLocaleDateString('cs-CZ')}
+            fieldValue={modelDetailData.asset.created.toLocaleDateString('cs-CZ')}
           />
           <CopyableField
             fieldName={t("citation.url")}
-            fieldValue={modelDetailData.model.name}
+            fieldValue={modelDetailData.asset.name}
           />
         </div>
         <div className="grow h-px my-2 bg-ui-border" />
@@ -184,7 +184,7 @@ const ModelDetail: React.FC = () => {
     );
   }
 
-  const modelData = modelDetailData.model;
+  const modelData = modelDetailData.asset;
 
   const ActionButtons = (
     <>

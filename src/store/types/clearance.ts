@@ -6,4 +6,4 @@ export const CLEARANCE = {
   OVERLORD: 4,
 } as const;
 
-export type Clearance = (typeof CLEARANCE)[keyof typeof CLEARANCE];;
+export type Clearance = (typeof CLEARANCE)[keyof typeof CLEARANCE];
