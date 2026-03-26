@@ -3,11 +3,13 @@ import { BaseLayout } from '../../libs/ui/layouts';
 import { Label } from '../../libs/ui/components';
 import { AboutSection } from '../../libs/ui/components/AboutSection';
 import { cn } from '../../libs/utils';
-import { useResponsive, useTranslation } from '../../libs/hooks';
+import { useResponsive, useTitle, useTranslation } from '../../libs/hooks';
 import { Link } from 'react-router-dom';
 
 const About: React.FC = () => {
   const t = useTranslation("pages.about");
+
+  useTitle({ type: 'name', name: 'About' });
 
   const { isDesktop } = useResponsive();
 

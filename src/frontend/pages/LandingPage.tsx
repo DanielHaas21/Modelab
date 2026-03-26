@@ -10,14 +10,15 @@ import { RootState } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useCheckClearance } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
-import { BrowserRoutes } from '../../global/BrowserRoutes';
+import { ROOT_ROUTES } from '../../global/routes';
 
 import grid from '../../libs/ui/assets/grid.svg';
-import { useResponsive, useTranslation } from '../../libs/hooks';
+import { useResponsive, useTitle, useTranslation } from '../../libs/hooks';
 import { useAuth } from '../../libs/auth/AuthProvider';
 
 const LandingPage: React.FC = () => {
   const t = useTranslation("pages.home");
+  useTitle({ type: 'empty' });
 
   const { isDesktop } = useResponsive();
   const { googleLogin } = useAuth();
@@ -26,7 +27,6 @@ const LandingPage: React.FC = () => {
   const [size, setSize] = React.useState<ImageSize | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true); // New loading state
   const UserData = useSelector((state: RootState) => state.User);
-
 
   React.useEffect(() => {
     const loadImage = async () => {
@@ -78,7 +78,7 @@ const LandingPage: React.FC = () => {
                         rounding="md"
                         size="md"
                       >
-                        <Link className="text-text-950 no-underline" to={BrowserRoutes.Browser}>
+                        <Link className="text-text-950 no-underline" to={ROOT_ROUTES.Browser}>
                           {t("browse")}
                         </Link>
                       </Button>
@@ -113,7 +113,7 @@ const LandingPage: React.FC = () => {
                           rounding="md"
                           size="md"
                         >
-                          <Link className="text-text-950 no-underline" to={BrowserRoutes.Browser}>
+                          <Link className="text-text-950 no-underline" to={ROOT_ROUTES.Browser}>
                             {t("browse")}
                           </Link>
                         </Button>

@@ -22,16 +22,16 @@ import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { ModelDetailImageCarousel } from '../../libs/ui/components/ModelDetailImageCarousel';
 import { CLEARANCE } from '../../store/types';
-import { BrowserRoutes } from '../../global/BrowserRoutes';
+import { ROOT_ROUTES } from '../../global/routes';
 import { faArrowLeft, faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
-import { useResponsive, useToast, useTranslation } from '../../libs/hooks';
+import { useResponsive, useTitle, useToast, useTranslation } from '../../libs/hooks';
 import { AssetFile, ModelDetailContext } from '../../middleware/types/actions';
 
 const ModelDetail: React.FC = () => {
-  useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
+  useValidatePermission(CLEARANCE.GUEST, ROOT_ROUTES.Browser);
 
   const t = useTranslation("pages.model_detail");
 
@@ -44,6 +44,9 @@ const ModelDetail: React.FC = () => {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [modelDetailContext, setModelDetailContext] = React.useState<ModelDetailContext | null>(null);
+
+  const [title, setTitle] = React.useState<string>('Loading...');
+  useTitle({ type: 'name', name: title });
 
   const model = useParams();
 
@@ -63,6 +66,11 @@ const ModelDetail: React.FC = () => {
       setIsLoading(false);
     })();
   }, [UserData.auth.clearance]);
+
+  React.useEffect(() => {
+    if (modelDetailContext === null) return;
+    setTitle(modelDetailContext.asset.name);
+  }, [modelDetailContext]);
 
   // zip download of all files
   const downloadAllAsZip = async (files: AssetFile[]) => {
@@ -193,7 +201,7 @@ const ModelDetail: React.FC = () => {
       <div className="w-1/2 p-1">
         <Link
           className="no-underline"
-          to={BrowserRoutes.Browser}>
+          to={ROOT_ROUTES.Browser}>
           <Button variant="light" className="justify-between w-full">
             <FontAwesomeIcon icon={faArrowLeft} />
             <span className="w-full">{t("back")}</span>
@@ -202,7 +210,7 @@ const ModelDetail: React.FC = () => {
       </div>
       {hasClearance(CLEARANCE.ADMIN) && (
         <div className="w-1/2 p-1">
-          <Link className="no-underline" to={BrowserRoutes.ModelManage + asset.id}>
+          <Link className="no-underline" to={ROOT_ROUTES.ModelManage + asset.id}>
             <Button variant="light" className="justify-between w-full">
               <FontAwesomeIcon icon={faPencil} />
               <span className="w-full">{t("edit")}</span>

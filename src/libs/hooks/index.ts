@@ -4,3 +4,4 @@ export * from './useMediaQuery';
 export * from './useResponsive';
 export * from './useTheme';
 export * from './useToast';
+export * from './useTitle';

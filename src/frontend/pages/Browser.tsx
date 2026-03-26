@@ -18,13 +18,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
-import { useResponsive, useTranslation } from '../../libs/hooks';
+import { useResponsive, useTitle, useTranslation } from '../../libs/hooks';
 import { ModelBrowserContext } from '../../middleware/types/actions';
 import { loadModelBrowserContext } from '../../middleware/actions/loadModelBrowserContext';
 import { AssetQueries } from '../../middleware/types/models';
 
 const Browser: React.FC = () => {
   const t = useTranslation("pages.browser");
+
+  useTitle({ type: 'name', name: 'Browser' });
 
   const { isDesktop } = useResponsive();
 

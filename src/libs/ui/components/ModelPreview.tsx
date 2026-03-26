@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import placeholder from '../assets/placeholder.png';
 import { ScrollLabel } from './ScrollLabel';
 import { AssetTag } from './AssetTag';
-import { BrowserRoutes } from '../../../global/BrowserRoutes';
+import { ROOT_ROUTES } from '../../../global/routes';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useTranslation } from '../../hooks';
@@ -55,7 +55,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
 
     return (
       <Link
-        to={BrowserRoutes.ModelDetail + asset.id}
+        to={ROOT_ROUTES.ModelDetail + asset.id}
         className="no-underline text-text-950 rounded-lg group transition-all duration-300 hover:scale-[1.02]"
       >
         <div

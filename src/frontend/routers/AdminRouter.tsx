@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import NoMatchPage from '../NoMatchPage';
-// import { AdminRoutes } from '../../../global/BrowserRoutes';
-// import AdminPanel from './AdminPanel';
+import NoMatchPage from '../pages/NoMatchPage';
+// import { AdminRoutes } from '../../global/BrowserRoutes';
+// import AdminPanel from './../pages/admin/AdminPanel';
 
 /**
  * There should be no active HTML in this component, only wrapping of providers, routers etc.

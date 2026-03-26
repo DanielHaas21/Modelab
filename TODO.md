@@ -3,7 +3,7 @@
   - [x] Add logging to API
   - [x] Add health endpoint to API  
   - [x] Add levels to users
-  - [ ] Rework middleware and migrate all files
+  - [x] Rework middleware and migrate all files
   - [ ] Add email origin prefix field to Oauth client
   - [ ] Landing page 3D model
   - [ ] Dynamic tab title
