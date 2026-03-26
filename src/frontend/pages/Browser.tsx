@@ -8,26 +8,28 @@ import {
   CategoryOption,
   Button,
   TagOption,
+  Preloader,
 } from '../../libs/ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { BrowserResults, SearchQuery } from '../../libs/ui/components/BrowserResults';
-import { Category } from '../../middleware/api';
-import ApiError from '../../middleware/api/ApiError';
+import { BrowserResults } from '../../libs/ui/components/BrowserResults';
 import { AppDispatch, RootState } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { useResponsive, useTranslation } from '../../libs/hooks';
-import { TAG } from '../../middleware/ApiServices';
+import { ModelBrowserContext } from '../../middleware/types/actions';
+import { loadModelBrowserContext } from '../../middleware/actions/loadModelBrowserContext';
+import { AssetQueries } from '../../middleware/types/models';
 
 const Browser: React.FC = () => {
   const t = useTranslation("pages.browser");
 
   const { isDesktop } = useResponsive();
 
-  const categoryApi = new Category();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [browserContext, setBrowserContext] = React.useState<ModelBrowserContext | null>(null);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
@@ -39,11 +41,50 @@ const Browser: React.FC = () => {
 
   const [searchText, setSearchText] = React.useState<string>(BrowserFilter.value?.nameQuery ?? '');
 
-  const [searchQuery, setSearchQuery] = React.useState<SearchQuery | undefined>({
+  const [assetQueries, setAssetQueries] = React.useState<AssetQueries>({
     nameQuery: searchText,
-    categories: categories.filter((category) => category.isSelected),
-    tags: tags.filter((tag) => tag.isSelected),
+    categoryQuery: categories.filter((category) => category.isSelected),
+    tagQuery: tags.filter((tag) => tag.isSelected),
   });
+
+  // load context
+  React.useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      try {
+        const context = await loadModelBrowserContext();
+        setBrowserContext(context);
+      } catch (error) {
+        console.error('Error fetching context:', error);
+      }
+      setIsLoading(false);
+    })();
+  }, []);
+
+  // setup data
+  React.useEffect(() => {
+    if (browserContext === null) return;
+
+    const config = browserContext.config;
+
+    setCategories(config.allCategories.map((category) => {
+      return {
+        ...category,
+        isSelected: BrowserFilter.value?.categoryQuery?.find(
+          (otherCategory) => category.id == otherCategory.id
+        ) !== undefined,
+      };
+    }));
+
+    setTags(config.allTags.map((tag) => {
+      return {
+        ...tag,
+        isSelected: BrowserFilter.value?.tagQuery?.find(
+          (otherTag) => tag.id == otherTag.id
+        ) !== undefined,
+      };
+    }));
+  }, [browserContext]);
 
   const resetFilters = () => {
     setSearchText('');
@@ -64,69 +105,21 @@ const Browser: React.FC = () => {
   };
 
   React.useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const data = await categoryApi.getAll();
-        return data.categories.map((category) => ({
-          ...category,
-          isSelected:
-            BrowserFilter.value?.categories.find(
-              (otherCategory) => category.id == otherCategory.id
-            ) !== undefined,
-        }));
-      } catch (err) {
-        if (err instanceof ApiError) {
-          console.error('Failed to fetch categories', err);
-        } else {
-          throw err;
-        }
-      }
-    };
-
-    const loadTags = async () => {
-      try {
-        const data = await TAG.getAll();
-        return data.tags.map((tag) => ({
-          ...tag,
-          isSelected:
-            BrowserFilter.value?.tags.find((otherTag) => tag.id == otherTag.id) !== undefined,
-        }));
-      } catch (err) {
-        if (err instanceof ApiError) {
-          console.error('Failed to fetch tags', err);
-        } else {
-          throw err;
-        }
-      }
-    };
-
-    const load = async () => {
-      const categories = (await loadCategories()) ?? [];
-      const tags = (await loadTags()) ?? [];
-      setCategories(categories);
-      setTags(tags);
-      if (BrowserFilter.value !== null) {
-        setSearchText(BrowserFilter.value.nameQuery);
-      }
-    };
-
-    load();
-  }, []);
-
-  React.useEffect(() => {
-    const newSearchQuery = {
+    const newSearchQuery: AssetQueries = {
       nameQuery: searchText,
-      categories: categories.filter((category) => category.isSelected),
-      tags: tags.filter((tag) => tag.isSelected),
+      categoryQuery: categories.filter((category) => category.isSelected),
+      tagQuery: tags.filter((tag) => tag.isSelected),
     };
 
-    if (newSearchQuery.nameQuery.length == 0 && categories.length == 0 && tags.length == 0) {
+    if (searchText.length == 0 && categories.length == 0 && tags.length == 0) {
       Dispatch(Clear());
     } else {
-      setSearchQuery(newSearchQuery);
+      setAssetQueries(newSearchQuery);
       Dispatch(Set(newSearchQuery));
     }
   }, [searchText, tags, categories]);
+
+  if (isLoading || browserContext === null) return <Preloader className="min-h-screen" />;
 
   const BrowserFilters = (
     <>
@@ -193,7 +186,10 @@ const Browser: React.FC = () => {
           )}
         </div>
         <div className="flex w-full grow overflow-hidden">
-          <BrowserResults searchQuery={searchQuery} />
+          <BrowserResults
+            assetQueires={assetQueries}
+            search={browserContext.search}
+          />
           {isDesktop && (
             <aside className="sticky top-0 h-full w-1/4 xl:w-1/6 flex flex-col p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
               {BrowserFilters}

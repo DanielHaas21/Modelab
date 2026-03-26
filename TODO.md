@@ -3,12 +3,13 @@
   - [x] Add logging to API
   - [x] Add health endpoint to API  
   - [x] Add levels to users
+  - [ ] Rework middleware and migrate all files
   - [ ] Add email origin prefix field to Oauth client
   - [ ] Landing page 3D model
   - [ ] Dynamic tab title
 - Daniel
  - [ ] animations
- - [ ] Admin panel frontend 
+ - [ ] Admin panel frontend
   - [ ] panel page (api health, logs, email origin prefix field)
   - [ ] assets page 
   - [ ] user page (manage user level, mass delete)

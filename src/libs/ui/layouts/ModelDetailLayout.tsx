@@ -5,11 +5,11 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils';
 import { ModelDetailImageCarousel } from '../components/ModelDetailImageCarousel';
-import { DetailFile } from '../../../middleware/types';
+import { AssetFile } from '../../../middleware/types/actions';
 
 interface ModelDetailProps {
   children?: React.ReactNode;
-  files?: DetailFile[] | null;
+  files?: AssetFile[] | null;
   bordered: boolean;
   buttons?: React.ReactNode;
 }

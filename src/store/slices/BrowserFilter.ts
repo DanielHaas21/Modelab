@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SearchQuery } from '../../libs/ui/components';
+import { AssetQueries } from '../../middleware/types/models';
 
 export interface BrowserFilterState {
-  value: SearchQuery | null;
+  value: AssetQueries | null;
 }
 
 const initialState: BrowserFilterState = { value: null };
@@ -11,7 +11,7 @@ const BrowserFilter = createSlice({
   name: 'BrowserFilter',
   initialState,
   reducers: {
-    Set: (state, action: PayloadAction<SearchQuery>) => {
+    Set: (state, action: PayloadAction<AssetQueries>) => {
       state.value = action.payload;
     },
     Clear: (state) => {

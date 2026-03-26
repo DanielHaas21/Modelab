@@ -3,18 +3,32 @@
 This is a model browser & viewer used for browsing a school-provided model databank with various models namely in .mb, .c4d, .fbx, .obj formats.
 This project is based on [React](https://react.dev/) and [PHP](https://www.php.net/)
 
-### Prerequisites
+## Contents
+
+- [Modelab](#modelab)
+  - [Contents](#contents)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Development](#development)
+  - [Build](#build)
+  - [Project Structure](#project-structure)
+    - [App](#app)
+    - [Utilities](#utilities)
+  - [Docs](#docs)
+
+
+## Prerequisites
 
 - Node.js `>=18.17`
 
-### Installation
+## Installation
 
 Clone the repository and install dependencies:
 
 ```bash
 npm install
 ```
-### Development
+## Development
 
 To develop the app and packages, run the following command:
 
@@ -22,7 +36,7 @@ To develop the app and packages, run the following command:
 npm dev
 ```
 
-### Build
+## Build
 
 To build the app and packages, run the following command:
 
@@ -34,7 +48,7 @@ npm build
 
 Modelab project comprises of two main components, that are their own repositories. The **Modelab** repo includes the React web application and documentation. The other repo is **Modelab-api**, which contains the PHP api connected to the React app.
 
-### app
+### App
 
 App folder structure
 ```
@@ -53,18 +67,11 @@ src
 │   │   ├───components 
 │   │   └───layouts - contains various page layouts 
 │   └───utils - helpers etc.
-├───middleware 
-│   ├───api - contains modelab-api calls
-│   ├───auth - contains app modules
-│   └───types  
+├───middleware
 └───store - redux store for global state management
 │   ├───reducers   
 │   └───slices   
 ```
-### api
-
-To learn more about the structure of the api see: <br>
-[Modelab-api](https://github.com/DanielHaas21/Modelab-api)
 
 ### Utilities
 
@@ -73,3 +80,7 @@ This project has some additional tools already setup for you:
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [Redux Toolkit](https://redux-toolkit.js.org/) for complex state management
 - [Prettier](https://prettier.io/) for better code formatting 
+
+## Docs
+
+- [Middleware](./docs/MIDDLEWARE.md)

@@ -11,8 +11,7 @@ import {
   Preloader,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { ModelDetailData, DetailFile } from '../../middleware/types';
-import loadModelDetail from '../../middleware/actions/LoadModelDetail';
+import { loadModelDetailContext } from '../../middleware/actions/loadModelDetailContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
@@ -29,6 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
 import { useResponsive, useToast, useTranslation } from '../../libs/hooks';
+import { AssetFile, ModelDetailContext } from '../../middleware/types/actions';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);
@@ -43,17 +43,31 @@ const ModelDetail: React.FC = () => {
   const UserData = useSelector((state: RootState) => state.User);
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [modelDetailData, setModelDetailData] = React.useState<ModelDetailData | null>(null);
+  const [modelDetailContext, setModelDetailContext] = React.useState<ModelDetailContext | null>(null);
 
   const model = useParams();
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
-  // zip download of all files
+  // load context
+  React.useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      try {
+        const assetId = parseInt(model.modelId!);
+        const context = await loadModelDetailContext(assetId, UserData.auth.clearance);
+        setModelDetailContext(context);
+      } catch (error) {
+        console.error('Error fetching model data:', error);
+      }
+      setIsLoading(false);
+    })();
+  }, [UserData.auth.clearance]);
 
-  const downloadAllAsZip = async (files: DetailFile[]) => {
-    if (modelDetailData === null) return;
-    const modelData = modelDetailData.model;
+  // zip download of all files
+  const downloadAllAsZip = async (files: AssetFile[]) => {
+    if (modelDetailContext === null) return;
+    const asset = modelDetailContext.asset;
 
     const displayFilesConfirmed = await confirm(
       t("confirm.download"),
@@ -64,7 +78,7 @@ const ModelDetail: React.FC = () => {
       <>
         <p>{t("confirm.note")}</p>
         <ul className="w-100 list-group">
-          {modelData.files.filter(file => file.download !== null).map((file, index) => (
+          {asset.files.filter(file => file.download !== null).map((file, index) => (
             <li className="list-group-item" key={index}>
               {file.name}
             </li>
@@ -91,7 +105,7 @@ const ModelDetail: React.FC = () => {
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(zipBlob);
-    link.download = modelData.name ? modelData.name + '.zip' : 'asset.zip';
+    link.download = asset.name ? asset.name + '.zip' : 'asset.zip';
     document.body.appendChild(link);
 
     link.click();
@@ -101,23 +115,9 @@ const ModelDetail: React.FC = () => {
     URL.revokeObjectURL(link.href);
   };
 
-  React.useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const assetId = parseInt(model.modelId!);
-        const modelData = await loadModelDetail(assetId, UserData.auth.clearance);
-        setModelDetailData(modelData);
-      } catch (error) {
-        console.error('Error fetching model data:', error);
-      }
-      setIsLoading(false);
-    })();
-  }, [UserData.auth.clearance]);
-
   if (isLoading) return <Preloader className="min-h-screen" />;
 
-  if (!modelDetailData) {
+  if (!modelDetailContext) {
     return (
       <BaseLayout bordered={true}>
         <ErrorDisplay image={icon_boom} code={404} message={t("oops")}>
@@ -128,13 +128,15 @@ const ModelDetail: React.FC = () => {
   }
 
   const GenerateCitationDataHandle = async () => {
-    if (modelDetailData === null) return;
+    if (modelDetailContext === null) return;
+
+    const asset = modelDetailContext.asset;
 
     const czechISO690 = generateCzechISO690(
-      modelDetailData.model.author ?? 'Modelab',
-      modelDetailData.model.name,
+      asset.author ?? 'Modelab',
+      asset.name,
       `${window.location.origin}${location.pathname}${location.search}`,
-      modelDetailData.model.created,
+      asset.created,
     );
 
     await confirm(
@@ -150,19 +152,19 @@ const ModelDetail: React.FC = () => {
         <div className='flex flex-col justify-center items-center gap-2'>
           <CopyableField
             fieldName={t("citation.name")}
-            fieldValue={modelDetailData.model.name}
+            fieldValue={asset.name}
           />
           <CopyableField
             fieldName={t("citation.author")}
-            fieldValue={modelDetailData.model.author ?? 'Modelab'}
+            fieldValue={asset.author ?? 'Modelab'}
           />
           <CopyableField
             fieldName={t("citation.created")}
-            fieldValue={modelDetailData.model.created.toLocaleDateString('cs-CZ')}
+            fieldValue={asset.created.toLocaleDateString('cs-CZ')}
           />
           <CopyableField
             fieldName={t("citation.url")}
-            fieldValue={modelDetailData.model.name}
+            fieldValue={asset.name}
           />
         </div>
         <div className="grow h-px my-2 bg-ui-border" />
@@ -184,7 +186,7 @@ const ModelDetail: React.FC = () => {
     );
   }
 
-  const modelData = modelDetailData.model;
+  const asset = modelDetailContext.asset;
 
   const ActionButtons = (
     <>
@@ -200,7 +202,7 @@ const ModelDetail: React.FC = () => {
       </div>
       {hasClearance(CLEARANCE.ADMIN) && (
         <div className="w-1/2 p-1">
-          <Link className="no-underline" to={BrowserRoutes.ModelManage + modelData.id}>
+          <Link className="no-underline" to={BrowserRoutes.ModelManage + asset.id}>
             <Button variant="light" className="justify-between w-full">
               <FontAwesomeIcon icon={faPencil} />
               <span className="w-full">{t("edit")}</span>
@@ -216,33 +218,33 @@ const ModelDetail: React.FC = () => {
       <GeneralPopup />
       <ModelDetailLayout
         bordered={true}
-        files={modelData.files}
+        files={asset.files}
         buttons={ActionButtons}
       >
         <Label size="lg" className={"font-normal tracking-[0.1rem] overflow-y-auto"}>
-          {modelData.name}
+          {asset.name}
         </Label>
-        <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{modelData.description}</p>
+        <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{asset.description}</p>
         <ModelInfoSection name={t("author_name")}>
           <p className="m-0">
-            {modelData.author}
+            {asset.author}
           </p>
         </ModelInfoSection>
         <ModelInfoSection name={t("category")}>
-          <p className="m-0" key={modelData.category.id}>
-            {modelData.category.name}
+          <p className="m-0" key={asset.category.id}>
+            {asset.category.name}
           </p>
         </ModelInfoSection>
         <ModelInfoSection name={t("tags")}>
           <div className="mt-2 flex flex-wrap">
-            {modelData.tags.map((tag) => {
+            {asset.tags.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>
         </ModelInfoSection>
         <div className={cn("sticky bottom-0 mt-6 pb-4 flex flex-col md:flex-row gap-2", isDesktop && "ms-4")}>
           <Button
-            onClick={() => downloadAllAsZip(modelData.files)}
+            onClick={() => downloadAllAsZip(asset.files)}
             disabled={!hasClearance(CLEARANCE.USER)}
             className={cn("flex justify-center", !isDesktop && "w-full")}
           >
@@ -267,7 +269,7 @@ const ModelDetail: React.FC = () => {
         </div>
         {!isDesktop && (
           <OffcanvasModal ref={offcanvasHandleRef} title='Preview' >
-            <ModelDetailImageCarousel files={modelData.files} />
+            <ModelDetailImageCarousel files={asset.files} />
           </OffcanvasModal>
         )}
       </ModelDetailLayout>

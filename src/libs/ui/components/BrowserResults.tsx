@@ -2,80 +2,23 @@ import * as React from 'react';
 import { ModelPreview } from './ModelPreview';
 import { Label } from './Label';
 import { Preloader } from './Preloader';
-import { AssetData, AdminPaginatedInfo } from '../../../middleware/api';
-import ApiError from '../../../middleware/api/ApiError';
 import { InfiniteScroll } from './InfiniteScroll';
-import { CategoryOption } from './CategorySelect';
-import { TagOption } from './TagSelect';
 import { useTranslation } from '../../hooks';
-import { ASSET } from '../../../middleware/ApiServices';
-
-export interface SearchQuery {
-  categories: CategoryOption[];
-  tags: TagOption[];
-  nameQuery: string;
-}
-
-interface AssetResult {
-  name: string;
-  tags: string[];
-  id: number;
-}
-
-interface FetchResult {
-  assets: AssetResult[];
-  info: AdminPaginatedInfo;
-}
-
-const fetchAssets = async (
-  searchQuery: SearchQuery | undefined,
-  page: number,
-  count: number
-): Promise<FetchResult> => {
-
-  const formatResult = (assets: AssetData[], info: AdminPaginatedInfo): FetchResult => {
-    return {
-      info,
-      assets: assets.map((asset) => ({
-        name: asset.name,
-        tags: asset.tags.map((tag) => tag.name),
-        id: asset.id,
-      })),
-    };
-  };
-
-  if (
-    !searchQuery ||
-    (searchQuery.categories.length === 0 &&
-      searchQuery.tags.length === 0 &&
-      searchQuery.nameQuery.length === 0)
-  ) {
-    const { assets, info } = await ASSET.getAll(page, count);
-    return formatResult(assets, info);
-  }
-
-  const { assets, info } = await ASSET.search({
-    page,
-    count,
-    categoryQuery: searchQuery.categories.length > 0 ? searchQuery.categories.map(c => c.id) : undefined,
-    tagQuery: searchQuery.tags.length > 0 ? searchQuery.tags.map(t => t.id) : undefined,
-    nameQuery: searchQuery.nameQuery.length > 0 ? searchQuery.nameQuery : undefined,
-    descriptionQuery: undefined,
-  });
-  return formatResult(assets, info);
-};
+import { AssetModel, AssetQueries } from '../../../middleware/types/models';
+import { BrowserSearchAction } from '../../../middleware/types/actions';
 
 interface BrowserResultProps {
-  searchQuery?: SearchQuery;
+  assetQueires: AssetQueries;
+  search: BrowserSearchAction;
 }
 
 interface Results {
-  assets: AssetResult[];
+  assets: AssetModel[];
   page: number;
   hasMore: boolean;
 }
 
-export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) => {
+export const BrowserResults: React.FC<BrowserResultProps> = ({ assetQueires, search }) => {
   const loadPerPage = 8; // Assets per page
   const previewWidth = 350;
   const previewHeight = 250;
@@ -103,11 +46,14 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
 
     const initialLoad = async () => {
       setIsLoading(true);
-      const result = await fetchPage(0, searchQuery);
+      const result = await search({
+        pagination: { page: 0, count: loadPerPage },
+        queries: assetQueires
+      });
 
-      if (currentVersion === requestVersion.current && result) {
-        const { assets, info } = result;
-        const hasMore = 0 < info.pageCount - 1;
+      if (currentVersion === requestVersion.current) {
+        const { assets, pagination } = result;
+        const hasMore = 0 < pagination.pageCount - 1;
         setResults({
           assets,
           page: hasMore ? 1 : 0,
@@ -118,20 +64,20 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
     };
 
     initialLoad();
-  }, [searchQuery]);
+  }, [assetQueires]);
 
-  const fetchPage = async (page: number, query?: SearchQuery): Promise<FetchResult | undefined> => {
-    try {
-      return await fetchAssets(query, page, loadPerPage);
-    } catch (err) {
-      if (err instanceof ApiError) {
-        console.error('Failed to fetch assets', err);
-      } else {
-        throw err;
-      }
-      return undefined;
-    }
-  };
+  // const fetchPage = async (page: number, query?: SearchQuery): Promise<FetchResult | undefined> => {
+  //   try {
+  //     return await fetchAssets(query, page, loadPerPage);
+  //   } catch (err) {
+  //     if (err instanceof ApiError) {
+  //       console.error('Failed to fetch assets', err);
+  //     } else {
+  //       throw err;
+  //     }
+  //     return undefined;
+  //   }
+  // };
 
   const loadMore = async () => {
     if (!results.hasMore || isLoading) return;
@@ -139,17 +85,20 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
     const currentVersion = requestVersion.current;
     setIsLoading(true);
 
-    const result = await fetchPage(results.page, searchQuery);
+    const result = await search({
+      pagination: { page: results.page, count: loadPerPage },
+      queries: assetQueires
+    });
 
     if (currentVersion !== requestVersion.current) return;
 
     if (result) {
-      const { assets, info } = result;
+      const { assets, pagination } = result;
       setResults((prev) => {
-        const isLastPage = info.page >= info.pageCount - 1;
+        const isLastPage = pagination.page >= pagination.pageCount - 1;
         return {
           assets: [...prev.assets, ...assets],
-          page: info.page + 1,
+          page: pagination.page + 1,
           hasMore: !isLastPage,
         };
       });
@@ -172,9 +121,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ searchQuery }) =>
         {results.assets.map((result) => (
           <React.Suspense key={`${requestVersion.current}-${result.id}`} fallback={<Preloader />}>
             <ModelPreview
-              name={result.name}
-              tags={result.tags}
-              id={result.id}
+              asset={result}
               width={previewWidth}
               height={previewHeight}
             />
