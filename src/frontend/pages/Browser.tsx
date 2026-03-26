@@ -19,9 +19,9 @@ import { Clear, Set } from '../../store/slices/BrowserFilter';
 import { cn } from '../../libs/utils';
 import { OffcanvasHandle, OffcanvasModal } from '../../libs/ui/components/OffcanvasModal';
 import { useResponsive, useTranslation } from '../../libs/hooks';
-import { ModelBrowserContext } from '../../new_middleware/types/actions';
-import { loadModelBrowserContext } from '../../new_middleware/actions/loadModelBrowserContext';
-import { AssetQueries } from '../../new_middleware/types/models';
+import { ModelBrowserContext } from '../../middleware/types/actions';
+import { loadModelBrowserContext } from '../../middleware/actions/loadModelBrowserContext';
+import { AssetQueries } from '../../middleware/types/models';
 
 const Browser: React.FC = () => {
   const t = useTranslation("pages.browser");
@@ -63,7 +63,7 @@ const Browser: React.FC = () => {
 
   // setup data
   React.useEffect(() => {
-    if (!browserContext) return;
+    if (browserContext === null) return;
 
     const config = browserContext.config;
 

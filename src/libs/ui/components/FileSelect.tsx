@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { UploadedFile } from './UploadedFile';
 import { getFileType } from '../../utils/getFileType';
 import { useToast, useTranslation } from '../../hooks';
-import { ManageFile } from '../../../new_middleware/types/actions';
+import { ManageFile } from '../../../middleware/types/actions';
 
 interface FileSelectProps {
   files: ManageFile[];

@@ -22,9 +22,9 @@ import { faEye, faPen, faSave, faTrash, faUpload } from '@fortawesome/free-solid
 import { useValidatePermission } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { useToast, useTranslation } from '../../libs/hooks';
-import { AssetFile, ManageFile, ModelManageContext } from '../../new_middleware/types/actions';
-import { loadModelManageContext } from '../../new_middleware/actions/loadModelManageContext';
-import { loadAssetFiles } from '../../new_middleware/actions/loadAssetFiles';
+import { AssetFile, ManageFile, ModelManageContext } from '../../middleware/types/actions';
+import { loadModelManageContext } from '../../middleware/actions/loadModelManageContext';
+import { loadAssetFiles } from '../../middleware/actions/loadAssetFiles';
 
 const ModelManage: React.FC = () => {
   const maxAssetNameLength = 128;

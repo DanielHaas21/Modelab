@@ -8,9 +8,9 @@ import { BrowserRoutes } from '../../../global/BrowserRoutes';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useTranslation } from '../../hooks';
-import { ModelPreviewContext } from '../../../new_middleware/types/actions/modelPreview';
-import { loadModelPreviewContext } from '../../../new_middleware/actions/loadModelPreviewContext';
-import { AssetModel } from '../../../new_middleware/types/models';
+import { ModelPreviewContext } from '../../../middleware/types/actions/modelPreview';
+import { loadModelPreviewContext } from '../../../middleware/actions/loadModelPreviewContext';
+import { AssetModel } from '../../../middleware/types/models';
 
 interface ModelPreviewProps {
   className?: string;

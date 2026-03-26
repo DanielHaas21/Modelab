@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { ModelDetailImage } from './ModelDetailImage';
 import { Preloader } from './Preloader';
-import { AssetFile } from '../../../new_middleware/types/actions';
+import { AssetFile } from '../../../middleware/types/actions';
 
 interface ModelDetailImageCarouselProps {
   files: AssetFile[];

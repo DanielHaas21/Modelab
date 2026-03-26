@@ -11,7 +11,7 @@ import {
   Preloader,
 } from '../../libs/ui/components';
 import { AssetTag } from '../../libs/ui/components/AssetTag';
-import { loadModelDetailContext } from '../../new_middleware/actions/loadModelDetailContext';
+import { loadModelDetailContext } from '../../middleware/actions/loadModelDetailContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store/store';
 import icon_boom from '../../libs/ui/assets/icon_boom.png';
@@ -28,7 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
 import { useResponsive, useToast, useTranslation } from '../../libs/hooks';
-import { AssetFile, ModelDetailContext } from '../../new_middleware/types/actions';
+import { AssetFile, ModelDetailContext } from '../../middleware/types/actions';
 
 const ModelDetail: React.FC = () => {
   useValidatePermission(CLEARANCE.GUEST, BrowserRoutes.Browser);

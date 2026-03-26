@@ -11,7 +11,7 @@ import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/
 import { Label } from './Label';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useTranslation } from '../../hooks';
-import { AssetFile, AssetFile3D, AssetFileAudio, AssetFileImage, AssetFilePreview } from '../../../new_middleware/types/actions';
+import { AssetFile, AssetFile3D, AssetFileAudio, AssetFileImage, AssetFilePreview } from '../../../middleware/types/actions';
 
 
 // This file is renders a model using THREE

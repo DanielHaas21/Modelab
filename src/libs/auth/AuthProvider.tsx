@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { RootState } from '../../store/store';
 import { UserStateActions } from '../../store/slices/User';
-import { ALL_SERVICES, USER } from '../../middleware/ApiServices';
-import { SERVICES } from '../../new_middleware/services';
+import { SERVICES, USER } from '../../middleware/services';
 
 /**
  * Defines auth actions
@@ -50,17 +49,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const setToken = (token: string | null) => {
     if (token === null) {
       localStorage.removeItem(AUTH_LS_KEY);
-      for (const service of ALL_SERVICES) {
-        service.setToken(token);
-      }
       for (const service of SERVICES) {
         service.setToken(token);
       }
     } else {
       localStorage.setItem(AUTH_LS_KEY, token);
-      for (const service of ALL_SERVICES) {
-        service.setToken(token);
-      }
       for (const service of SERVICES) {
         service.setToken(token);
       }
@@ -80,7 +73,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     try {
       setToken(token);
-      const { user } = await USER.getInfo();
+      const { user } = await USER.info();
 
       dispatch(UserStateActions.loginSuccess({
         user: {
@@ -110,9 +103,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     dispatch(UserStateActions.loginStart());
 
     try {
-      const { token } = await USER.login(googleToken);
+      const { token } = await USER.login({ accessToken: googleToken });
       setToken(token);
-      const { user } = await USER.getInfo();
+      const { user } = await USER.info();
 
       dispatch(UserStateActions.loginSuccess({
         user: {

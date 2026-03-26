@@ -3,7 +3,7 @@ import { Label } from './Label';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import { useTranslation } from '../../hooks';
-import { ManageFile } from '../../../new_middleware/types/actions';
+import { ManageFile } from '../../../middleware/types/actions';
 
 interface UploadedFileProps {
   index: number;

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AssetQueries } from '../../new_middleware/types/models';
+import { AssetQueries } from '../../middleware/types/models';
 
 export interface BrowserFilterState {
   value: AssetQueries | null;

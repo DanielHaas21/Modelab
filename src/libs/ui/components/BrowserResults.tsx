@@ -4,8 +4,8 @@ import { Label } from './Label';
 import { Preloader } from './Preloader';
 import { InfiniteScroll } from './InfiniteScroll';
 import { useTranslation } from '../../hooks';
-import { AssetModel, AssetQueries } from '../../../new_middleware/types/models';
-import { BrowserSearchAction } from '../../../new_middleware/types/actions';
+import { AssetModel, AssetQueries } from '../../../middleware/types/models';
+import { BrowserSearchAction } from '../../../middleware/types/actions';
 
 interface BrowserResultProps {
   assetQueires: AssetQueries;
