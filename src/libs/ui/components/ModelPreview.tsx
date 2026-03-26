@@ -5,10 +5,11 @@ import placeholder from '../assets/placeholder.png';
 import { ScrollLabel } from './ScrollLabel';
 import { AssetTag } from './AssetTag';
 import { BrowserRoutes } from '../../../global/BrowserRoutes';
-import LoadModelPreviewImage from '../../../middleware/actions/LoadModelPreviewImage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useTranslation } from '../../hooks';
+import { ModelPreviewContext } from '../../../new_middleware/types/actions/modelPreview';
+import { loadModelPreviewContext } from '../../../new_middleware/actions/loadModelPreviewContext';
 
 interface ModelPreviewProps {
   className?: string;
@@ -31,15 +32,23 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
 
     const UserData = useSelector((state: RootState) => state.User);
 
-    const [imageUrl, setImageUrl] = React.useState<string | null>(null);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [modelPreviewContext, setModelPreviewContext] = React.useState<ModelPreviewContext | null>(null);
 
     React.useEffect(() => {
       (async () => {
-        const imageUrl = await LoadModelPreviewImage(id, UserData.auth.clearance);
-        setImageUrl(imageUrl);
+        setIsLoading(true);
+        try {
+          const context = await loadModelPreviewContext(id, UserData.auth.clearance);
+          setModelPreviewContext(context);
+        } catch (error) {
+          console.error('Error fetching model data:', error);
+        }
+        setIsLoading(false);
       })();
     }, [id, UserData.auth]);
 
+    const previewUrl = modelPreviewContext?.previewUrl ?? null;
 
     const tagsRender = tags?.slice(0, 8).map((tag, index) => (
       <AssetTag key={index} name={tag} />
@@ -59,7 +68,7 @@ export const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
         >
           <div className="w-[90%] grow mt-2 rounded-md overflow-hidden relative">
             <img
-              src={imageUrl === null ? placeholder : imageUrl}
+              src={(isLoading || previewUrl === null) ? placeholder : previewUrl}
               className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
               alt={name}
             />
