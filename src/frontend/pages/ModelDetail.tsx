@@ -140,10 +140,11 @@ const ModelDetail: React.FC = () => {
 
     const asset = modelDetailContext.asset;
 
+    const url = `${window.location.origin}${location.pathname}${location.search}`;
     const czechISO690 = generateCzechISO690(
       asset.author ?? 'Modelab',
       asset.name,
-      `${window.location.origin}${location.pathname}${location.search}`,
+      url,
       asset.created,
     );
 
@@ -172,7 +173,7 @@ const ModelDetail: React.FC = () => {
           />
           <CopyableField
             fieldName={t("citation.url")}
-            fieldValue={asset.name}
+            fieldValue={url}
           />
         </div>
         <div className="grow h-px my-2 bg-ui-border" />
