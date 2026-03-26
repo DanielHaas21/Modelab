@@ -8,10 +8,10 @@ import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/free-solid-svg-icons';
-import { DetailFile3D, DetailFileAudio, DetailFile, DetailFileImage, DetailFilePreview } from '../../../middleware/types';
 import { Label } from './Label';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useTranslation } from '../../hooks';
+import { AssetFile, AssetFile3D, AssetFileAudio, AssetFileImage, AssetFilePreview } from '../../../new_middleware/types/actions';
 
 
 // This file is renders a model using THREE
@@ -20,7 +20,7 @@ import { useTranslation } from '../../hooks';
 // Model preview (can be used for both preview and image types since they are both just images with different urls)
 
 interface ModelPreviewProps {
-  file: DetailFilePreview;
+  file: AssetFilePreview;
 }
 
 const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
@@ -41,7 +41,7 @@ const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
 // Image (can be used for both image types since they are both just images with different urls)
 
 interface ModelImageProps {
-  file: DetailFileImage;
+  file: AssetFileImage;
 }
 
 const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
@@ -183,7 +183,7 @@ const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, o
 // 3D model viewer component, it renders a 3D model using the Model component.
 
 interface Model3DProps {
-  file: DetailFile3D;
+  file: AssetFile3D;
   canvasKey?: number;
   onContextLoss?: (e: Event) => void; // The onContextLoss prop is a callback function that is triggered when the WebGL context is lost, it allows the parent component to handle the context loss by re-rendering the canvas with a new key, which will create a new WebGL context.
 }
@@ -305,7 +305,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
 // Audio model viewer component, it renders an audio file using the HTML5 audio element.
 
 interface ModelAudioProps {
-  file: DetailFileAudio;
+  file: AssetFileAudio;
 }
 
 const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
@@ -337,7 +337,7 @@ export default ModelAudio;
 // Top level component that decides which type of model viewer to render based on the file type, it also handles unsupported file types by rendering a placeholder image.
 
 interface ModelDetailImageProps {
-  file: DetailFile;
+  file: AssetFile;
 }
 
 export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImageProps>(

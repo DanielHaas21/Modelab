@@ -1,8 +1,7 @@
-import { PaginatedInfo } from '../../../middleware/api';
 import { BaseResponse } from '../axiosService';
 import { AssetFileMetaModel } from '../models';
 import { AssetModel, AssetQueries, AssetRaw } from '../models/asset';
-import { PaginationQuery } from '../models/pagination';
+import { PaginationInfo, PaginationQuery } from '../models/pagination';
 
 // All
 
@@ -17,7 +16,7 @@ export interface AssetAllQueryData {
 
 export interface AssetAllResponse extends BaseResponse {
   assets: AssetModel[];
-  info: PaginatedInfo;
+  info: PaginationInfo;
 }
 
 export interface RawAssetAllResponse extends Omit<AssetAllResponse, 'assets'> {
@@ -43,7 +42,7 @@ export interface AssetSearchQueryData {
 
 export interface AssetSearchResponse extends BaseResponse {
   assets: AssetModel[];
-  info: PaginatedInfo;
+  info: PaginationInfo;
 }
 
 export interface RawAssetSearchResponse extends Omit<AssetSearchResponse, 'assets'> {

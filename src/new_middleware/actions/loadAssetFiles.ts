@@ -1,12 +1,10 @@
 import { getFileGroup } from '../../libs/utils';
-import { LocalManageFile } from '../../middleware/types';
 import { FILE } from '../services';
-import { AssetFile, ManageFile } from '../types/actions';
+import { AssetFile, ManageFile, ManageFileLocal } from '../types/actions';
 import { SupportedFileTypesModel } from '../types/models';
 import { getModelTypeFromName, loadModelFromFile } from '../utils/modelLoader';
 
-const loadAssetFileFromLocalFile = async (localManageFile: LocalManageFile, supportedFileTypes: SupportedFileTypesModel): Promise<AssetFile | null> => {
-
+const loadAssetFileFromLocalFile = async (localManageFile: ManageFileLocal, supportedFileTypes: SupportedFileTypesModel): Promise<AssetFile | null> => {
   const fileBase = {
     ...localManageFile,
     id: 0,

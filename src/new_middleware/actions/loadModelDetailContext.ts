@@ -3,10 +3,10 @@ import { AssetFile, ModelDetailContext } from '../types/actions';
 import { ASSET, FILE } from '../services';
 import { FileGroup, getFileGroup } from '../../libs/utils';
 import { load3DModel } from './loadModel';
-import { FileInfoData } from '../../middleware/api';
 import { getModelTypeFromName } from '../utils/modelLoader';
+import { AssetFileMetaModel } from '../types/models';
 
-const canShowPreview = (fileInfo: FileInfoData, group: FileGroup) => {
+const canShowPreview = (fileInfo: AssetFileMetaModel, group: FileGroup) => {
   if (group === 'model' && getModelTypeFromName(fileInfo.name) !== null)
     return false;
   return true;

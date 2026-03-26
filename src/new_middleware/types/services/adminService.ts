@@ -1,7 +1,6 @@
-import { PaginatedInfo } from '../../../middleware/api';
 import { BaseResponse } from '../axiosService';
 import { LogModel, LogQueries, LogRaw, LogStatus } from '../models/log';
-import { PaginationQuery } from '../models/pagination';
+import { PaginationInfo, PaginationQuery } from '../models/pagination';
 
 // Select All Logs
 
@@ -16,7 +15,7 @@ export interface AdminSelectAllLogsData {
 
 export interface AdminSelectAllLogsResponse extends BaseResponse {
   logs: LogModel[];
-  info: PaginatedInfo;
+  info: PaginationInfo;
 }
 
 export interface RawAdminSelectAllLogsResponse extends Omit<AdminSelectAllLogsResponse, 'logs'> {
@@ -40,7 +39,7 @@ export interface AdminSearchLogsData {
 
 export interface AdminSearchLogsResponse extends BaseResponse {
   logs: LogModel[];
-  info: PaginatedInfo;
+  info: PaginationInfo;
 }
 
 export interface RawAdminSearchLogsResponse extends Omit<AdminSearchLogsResponse, 'logs'> {
