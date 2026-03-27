@@ -38,7 +38,7 @@ export class AssetService extends AxiosService {
 
     return {
       ...raw,
-      assets: raw.assets.map(mapAssetRawToModel)
+      assets: (raw?.assets ?? []).map(mapAssetRawToModel)
     };
   }
 
@@ -56,7 +56,7 @@ export class AssetService extends AxiosService {
 
     return {
       ...raw,
-      assets: raw.assets.map(mapAssetRawToModel)
+      assets: (raw?.assets ?? []).map(mapAssetRawToModel)
     };
   }
 

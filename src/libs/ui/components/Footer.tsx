@@ -97,6 +97,7 @@ export const Footer: React.FC<FooterProps> = ({
           .map((linkData, index, arrray) => {
             return (
               <FooterNavLink
+                key={index}
                 path={linkData.path}
                 position={navLinkPositionOf(index, arrray.length)}
               >
