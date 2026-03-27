@@ -10,9 +10,8 @@ import { UserImage } from './UserImage';
 import { useCheckClearance } from '../../auth';
 import { CLEARANCE } from '../../../store/types';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useAuth } from '../../auth/AuthProvider';
 import { useTheme } from '../../hooks/useTheme';
-import { useI18n, useTranslation } from '../../hooks';
+import { useAuth, useI18n, useTranslation } from '../../hooks';
 
 interface UserPopupProps {
   className?: string;

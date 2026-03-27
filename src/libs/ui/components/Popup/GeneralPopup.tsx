@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../store/store';
-import { Button } from './Button';
-import { resolveConfirmation, showConfirmation } from '../../../store/slices/Confirmation';
-import { v4 as uuidv4 } from 'uuid';
-import { registerResolver } from '../../../store/utils/Resolver';
-import { getBody, registerBody, removeBody } from '../../../store/utils/ConfirmationBodyRegistry';
+import { AppDispatch, RootState } from '../../../../store/store';
+import { Button } from '../Button';
+import { resolveConfirmation } from '../../../../store/slices/Confirmation';
+import { getBody, removeBody } from '../../../../store/utils/ConfirmationBodyRegistry';
 
 /**
  *  A component that displays a general-purpose confirmation popup. 
@@ -67,22 +65,3 @@ export const GeneralPopup: React.FC = () => {
   );
 };
 
-export const confirm = (
-  text: string,
-  isDeclinable = true,
-  dispatch: AppDispatch,
-  responseA: string | undefined = undefined,
-  responseB: string | undefined = undefined,
-  body: React.ReactNode = undefined
-): Promise<boolean> => {
-  const id = uuidv4();
-
-  registerBody(id, body);
-
-  return new Promise((resolve) => {
-    registerResolver(id, resolve);
-    dispatch(
-      showConfirmation({ text, isDeclinable, confirmationId: id, responseA, responseB })
-    );
-  });
-};

@@ -31,7 +31,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
       if (selectedItem >= showableFiles.length) {
         setSelectedItem(Math.max(showableFiles.length - 1, 0));
       }
-    }, [files]);
+    }, [files, selectedItem, showableFiles]);
 
     const filesRender = showableFiles.map((data) => {
       return (

@@ -1,36 +1,13 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TokenResponse, useGoogleLogin } from '@react-oauth/google';
 import { RootState } from '../../store/store';
 import { UserStateActions } from '../../store/slices/User';
 import { SERVICES, USER } from '../../middleware/services';
-
-/**
- * Defines auth actions
- */
-interface Auth {
-  googleLogin: () => void;
-  changeAccount: () => void;
-  logout: () => void;
-}
-
-const AuthContext = createContext<Auth | null>(null);
+import { AUTH_LS_KEY, AuthContext } from '../hooks';
 
 interface AuthProviderProps {
   children: React.ReactNode;
-}
-
-/**
- * Local storage auth key
- */
-const AUTH_LS_KEY: string = 'authToken';
-
-export const useAuth = () => {
-  const auth = useContext(AuthContext);
-  if (auth == null) {
-    throw new Error('useAuth must be used inside an AuthProvider');
-  }
-  return auth;
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -38,15 +15,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const UserData = useSelector((state: RootState) => state.User);
 
-  // Tries to login automatically
-  useEffect(() => {
-    if (!UserData.auth.isAuthenticated) {
-      refreshAuth();
-    }
-  }, []);
-
   // Sets the auth token to all api services
-  const setToken = (token: string | null) => {
+  const setToken = useCallback((token: string | null) => {
     if (token === null) {
       localStorage.removeItem(AUTH_LS_KEY);
       for (const service of SERVICES) {
@@ -58,10 +28,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         service.setToken(token);
       }
     }
-  };
+  }, []);
 
   // Refreshes the auth data
-  const refreshAuth = async () => {
+  const refreshAuth = useCallback(async () => {
     const token = UserData.auth?.authToken ?? localStorage.getItem(AUTH_LS_KEY);
 
     dispatch(UserStateActions.loginStart());
@@ -96,7 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.error(error);
       }
     }
-  };
+  }, [dispatch, UserData.auth, setToken]);
 
   // Logs in with a google auth token provided by the google button
   const loginWithToken = async (googleToken: string) => {
@@ -162,6 +132,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     dispatch(UserStateActions.logout());
     setToken(null);
   };
+
+  // auto refreshes
+  useEffect(() => {
+    if (!UserData.auth.isAuthenticated) {
+      refreshAuth();
+    }
+  }, [UserData.auth, refreshAuth]);
 
   return (
     <AuthContext.Provider value={{

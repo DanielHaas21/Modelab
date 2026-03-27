@@ -20,6 +20,5 @@ export * from './TagSelect';
 export * from './FileSelect';
 export * from './UploadedFile';
 export * from './UserPopup';
-export * from './GeneralPopup';
 export * from './ErrorDisplay';
 export * from './ScrollLabel';

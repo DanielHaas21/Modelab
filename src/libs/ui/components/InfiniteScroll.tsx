@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { cn } from '../../utils';
 
 interface InfiniteScrollProps {
@@ -28,6 +28,23 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 
   const scrollDivRef = React.useRef<HTMLDivElement>(null);
 
+  const isReadyToLoad = useCallback((): boolean => {
+    const div = scrollDivRef.current;
+    if (!div) return false;
+
+    const isAtBottom = div.scrollTop + div.offsetHeight >= div.scrollHeight * 0.9;
+
+    return isAtBottom && hasMore;
+  }, [hasMore]);
+
+  const tryLoadMore = useCallback(async () => {
+    if (isLoading || !isReadyToLoad()) return;
+
+    setIsLoading(true);
+    await loadMore();
+    setIsLoading(false);
+  }, [isReadyToLoad, isLoading, loadMore]);
+
   React.useEffect(() => {
     if (itemCount < lastItemCount) {
       const div = scrollDivRef.current;
@@ -36,24 +53,7 @@ export const InfiniteScroll: React.FC<InfiniteScrollProps> = ({
 
     tryLoadMore();
     setLastItemCount(itemCount);
-  }, [itemCount, hasMore]);
-
-  const isReadyToLoad = (): boolean => {
-    const div = scrollDivRef.current;
-    if (!div) return false;
-
-    const isAtBottom = div.scrollTop + div.offsetHeight >= div.scrollHeight * 0.9;
-
-    return isAtBottom && hasMore;
-  };
-
-  const tryLoadMore = async () => {
-    if (isLoading || !isReadyToLoad()) return;
-
-    setIsLoading(true);
-    await loadMore();
-    setIsLoading(false);
-  };
+  }, [itemCount, hasMore, lastItemCount, tryLoadMore, isReadyToLoad]);
 
   return (
     <div

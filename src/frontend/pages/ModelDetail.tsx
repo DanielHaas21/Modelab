@@ -3,9 +3,7 @@ import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
 import { Button } from '../../libs/ui/components/Button';
 import { Link, useParams } from 'react-router-dom';
 import {
-  confirm,
   ErrorDisplay,
-  GeneralPopup,
   Label,
   ModelInfoSection,
   Preloader,
@@ -29,6 +27,7 @@ import { CopyableField } from '../../libs/ui/components/CopyableField';
 import { generateCzechISO690 } from '../../libs/utils/generateIso';
 import { useResponsive, useTitle, useToast, useTranslation } from '../../libs/hooks';
 import { AssetFile, ModelDetailContext } from '../../middleware/types/actions';
+import { confirmPopup, GeneralPopup } from '../../libs/ui/components/Popup';
 
 interface ModelDetailProps {
   context: ModelDetailContext;
@@ -58,7 +57,7 @@ const ModelDetail: React.FC<ModelDetailProps> = ({ context }) => {
   const downloadAllAsZip = async (files: AssetFile[]) => {
     const asset = context.asset;
 
-    const displayFilesConfirmed = await confirm(
+    const displayFilesConfirmed = await confirmPopup(
       t("confirm.download"),
       true,
       Dispatch,
@@ -115,7 +114,7 @@ const ModelDetail: React.FC<ModelDetailProps> = ({ context }) => {
       asset.created,
     );
 
-    await confirm(
+    await confirmPopup(
       t("citation.title"),
       false,
       Dispatch,
@@ -273,7 +272,7 @@ const ModelDetailLoader: React.FC = () => {
         setIsLoading(false);
       }
     })();
-  }, [UserData.auth.clearance]);
+  }, [UserData.auth.clearance, model]);
 
   if (isLoading) return <Preloader className="min-h-screen" />;
 

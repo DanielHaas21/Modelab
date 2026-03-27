@@ -18,5 +18,5 @@ export const useValidatePermission = (minClearance: Clearance, redirectRoute: st
       return;
     }
 
-  }, [hasClearance, redirectRoute, navigate]);
+  }, [hasClearance, redirectRoute, navigate, minClearance]);
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { CategoryCheckbox } from './CategoryCheckbox';
 import { useResponsive } from '../../hooks/useResponsive';
 
@@ -26,14 +26,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
 }) => {
   const { isDesktop } = useResponsive();
 
-  React.useEffect(() => {
-    if (categories.length == 0) return;
-    if (isRadio && categories.find((category) => category.isSelected) === undefined) {
-      selectCategory(0, true);
-    }
-  }, [categories]);
-
-  const selectCategory = (index: number, isSelected: boolean) => {
+  const selectCategory = useCallback((index: number, isSelected: boolean) => {
     const updatedCategories = [...categories];
 
     if (isRadio) {
@@ -47,7 +40,14 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
       isSelected: isSelected,
     };
     setCategories(updatedCategories);
-  };
+  }, [categories, isRadio, setCategories]);
+
+  React.useEffect(() => {
+    if (categories.length == 0) return;
+    if (isRadio && categories.find((category) => category.isSelected) === undefined) {
+      selectCategory(0, true);
+    }
+  }, [categories, isRadio, selectCategory]);
 
   if (isDesktop) {
     return (

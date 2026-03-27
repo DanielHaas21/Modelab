@@ -175,7 +175,7 @@ const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, o
 
   React.useLayoutEffect(() => {
     onRefocusLoaded(refocusCamera);
-  }, []);
+  }, [onRefocusLoaded, refocusCamera]);
 
   return null;
 };

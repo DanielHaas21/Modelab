@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import i18n, { ALL_LANGUAGES, Language } from '../../../../public/i18n/i18n';
 import { I18nContext } from '../../hooks/useI18N';
 
@@ -20,22 +20,22 @@ export function I18NProvider({ children }: I18NProviderProps) {
   const languages = ALL_LANGUAGES;
   const i18nValue = i18n;
 
+  const changeLanguage = useCallback((language: Language) => {
+    i18nValue.changeLanguage(language);
+    localStorage.setItem(LS_LANGUAGE_KEY, language);
+  }, [i18nValue]);
+
+  const cycleLanguages = useCallback(() => {
+    const language = languages[(getLanguageIndex(i18nValue.language) + 1) % languages.length];
+    changeLanguage(language);
+  }, [i18nValue, changeLanguage, languages]);
+
   useEffect(() => {
     const currentIndex = getLanguageIndex(i18nValue.language);
     const storedIndex = getStoredIndex(currentIndex);
 
     changeLanguage(ALL_LANGUAGES[storedIndex]);
-  }, [LS_LANGUAGE_KEY]);
-
-  const changeLanguage = (language: Language) => {
-    i18nValue.changeLanguage(language);
-    localStorage.setItem(LS_LANGUAGE_KEY, language);
-  };
-
-  const cycleLanguages = () => {
-    const language = languages[(getLanguageIndex(i18nValue.language) + 1) % languages.length];
-    changeLanguage(language);
-  };
+  }, [changeLanguage, i18nValue]);
 
   return (
     <I18nContext.Provider value={{

@@ -27,8 +27,8 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
   const popupRef = React.useRef<HTMLDivElement>(null);
   const userImageRef = React.useRef<HTMLImageElement>(null);
 
-  const ClosePopup = () => Dispatch(Hide());
-  const TogglePopup = () => Dispatch(Toggle());
+  const ClosePopup = React.useCallback(() => Dispatch(Hide()), [Dispatch]);
+  const TogglePopup = React.useCallback(() => Dispatch(Toggle()), [Dispatch]);
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ className, children, ...props })
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [Popup]);
+  }, [Popup, ClosePopup]);
 
   return (
     <>

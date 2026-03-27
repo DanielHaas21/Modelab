@@ -4,7 +4,6 @@ import {
   CategoryOption,
   CategorySelect,
   FileSelect,
-  GeneralPopup,
   Input,
   ModelInfoSection,
   Preloader,
@@ -13,7 +12,6 @@ import {
 } from '../../libs/ui/components';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ModelDetailLayout } from '../../libs/ui/layouts/ModelDetailLayout';
-import { confirm } from '../../libs/ui/components';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { ROOT_ROUTES } from '../../global/routes';
@@ -25,6 +23,7 @@ import { useTitle, useToast, useTranslation } from '../../libs/hooks';
 import { AssetFile, ManageFile, ModelManageContext } from '../../middleware/types/actions';
 import { loadModelManageContext } from '../../middleware/actions/loadModelManageContext';
 import { loadAssetFiles } from '../../middleware/actions/loadAssetFiles';
+import { confirmPopup, GeneralPopup } from '../../libs/ui/components/Popup';
 
 interface ModelManageProps {
   context: ModelManageContext;
@@ -98,7 +97,7 @@ const ModelManage: React.FC<ModelManageProps> = ({ context, refresh }) => {
   // delete model and return to browser
   const handleDelete = async () => {
     if (context.assetId === null) return;
-    const userConfirmedNo = await confirm(
+    const userConfirmedNo = await confirmPopup(
       t('confirm.delete'),
       true,
       dispatch,
@@ -148,7 +147,7 @@ const ModelManage: React.FC<ModelManageProps> = ({ context, refresh }) => {
       return;
     }
 
-    const userConfirmedLeave = await confirm(
+    const userConfirmedLeave = await confirmPopup(
       t('unsaved.title'),
       true,
       dispatch,
@@ -170,7 +169,7 @@ const ModelManage: React.FC<ModelManageProps> = ({ context, refresh }) => {
       filesInput.length === 0 ||
       tagsInput.filter((tag) => tag.isSelected).length === 0
     ) {
-      await confirm(
+      await confirmPopup(
         t('save.not_enough'),
         false,
         dispatch,

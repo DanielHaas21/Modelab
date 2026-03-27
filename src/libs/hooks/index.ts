@@ -1,3 +1,4 @@
+export * from './useAuth';
 export * from './useI18N';
 export * from './useTranslation';
 export * from './useMediaQuery';

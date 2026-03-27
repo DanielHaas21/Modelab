@@ -19,7 +19,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const storedIndex = getStoredIndex(currentIndex);
 
     changeTheme(ALL_THEME_MODES[storedIndex]);
-  }, [LS_THEME_KEY]);
+  }, [theme]);
 
   const changeTheme = (theme: ThemeMode) => {
     setTheme(theme);

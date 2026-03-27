@@ -36,6 +36,7 @@ const Browser: React.FC<BrowserProps> = ({ context }) => {
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
+  const [isDataSetup, setIsDataSetup] = React.useState<boolean>(false);
 
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
@@ -52,9 +53,10 @@ const Browser: React.FC<BrowserProps> = ({ context }) => {
 
   // setup data
   React.useEffect(() => {
+    if (isDataSetup) return;
     const config = context.config;
 
-    setCategories(config.allCategories.map((category) => {
+    setCategories((config?.allCategories ?? []).map((category) => {
       return {
         ...category,
         isSelected: BrowserFilter.value?.categoryQuery?.find(
@@ -63,7 +65,7 @@ const Browser: React.FC<BrowserProps> = ({ context }) => {
       };
     }));
 
-    setTags(config.allTags.map((tag) => {
+    setTags((config?.allTags ?? []).map((tag) => {
       return {
         ...tag,
         isSelected: BrowserFilter.value?.tagQuery?.find(
@@ -71,7 +73,9 @@ const Browser: React.FC<BrowserProps> = ({ context }) => {
         ) !== undefined,
       };
     }));
-  }, [context]);
+
+    setIsDataSetup(true);
+  }, [context, isDataSetup, BrowserFilter.value]);
 
   const resetFilters = () => {
     setSearchText('');
@@ -104,7 +108,7 @@ const Browser: React.FC<BrowserProps> = ({ context }) => {
       setAssetQueries(newSearchQuery);
       Dispatch(Set(newSearchQuery));
     }
-  }, [searchText, tags, categories]);
+  }, [searchText, tags, categories, Dispatch]);
 
 
   const BrowserFilters = (

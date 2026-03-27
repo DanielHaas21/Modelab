@@ -88,9 +88,9 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ assetQueires, sea
     };
 
     initialLoad();
-  }, [assetQueires]);
+  }, [assetQueires, getResults]);
 
-  const loadMore = async () => {
+  const loadMore = React.useCallback(async () => {
     if (!results.hasMore || isLoading) return;
 
     const currentVersion = requestVersion.current;
@@ -101,7 +101,7 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ assetQueires, sea
     if (currentVersion !== requestVersion.current) return;
     setResults(result);
     setIsLoading(false);
-  };
+  }, [getResults, assetQueires, isLoading, results]);
 
   return (
     <InfiniteScroll

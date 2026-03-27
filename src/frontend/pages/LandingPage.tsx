@@ -11,10 +11,8 @@ import { useSelector } from 'react-redux';
 import { useCheckClearance } from '../../libs/auth';
 import { CLEARANCE } from '../../store/types';
 import { ROOT_ROUTES } from '../../global/routes';
-
 import grid from '../../libs/ui/assets/grid.svg';
-import { useResponsive, useTitle, useTranslation } from '../../libs/hooks';
-import { useAuth } from '../../libs/auth/AuthProvider';
+import { useAuth, useResponsive, useTitle, useTranslation } from '../../libs/hooks';
 
 const LandingPage: React.FC = () => {
   const t = useTranslation("pages.home");
