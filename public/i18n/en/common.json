@@ -97,6 +97,7 @@
     "footer": {
       "about": "About",
       "upload_assets": "Upload Assets",
+      "browse_assets": "Browse Assets",
       "home": "Home",
       "no_clearance": "You don't have the required clearance for this function",
       "login_required": "You must log in order to use this function"

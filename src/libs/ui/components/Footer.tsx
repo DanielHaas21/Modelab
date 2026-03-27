@@ -1,10 +1,39 @@
 import * as React from 'react';
 import { cn } from '../../utils';
 import { Link } from 'react-router-dom';
-import { useToast, useTranslation, useResponsive } from '../../hooks';
+import { useTranslation, useResponsive } from '../../hooks';
 import { useCheckClearance } from '../../auth';
-import { CLEARANCE } from '../../../store/types';
+import { Clearance, CLEARANCE } from '../../../store/types';
 import { ROOT_ROUTES } from '../../../global/routes';
+
+type NavLinkPosition = 'left' | 'middle' | 'right';
+
+const navLinkPositionOf = (index: number, total: number): NavLinkPosition => {
+  if (index <= 0) return 'left';
+  if (index >= total - 1) return 'right';
+  return 'middle';
+};
+
+interface FooterNavLinkProps {
+  path: string;
+  position: NavLinkPosition;
+  children: React.ReactNode;
+}
+
+const FooterNavLink: React.FC<FooterNavLinkProps> = ({ path, position, children }) => {
+  return (
+    <Link
+      to={path}
+      className={cn(
+        'text-xl hover-underline-animation no-underline text-text-950 border-ui-border',
+        position === 'left' && 'border-e me-[10px] pe-[10px]',
+        position === 'middle' && 'border-e me-[10px] pe-[10px]',
+      )}
+    >
+      {children}
+    </Link>
+  );
+};
 
 interface FooterProps extends React.HTMLAttributes<HTMLElement> {
   variant?: 'borderless' | 'bordered';
@@ -20,18 +49,32 @@ export const Footer: React.FC<FooterProps> = ({
   const t = useTranslation('ui.footer');
 
   const { isDesktop } = useResponsive();
-  const { show } = useToast();
   const { hasClearance } = useCheckClearance();
 
-  const handleAdminClick = (e: React.MouseEvent) => {
-    if (!hasClearance(CLEARANCE.ADMIN)) {
-      e.preventDefault(); // Stop navigation
-      show({
-        variant: 'error',
-        title: t('no_clearance'),
-      });
-    }
-  };
+  interface NavLinkData extends Omit<FooterNavLinkProps, 'position'> {
+    minClearance?: Clearance;
+  }
+
+  const footerNavLinks: NavLinkData[] = [
+    {
+      minClearance: CLEARANCE.ADMIN,
+      path: ROOT_ROUTES.ModelManage + 'upload',
+      children: t('upload_assets')
+    },
+    {
+      minClearance: CLEARANCE.USER,
+      path: ROOT_ROUTES.Browser,
+      children: t('browse_assets')
+    },
+    {
+      path: ROOT_ROUTES.About,
+      children: t('about')
+    },
+    {
+      path: ROOT_ROUTES.LandingPage,
+      children: t('home')
+    },
+  ];
 
   return (
     <footer
@@ -45,19 +88,22 @@ export const Footer: React.FC<FooterProps> = ({
     >
       {children}
       <nav className={cn("flex flex-row justify-center", isDesktop && "mr-32")}>
-        <Link to={ROOT_ROUTES.About} className="text-xl hover-underline-animation no-underline text-text-950">
-          {t('about')}
-        </Link>
-        <Link
-          onClick={handleAdminClick}
-          to={hasClearance(CLEARANCE.ADMIN) ? (ROOT_ROUTES.ModelManage + 'upload') : '#'}
-          className="text-xl hover-underline-animation no-underline text-text-950 mx-[10px] px-[10px] border-x border-ui-border"
-        >
-          {t('upload_assets')}
-        </Link>
-        <Link to={ROOT_ROUTES.LandingPage} className="text-xl hover-underline-animation no-underline text-text-950">
-          {t('home')}
-        </Link>
+        {footerNavLinks
+          .filter((linkData) => {
+            if (!hasClearance(linkData.minClearance ?? CLEARANCE.GUEST))
+              return false;
+            return true;
+          })
+          .map((linkData, index, arrray) => {
+            return (
+              <FooterNavLink
+                path={linkData.path}
+                position={navLinkPositionOf(index, arrray.length)}
+              >
+                {linkData.children}
+              </FooterNavLink>
+            );
+          })}
       </nav>
     </footer>
   );

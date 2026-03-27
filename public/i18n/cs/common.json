@@ -96,7 +96,8 @@
   "ui": {
     "footer": {
       "about": "O nás",
-      "upload_assets": "Nahrát modely",
+      "upload_assets": "Nahrát assety",
+      "browse_assets": "Prohlížet assety",
       "home": "Domů",
       "no_clearance": "Nemáte potřebná oprávnění pro tuto funkci",
       "login_required": "Pro použití této funkce se musíte přihlásit"
