@@ -23,15 +23,16 @@ import { ModelBrowserContext } from '../../middleware/types/actions';
 import { loadModelBrowserContext } from '../../middleware/actions/loadModelBrowserContext';
 import { AssetQueries } from '../../middleware/types/models';
 
-const Browser: React.FC = () => {
+interface BrowserProps {
+  context: ModelBrowserContext;
+}
+
+const Browser: React.FC<BrowserProps> = ({ context }) => {
   const t = useTranslation("pages.browser");
 
   useTitle({ type: 'name', name: 'Browser' });
 
   const { isDesktop } = useResponsive();
-
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [browserContext, setBrowserContext] = React.useState<ModelBrowserContext | null>(null);
 
   const [categories, setCategories] = React.useState<CategoryOption[]>([]);
   const [tags, setTags] = React.useState<TagOption[]>([]);
@@ -49,25 +50,9 @@ const Browser: React.FC = () => {
     tagQuery: tags.filter((tag) => tag.isSelected),
   });
 
-  // load context
-  React.useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const context = await loadModelBrowserContext();
-        setBrowserContext(context);
-      } catch (error) {
-        console.error('Error fetching context:', error);
-      }
-      setIsLoading(false);
-    })();
-  }, []);
-
   // setup data
   React.useEffect(() => {
-    if (browserContext === null) return;
-
-    const config = browserContext.config;
+    const config = context.config;
 
     setCategories(config.allCategories.map((category) => {
       return {
@@ -86,7 +71,7 @@ const Browser: React.FC = () => {
         ) !== undefined,
       };
     }));
-  }, [browserContext]);
+  }, [context]);
 
   const resetFilters = () => {
     setSearchText('');
@@ -121,7 +106,6 @@ const Browser: React.FC = () => {
     }
   }, [searchText, tags, categories]);
 
-  if (isLoading || browserContext === null) return <Preloader className="min-h-screen" />;
 
   const BrowserFilters = (
     <>
@@ -190,7 +174,7 @@ const Browser: React.FC = () => {
         <div className="flex w-full grow overflow-hidden">
           <BrowserResults
             assetQueires={assetQueries}
-            search={browserContext.search}
+            search={context.search}
           />
           {isDesktop && (
             <aside className="sticky top-0 h-full w-1/4 xl:w-1/6 flex flex-col p-4 overflow-y-auto overflow-x-hidden custom-scrollbar">
@@ -210,4 +194,27 @@ const Browser: React.FC = () => {
   );
 };
 
-export default Browser;
+const BrowserLoader: React.FC = () => {
+  const [context, setContext] = React.useState<ModelBrowserContext | null>(null);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const context = await loadModelBrowserContext();
+        setContext(context);
+      } catch (error) {
+        console.error('Error fetching context:', error);
+      }
+    })();
+  }, []);
+
+  if (context === null) return <Preloader className="min-h-screen" />;
+
+  return (
+    <Browser
+      context={context}
+    />
+  );
+};
+
+export default BrowserLoader;

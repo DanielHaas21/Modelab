@@ -5,34 +5,43 @@ import { AdminPanelContext } from '../../../middleware/types/actions/adminPanel'
 import { loadAdminPanelContext } from '../../../middleware/actions/loadAdminPanelContext';
 import { Label, Preloader } from '../../../libs/ui/components';
 
-const AdminPanel: React.FC = () => {
+interface AdminPanelProps {
+  context: AdminPanelContext;
+}
+
+const AdminPanel: React.FC<AdminPanelProps> = ({ context }) => {
   useTitle({ type: 'name', name: 'Admin Panel' });
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [adminPanelContext, setAdminPanelContext] = React.useState<AdminPanelContext | null>(null);
-
-  // load context
-  React.useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const context = await loadAdminPanelContext();
-        setAdminPanelContext(context);
-      } catch (error) {
-        console.error('Error fetching context:', error);
-      }
-      setIsLoading(false);
-    })();
-  }, []);
-
-  if (isLoading || adminPanelContext === null) return <Preloader className="min-h-screen" />;
 
   return (
     <BaseLayout bordered={true}>
       <Label>Admin Panel</Label>
-      <Label>Health: {JSON.stringify(adminPanelContext.health)}</Label>
+      <Label>Health: {JSON.stringify(context.health)}</Label>
     </BaseLayout>
   );
 };
 
-export default AdminPanel;
+const AdminPanelLoader: React.FC = () => {
+  const [context, setContext] = React.useState<AdminPanelContext | null>(null);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const context = await loadAdminPanelContext();
+        setContext(context);
+      } catch (error) {
+        console.error('Error fetching context:', error);
+      }
+    })();
+  }, []);
+
+  if (context === null) return <Preloader className="min-h-screen" />;
+
+  return (
+    <AdminPanel
+      context={context}
+    />
+  );
+};
+
+export default AdminPanelLoader;

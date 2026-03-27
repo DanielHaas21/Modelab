@@ -4,6 +4,7 @@ import { Tag } from './tag';
 import { AssetFile } from './file';
 
 export interface ModelManageContext {
+  assetId: number | null;
   config: ManageConfig;
   asset: ManageAsset | null;
   create: ManageCreateAssetAction;

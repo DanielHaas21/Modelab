@@ -30,7 +30,11 @@ import { generateCzechISO690 } from '../../libs/utils/generateIso';
 import { useResponsive, useTitle, useToast, useTranslation } from '../../libs/hooks';
 import { AssetFile, ModelDetailContext } from '../../middleware/types/actions';
 
-const ModelDetail: React.FC = () => {
+interface ModelDetailProps {
+  context: ModelDetailContext;
+}
+
+const ModelDetail: React.FC<ModelDetailProps> = ({ context }) => {
   useValidatePermission(CLEARANCE.GUEST, ROOT_ROUTES.Browser);
 
   const t = useTranslation("pages.model_detail");
@@ -40,42 +44,19 @@ const ModelDetail: React.FC = () => {
   const { hasClearance } = useCheckClearance();
 
   const Dispatch = useDispatch<AppDispatch>();
-  const UserData = useSelector((state: RootState) => state.User);
-
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [modelDetailContext, setModelDetailContext] = React.useState<ModelDetailContext | null>(null);
 
   const [title, setTitle] = React.useState<string>('Loading...');
   useTitle({ type: 'name', name: title });
 
-  const model = useParams();
-
   const offcanvasHandleRef = React.useRef<OffcanvasHandle>(null);
 
-  // load context
   React.useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const assetId = parseInt(model.modelId!);
-        const context = await loadModelDetailContext(assetId, UserData.auth.clearance);
-        setModelDetailContext(context);
-      } catch (error) {
-        console.error('Error fetching model data:', error);
-      }
-      setIsLoading(false);
-    })();
-  }, [UserData.auth.clearance]);
-
-  React.useEffect(() => {
-    if (modelDetailContext === null) return;
-    setTitle(modelDetailContext.asset.name);
-  }, [modelDetailContext]);
+    setTitle(context.asset.name);
+  }, [context]);
 
   // zip download of all files
   const downloadAllAsZip = async (files: AssetFile[]) => {
-    if (modelDetailContext === null) return;
-    const asset = modelDetailContext.asset;
+    const asset = context.asset;
 
     const displayFilesConfirmed = await confirm(
       t("confirm.download"),
@@ -123,22 +104,8 @@ const ModelDetail: React.FC = () => {
     URL.revokeObjectURL(link.href);
   };
 
-  if (isLoading) return <Preloader className="min-h-screen" />;
-
-  if (!modelDetailContext) {
-    return (
-      <BaseLayout bordered={true}>
-        <ErrorDisplay image={icon_boom} code={404} message={t("oops")}>
-          <p>{t("notFound")}</p>
-        </ErrorDisplay>
-      </BaseLayout>
-    );
-  }
-
   const GenerateCitationDataHandle = async () => {
-    if (modelDetailContext === null) return;
-
-    const asset = modelDetailContext.asset;
+    const asset = context.asset;
 
     const url = `${window.location.origin}${location.pathname}${location.search}`;
     const czechISO690 = generateCzechISO690(
@@ -195,8 +162,6 @@ const ModelDetail: React.FC = () => {
     );
   }
 
-  const asset = modelDetailContext.asset;
-
   const ActionButtons = (
     <>
       <div className="w-1/2 p-1">
@@ -211,7 +176,7 @@ const ModelDetail: React.FC = () => {
       </div>
       {hasClearance(CLEARANCE.ADMIN) && (
         <div className="w-1/2 p-1">
-          <Link className="no-underline" to={ROOT_ROUTES.ModelManage + asset.id}>
+          <Link className="no-underline" to={ROOT_ROUTES.ModelManage + context.asset.id}>
             <Button variant="light" className="justify-between w-full">
               <FontAwesomeIcon icon={faPencil} />
               <span className="w-full">{t("edit")}</span>
@@ -227,33 +192,33 @@ const ModelDetail: React.FC = () => {
       <GeneralPopup />
       <ModelDetailLayout
         bordered={true}
-        files={asset.files}
+        files={context.asset.files}
         buttons={ActionButtons}
       >
         <Label size="lg" className={"font-normal tracking-[0.1rem] overflow-y-auto"}>
-          {asset.name}
+          {context.asset.name}
         </Label>
-        <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{asset.description}</p>
+        <p className="ms-3 mt-4 font-light w-80 overflow-auto max-h-[20vh]">{context.asset.description}</p>
         <ModelInfoSection name={t("author_name")}>
           <p className="m-0">
-            {asset.author}
+            {context.asset.author}
           </p>
         </ModelInfoSection>
         <ModelInfoSection name={t("category")}>
-          <p className="m-0" key={asset.category.id}>
-            {asset.category.name}
+          <p className="m-0" key={context.asset.category.id}>
+            {context.asset.category.name}
           </p>
         </ModelInfoSection>
         <ModelInfoSection name={t("tags")}>
           <div className="mt-2 flex flex-wrap">
-            {asset.tags.map((tag) => {
+            {context.asset.tags.map((tag) => {
               return <AssetTag key={tag.id} name={tag.name} />;
             })}
           </div>
         </ModelInfoSection>
         <div className={cn("sticky bottom-0 mt-6 pb-4 flex flex-col md:flex-row gap-2", isDesktop && "ms-4")}>
           <Button
-            onClick={() => downloadAllAsZip(asset.files)}
+            onClick={() => downloadAllAsZip(context.asset.files)}
             disabled={!hasClearance(CLEARANCE.USER)}
             className={cn("flex justify-center", !isDesktop && "w-full")}
           >
@@ -278,7 +243,7 @@ const ModelDetail: React.FC = () => {
         </div>
         {!isDesktop && (
           <OffcanvasModal ref={offcanvasHandleRef} title='Preview' >
-            <ModelDetailImageCarousel files={asset.files} />
+            <ModelDetailImageCarousel files={context.asset.files} />
           </OffcanvasModal>
         )}
       </ModelDetailLayout>
@@ -286,4 +251,47 @@ const ModelDetail: React.FC = () => {
   );
 };
 
-export default ModelDetail;
+const ModelDetailLoader: React.FC = () => {
+  const t = useTranslation("pages.model_detail");
+
+  const model = useParams();
+  const UserData = useSelector((state: RootState) => state.User);
+
+  const [context, setContext] = React.useState<ModelDetailContext | null>(null);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        setIsLoading(true);
+        const assetId = parseInt(model.modelId!);
+        const context = await loadModelDetailContext(assetId, UserData.auth.clearance);
+        setContext(context);
+      } catch (error) {
+        console.error('Error fetching model data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [UserData.auth.clearance]);
+
+  if (isLoading) return <Preloader className="min-h-screen" />;
+
+  if (context === null) {
+    return (
+      <BaseLayout bordered={true}>
+        <ErrorDisplay image={icon_boom} code={404} message={t("oops")}>
+          <p>{t("notFound")}</p>
+        </ErrorDisplay>
+      </BaseLayout>
+    );
+  }
+
+  return (
+    <ModelDetail
+      context={context}
+    />
+  );
+}
+
+export default ModelDetailLoader;

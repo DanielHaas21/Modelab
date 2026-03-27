@@ -26,27 +26,24 @@ import { AssetFile, ManageFile, ModelManageContext } from '../../middleware/type
 import { loadModelManageContext } from '../../middleware/actions/loadModelManageContext';
 import { loadAssetFiles } from '../../middleware/actions/loadAssetFiles';
 
-const ModelManage: React.FC = () => {
+interface ModelManageProps {
+  context: ModelManageContext;
+  refresh: () => void;
+}
+
+const ModelManage: React.FC<ModelManageProps> = ({ context, refresh }) => {
   const maxAssetNameLength = 128;
   const maxAuthorNameLength = 128;
   const maxAssetDescriptionLength = 320;
 
   const t = useTranslation("pages.model_manage");
 
-  const { action } = useParams();
   const { show } = useToast();
 
-  const assetId = isFinite(Number(action)) ? Number(action) : undefined;
-
-  useValidatePermission(CLEARANCE.ADMIN, assetId !== undefined ? (ROOT_ROUTES.ModelDetail + assetId) : ROOT_ROUTES.Browser);
+  useValidatePermission(CLEARANCE.ADMIN, context.assetId !== undefined ? (ROOT_ROUTES.ModelDetail + context.assetId) : ROOT_ROUTES.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  const [refreshModel, setRefreshModel] = React.useState<number>(0);
-
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [modelManageContext, setModelManageContext] = React.useState<ModelManageContext | null>(null);
 
   const [title, setTitle] = React.useState<string>('Loading...');
   useTitle({ type: 'name', name: title });
@@ -60,26 +57,11 @@ const ModelManage: React.FC = () => {
 
   const [previewDetailFiles, setPreviewDetailFiles] = React.useState<AssetFile[]>([]);
 
-  // load context
-  React.useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const context = await loadModelManageContext(assetId ?? null);
-        setModelManageContext(context);
-      } catch (error) {
-        console.error('Error fetching context:', error);
-      }
-      setIsLoading(false);
-    })();
-  }, [assetId, refreshModel]);
 
   // setup data
   React.useEffect(() => {
-    if (!modelManageContext) return;
-
-    const asset = modelManageContext.asset;
-    const config = modelManageContext.config;
+    const asset = context.asset;
+    const config = context.config;
     const tagIds = asset?.tags.map(t => t.id) ?? [];
 
     if (asset === null) {
@@ -103,32 +85,31 @@ const ModelManage: React.FC = () => {
     setAssetNameInput(asset?.name ?? '');
     setAuthorNameInput(asset?.author ?? '');
     setAssetDescriptionInput(asset?.description ?? '');
-  }, [modelManageContext]);
+  }, [context]);
 
   // uploaded files added to preview
   React.useEffect(() => {
-    if (!modelManageContext) return;
     (async () => {
       const assetFiles = await loadAssetFiles(filesInput.filter((file) => !file.isRemoved && !file.isHidden));
       setPreviewDetailFiles(assetFiles);
     })();
-  }, [filesInput, modelManageContext]);
+  }, [filesInput, context]);
 
   // delete model and return to browser
   const handleDelete = async () => {
-    if (assetId === undefined) return;
+    if (context.assetId === null) return;
     const userConfirmedNo = await confirm(
       t('confirm.delete'),
       true,
       dispatch,
       t('confirm.no'),
       t('confirm.yes'),
-      <p>{t("confirm.sure_delete")}<span className='text-2xl'>`{modelManageContext?.asset?.name ?? assetNameInput}`</span>?<br /><b>{t("confirm.cant_undo")}</b></p>
+      <p>{t("confirm.sure_delete")}<span className='text-2xl'>`{context?.asset?.name ?? assetNameInput}`</span>?<br /><b>{t("confirm.cant_undo")}</b></p>
     );
 
     if (userConfirmedNo) return;
-    await modelManageContext?.delete({
-      id: assetId
+    await context?.delete({
+      id: context.assetId
     });
     navigate(ROOT_ROUTES.Browser);
   };
@@ -139,8 +120,8 @@ const ModelManage: React.FC = () => {
     event.preventDefault();
 
     // check if there are unsaved changes
-    if (modelManageContext === null || modelManageContext.asset === null) return;
-    const asset = modelManageContext.asset;
+    if (context.asset === null) return;
+    const asset = context.asset;
 
     // check if there are changes in name, description, category, tags or files
     // There musnt be any change for the user to be able to see the preview without confirmation, even if there are changes in files
@@ -163,7 +144,7 @@ const ModelManage: React.FC = () => {
         ) !== undefined
       )
     ) {
-      navigate(ROOT_ROUTES.ModelDetail + assetId);
+      navigate(ROOT_ROUTES.ModelDetail + context.assetId);
       return;
     }
 
@@ -177,13 +158,12 @@ const ModelManage: React.FC = () => {
     );
 
     if (userConfirmedLeave) {
-      navigate(ROOT_ROUTES.ModelDetail + assetId);
+      navigate(ROOT_ROUTES.ModelDetail + context.assetId);
     }
   };
 
   // upload new model or save changes to existing model
   const handleUploadOrSave = async () => {
-    if (modelManageContext === null) return;
     if (
       assetNameInput.length === 0 ||
       assetDescriptionInput.length === 0 ||
@@ -202,9 +182,9 @@ const ModelManage: React.FC = () => {
     }
 
     // if assetId is defined, edit model, otherwise create new model
-    if (assetId !== undefined) {
-      await modelManageContext.edit({
-        id: assetId,
+    if (context.asset !== null) {
+      await context.edit({
+        id: context.asset.id,
         name: assetNameInput,
         description: assetDescriptionInput.trim(),
         author: authorNameInput,
@@ -212,7 +192,7 @@ const ModelManage: React.FC = () => {
         tags: tagsInput.filter((tag) => tag.isSelected),
         files: filesInput,
       });
-      setRefreshModel((i) => i + 1);
+      refresh();
 
       show({
         title: t('save.saved'),
@@ -220,7 +200,7 @@ const ModelManage: React.FC = () => {
       });
 
     } else {
-      const created = await modelManageContext.create({
+      const created = await context.create({
         name: assetNameInput,
         author: authorNameInput,
         description: assetDescriptionInput.trim(),
@@ -228,7 +208,7 @@ const ModelManage: React.FC = () => {
         tags: tagsInput.filter((tag) => tag.isSelected),
         files: filesInput.filter((file) => file.type === 'local'),
       });
-      // setRefreshModel((i) => i + 1);
+      // refresh();
 
       show({
         title: t('save.uploaded'),
@@ -243,16 +223,14 @@ const ModelManage: React.FC = () => {
     }
   };
 
-  if (isLoading || modelManageContext === null) return <Preloader className="min-h-screen" />;
-
   const ActionButtons = (
     <>
-      {assetId !== undefined && (
+      {context.asset !== null && (
         <div className="w-1/2 p-1">
           <Link
             className="no-underline"
             onClick={handleShowPreview}
-            to={ROOT_ROUTES.ModelDetail + assetId}
+            to={ROOT_ROUTES.ModelDetail + context.asset.id}
           >
             <Button variant="light" className="justify-between w-full">
               <FontAwesomeIcon icon={faEye} />
@@ -267,13 +245,13 @@ const ModelManage: React.FC = () => {
           className="justify-between w-full"
           onClick={handleUploadOrSave}
         >
-          <FontAwesomeIcon icon={assetId === undefined ? faUpload : faSave} />
+          <FontAwesomeIcon icon={context.asset === null ? faUpload : faSave} />
           <span className="w-full">
-            {assetId === undefined ? t('uploadButton') : t('saveButton')}
+            {context.asset === null ? t('uploadButton') : t('saveButton')}
           </span>
         </Button>
       </div>
-      {assetId !== undefined && (
+      {context.asset !== null && (
         <div className="w-1/2 p-1">
           <Button
             variant="accent"
@@ -362,4 +340,36 @@ const ModelManage: React.FC = () => {
   );
 };
 
-export default ModelManage;
+const ModelManageLoader: React.FC = () => {
+  const { action } = useParams();
+  const assetId = isFinite(Number(action)) ? Number(action) : undefined;
+
+  const [refreshIndex, setRefreshIndex] = React.useState<number>(0);
+  const [context, setContext] = React.useState<ModelManageContext | null>(null);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const context = await loadModelManageContext(assetId ?? null);
+        setContext(context);
+      } catch (error) {
+        console.error('Error fetching context:', error);
+      }
+    })();
+  }, [assetId, refreshIndex]);
+
+  const refresh = () => {
+    setRefreshIndex((i) => i + 1);
+  };
+
+  if (context === null) return <Preloader className="min-h-screen" />;
+
+  return (
+    <ModelManage
+      context={context}
+      refresh={refresh}
+    />
+  );
+};
+
+export default ModelManageLoader;

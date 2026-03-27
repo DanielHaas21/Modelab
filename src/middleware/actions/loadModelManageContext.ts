@@ -91,7 +91,8 @@ export const loadModelManageContext = async (id: number | null): Promise<ModelMa
     config: {
       allCategories: categories,
       allTags: tags,
-    }
+    },
+    assetId: id,
   };
 
   if (id === null) {
