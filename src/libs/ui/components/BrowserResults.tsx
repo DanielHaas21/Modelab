@@ -34,6 +34,40 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ assetQueires, sea
 
   const requestVersion = React.useRef(0);
 
+  const getResults = React.useCallback(async (page: number, assetQueires: AssetQueries, previous?: Results): Promise<Results> => {
+    try {
+      const result = await search({
+        pagination: { page: page, count: loadPerPage },
+        queries: assetQueires
+      });
+
+      const { assets, pagination } = result;
+      const hasMore = 0 < pagination.pageCount - 1;
+
+      if (previous !== undefined) {
+        const isLastPage = result.pagination.page >= pagination.pageCount - 1;
+        return {
+          assets: [...previous.assets, ...assets],
+          page: pagination.page + 1,
+          hasMore: !isLastPage,
+        };
+      } else {
+        return {
+          assets,
+          page: hasMore ? 1 : 0,
+          hasMore,
+        };
+      }
+    } catch (err) {
+      console.log(err);
+      return {
+        assets: [],
+        page: 0,
+        hasMore: false,
+      };
+    }
+  }, [search]);
+
   React.useEffect(() => {
     requestVersion.current += 1;
     const currentVersion = requestVersion.current;
@@ -46,63 +80,26 @@ export const BrowserResults: React.FC<BrowserResultProps> = ({ assetQueires, sea
 
     const initialLoad = async () => {
       setIsLoading(true);
-      const result = await search({
-        pagination: { page: 0, count: loadPerPage },
-        queries: assetQueires
-      });
-
+      const results = await getResults(0, assetQueires);
       if (currentVersion === requestVersion.current) {
-        const { assets, pagination } = result;
-        const hasMore = 0 < pagination.pageCount - 1;
-        setResults({
-          assets,
-          page: hasMore ? 1 : 0,
-          hasMore,
-        });
-        setIsLoading(false);
+        setResults(results);
       }
+      setIsLoading(false);
     };
 
     initialLoad();
   }, [assetQueires]);
 
-  // const fetchPage = async (page: number, query?: SearchQuery): Promise<FetchResult | undefined> => {
-  //   try {
-  //     return await fetchAssets(query, page, loadPerPage);
-  //   } catch (err) {
-  //     if (err instanceof ApiError) {
-  //       console.error('Failed to fetch assets', err);
-  //     } else {
-  //       throw err;
-  //     }
-  //     return undefined;
-  //   }
-  // };
-
   const loadMore = async () => {
     if (!results.hasMore || isLoading) return;
 
     const currentVersion = requestVersion.current;
+
     setIsLoading(true);
 
-    const result = await search({
-      pagination: { page: results.page, count: loadPerPage },
-      queries: assetQueires
-    });
-
+    const result = await getResults(results.page, assetQueires, results);
     if (currentVersion !== requestVersion.current) return;
-
-    if (result) {
-      const { assets, pagination } = result;
-      setResults((prev) => {
-        const isLastPage = pagination.page >= pagination.pageCount - 1;
-        return {
-          assets: [...prev.assets, ...assets],
-          page: pagination.page + 1,
-          hasMore: !isLastPage,
-        };
-      });
-    }
+    setResults(result);
     setIsLoading(false);
   };
 
