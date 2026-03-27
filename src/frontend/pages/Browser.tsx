@@ -110,7 +110,6 @@ const Browser: React.FC<BrowserProps> = ({ context }) => {
     }
   }, [searchText, tags, categories, Dispatch]);
 
-
   const BrowserFilters = (
     <>
       <div className="w-full">

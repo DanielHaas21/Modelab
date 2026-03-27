@@ -47,6 +47,12 @@ To develop the app and packages, run the following command:
 npm dev
 ```
 
+Before commiting check and fix **ALL** lint errors:
+
+```bash
+npm run lint
+```
+
 ### Build
 
 To build the app and packages, run the following command:

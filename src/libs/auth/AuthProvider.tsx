@@ -32,14 +32,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Refreshes the auth data
   const refreshAuth = useCallback(async () => {
-    const token = UserData.auth?.authToken ?? localStorage.getItem(AUTH_LS_KEY);
+    const token = localStorage.getItem(AUTH_LS_KEY);
 
-    dispatch(UserStateActions.loginStart());
-
-    if (token === null) {
+    if (!token) {
       dispatch(UserStateActions.loginFailure('Invalid or missing token.'));
       return;
     }
+
+    dispatch(UserStateActions.loginStart());
 
     try {
       setToken(token);
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.error(error);
       }
     }
-  }, [dispatch, UserData.auth, setToken]);
+  }, [dispatch, setToken]);
 
   // Logs in with a google auth token provided by the google button
   const loginWithToken = async (googleToken: string) => {
@@ -135,10 +135,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // auto refreshes
   useEffect(() => {
-    if (!UserData.auth.isAuthenticated) {
+    const hasStoredToken = Boolean(localStorage.getItem(AUTH_LS_KEY));
+    if (!UserData.auth?.isAuthenticated && hasStoredToken) {
       refreshAuth();
     }
-  }, [UserData.auth, refreshAuth]);
+  }, [UserData.auth?.isAuthenticated, refreshAuth]);
 
   return (
     <AuthContext.Provider value={{
