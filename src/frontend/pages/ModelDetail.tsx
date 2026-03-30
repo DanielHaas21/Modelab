@@ -272,7 +272,7 @@ const ModelDetailLoader: React.FC = () => {
         setIsLoading(false);
       }
     })();
-  }, [UserData.auth.clearance, model]);
+  }, [UserData.auth.clearance, model.modelId]);
 
   if (isLoading) return <Preloader className="min-h-screen" />;
 

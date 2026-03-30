@@ -15,7 +15,9 @@ export class UserService extends AxiosService {
   }
 
   public async info() {
-    return await this.POST<UserInfoResponse>(`info`);
+    const info = await this.POST<UserInfoResponse>(`info`);
+    console.log(info);
+    return info;
   }
 
 }

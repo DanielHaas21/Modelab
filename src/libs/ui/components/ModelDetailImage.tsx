@@ -130,55 +130,63 @@ const Model = React.forwardRef<ModelType, ModelProps>(
 // FocusCamera is a helper component that focuses the camera on the model when it is loaded and whenever the refocus action is triggered from the dropdown menu. 
 // It calculates the bounding box of the model and positions the camera accordingly to fit the entire model in view. It also updates the OrbitControls target to ensure that the controls are centered on the model.
 
+export interface FocusCameraHandle {
+  refocus: () => void;
+}
+
 interface FocusCameraProps {
   modelRef: React.RefObject<ModelType | null>;
   orbitControlsRef: React.RefObject<OrbitControlsImpl | null>;
-  onRefocusLoaded: (refocusCamera: () => void) => void;
 }
 
-const FocusCamera: React.FC<FocusCameraProps> = ({ modelRef, orbitControlsRef, onRefocusLoaded }) => {
-  const { camera, size: canvasSize } = useThree();
+const FocusCamera = React.forwardRef<FocusCameraHandle, FocusCameraProps>(
+  ({ modelRef, orbitControlsRef }, ref) => {
+    const { camera, size: canvasSize } = useThree();
 
-  const refocusCamera = React.useCallback(() => {
-    if (!modelRef.current) return;
+    const refocusCamera = React.useCallback(() => {
+      if (!modelRef.current) return;
 
-    const persCam = camera as THREE.PerspectiveCamera;
-    const fov = persCam.fov || 50;
-    const aspect = canvasSize.width / canvasSize.height;
+      const persCam = camera as THREE.PerspectiveCamera;
+      const fov = persCam.fov || 50;
+      const aspect = canvasSize.width / canvasSize.height;
 
-    const box = new Three.Box3().setFromObject(modelRef.current);
-    const center = new Three.Vector3();
-    const size = new Three.Vector3();
-    box.getCenter(center);
-    box.getSize(size);
+      const box = new Three.Box3().setFromObject(modelRef.current);
+      const center = new Three.Vector3();
+      const size = new Three.Vector3();
+      box.getCenter(center);
+      box.getSize(size);
 
+      // The following calculations are based on the formula for the field of view of a perspective camera and the size of the model's bounding box. 
+      // It calculates the distance needed to fit the entire model in view based on both the height and width of the bounding box, and then positions the camera at that distance along the z-axis while looking at the center of the model.
+      const fovInRad = fov * (Math.PI / 180);
+      const distanceToFitHeight = size.y / (2 * Math.tan(fovInRad / 2));
+      const hFovInRad = 2 * Math.atan(Math.tan(fovInRad / 2) * aspect);
+      const distanceToFitWidth = size.x / (2 * Math.tan(hFovInRad / 2));
 
-    // The following calculations are based on the formula for the field of view of a perspective camera and the size of the model's bounding box. 
-    // It calculates the distance needed to fit the entire model in view based on both the height and width of the bounding box, and then positions the camera at that distance along the z-axis while looking at the center of the model.
-    const fovInRad = fov * (Math.PI / 180);
-    const distanceToFitHeight = size.y / (2 * Math.tan(fovInRad / 2));
-    const hFovInRad = 2 * Math.atan(Math.tan(fovInRad / 2) * aspect);
-    const distanceToFitWidth = size.x / (2 * Math.tan(hFovInRad / 2));
+      const distance = Math.max(distanceToFitHeight, distanceToFitWidth);
 
-    const distance = Math.max(distanceToFitHeight, distanceToFitWidth);
+      // Position the camera
+      camera.position.set(center.x, center.y, center.z + distance);
+      camera.lookAt(center);
+      camera.updateProjectionMatrix();
 
-    // Position the camera
-    camera.position.set(center.x, center.y, center.z + distance);
-    camera.lookAt(center);
-    camera.updateProjectionMatrix();
+      if (orbitControlsRef.current) {
+        orbitControlsRef.current.target.copy(center);
+        orbitControlsRef.current.update();
+      }
+    }, [camera, canvasSize, modelRef, orbitControlsRef]);
 
-    if (orbitControlsRef.current) {
-      orbitControlsRef.current.target.copy(center);
-      orbitControlsRef.current.update();
-    }
-  }, [camera, canvasSize, modelRef, orbitControlsRef]);
+    React.useImperativeHandle(ref, () => ({
+      refocus: refocusCamera
+    }), [refocusCamera]);
 
-  React.useLayoutEffect(() => {
-    onRefocusLoaded(refocusCamera);
-  }, [onRefocusLoaded, refocusCamera]);
+    React.useLayoutEffect(() => {
+      refocusCamera();
+    }, [refocusCamera]);
 
-  return null;
-};
+    return null;
+  }
+);
 
 // 3D model viewer component, it renders a 3D model using the Model component.
 
@@ -192,8 +200,8 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
   ({ file, canvasKey, onContextLoss }, ref) => {
     const orbitControlsRef = React.useRef<OrbitControlsImpl>(null);
     const modelRef = React.useRef<ModelType | null>(null);
+    const focusCameraRef = React.useRef<FocusCameraHandle>(null);
 
-    const [refocusCameraAction, setRefocusCameraAction] = React.useState<() => void>(() => { });
     const [actionsOpen, setActionsOpen] = React.useState<boolean>(false);
     const [autoRotate, setAutoRotate] = React.useState<boolean>(false);
     const [showWireframe, setShowWireframe] = React.useState<boolean>(false);
@@ -223,11 +231,9 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
       }));
     }, [showWireframe, currentPaletteIndex]);
 
-    React.useEffect(() => {
-      if (refocusCameraAction) refocusCameraAction();
-    }, [refocusCameraAction])
-
-    const handleRefocus = () => refocusCameraAction();
+    const handleRefocus = () => {
+      focusCameraRef.current?.refocus();
+    };
     const handleToggleAutoRotate = () => setAutoRotate(!autoRotate);
     const handleToggleWireframe = () => setShowWireframe(!showWireframe);
     const handleCyclePalette = () => setCurrentPaletteIndex(i => (i + 1) % palettes.length);
@@ -256,15 +262,14 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
               />
               <OrbitControls
                 ref={orbitControlsRef}
+                makeDefault
                 autoRotate={autoRotate}
                 autoRotateSpeed={4}
               />
               <FocusCamera
+                ref={focusCameraRef}
                 modelRef={modelRef}
                 orbitControlsRef={orbitControlsRef}
-                onRefocusLoaded={(refocusCamera) => {
-                  setRefocusCameraAction(() => refocusCamera);
-                }}
               />
               <directionalLight position={[5, 5, 5]} intensity={3} />
               <ambientLight intensity={1} />
