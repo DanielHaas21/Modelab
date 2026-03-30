@@ -39,7 +39,7 @@ const ModelManage: React.FC<ModelManageProps> = ({ context, refresh }) => {
 
   const { show } = useToast();
 
-  useValidatePermission(CLEARANCE.ADMIN, context.assetId !== undefined ? (ROOT_ROUTES.ModelDetail + context.assetId) : ROOT_ROUTES.Browser);
+  useValidatePermission(CLEARANCE.ADMIN, context.assetId != null ? (ROOT_ROUTES.ModelDetail + context.assetId) : ROOT_ROUTES.Browser);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
