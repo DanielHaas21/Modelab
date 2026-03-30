@@ -36,7 +36,7 @@ export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDe
     const filesRender = showableFiles.map((data) => {
       return (
         <React.Suspense key={data.name} fallback={<Preloader />}>
-          <div className='min-w-full min-h-full grow flex flex-col'>
+          <div className='w-full h-[50vh] grow flex flex-col'>
             <ModelDetailImage
               key={data.name}
               file={data}

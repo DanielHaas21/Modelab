@@ -47,10 +47,10 @@ interface ModelImageProps {
 const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
   ({ file }, ref) => {
     return (
-      <div className="w-full h-full grow flex justify-center items-center">
+      <div className="h-full grow flex justify-center items-center">
         <img
           ref={ref as React.RefObject<HTMLImageElement>}
-          className={cn('object-contain')}
+          className="object-contain w-full h-full"
           src={file.imageUrl}
           alt="Image"
         />
