@@ -65,7 +65,7 @@ const ModelDetail: React.FC<ModelDetailProps> = ({ context }) => {
       t("confirm.cancel"),
       <>
         <p>{t("confirm.note")}</p>
-        <ul className="w-100 list-group">
+        <ul className="w-full list-group">
           {asset.files.filter(file => file.download !== null).map((file, index) => (
             <li className="list-group-item" key={index}>
               {file.name}

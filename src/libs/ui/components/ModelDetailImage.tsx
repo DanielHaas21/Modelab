@@ -239,7 +239,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
     const handleCyclePalette = () => setCurrentPaletteIndex(i => (i + 1) % palettes.length);
 
     return (
-      <div className="w-full h-100 model-viewer relative" ref={ref}>
+      <div className="w-full h-full model-viewer relative" ref={ref}>
         {!file.model ? (
           <Label>Model not loaded</Label>
         ) : (
@@ -247,7 +247,7 @@ const Model3D = React.forwardRef<HTMLDivElement, Model3DProps>(
             <Canvas
               scene={SceneConfig}
               key={canvasKey}
-              className="h-100 w-90 min-h-[500px]"
+              className="h-full w-90 min-h-[500px]"
               onCreated={({ gl }) => {
                 gl.domElement.addEventListener('webglcontextlost', (e) => {
                   e.preventDefault();
