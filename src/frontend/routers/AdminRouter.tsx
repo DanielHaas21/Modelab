@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import NoMatchPage from '../pages/NoMatchPage';
-// import { AdminRoutes } from '../../global/BrowserRoutes';
+import { ADMIN_ROUTES } from '../../global/routes';
+import Login from '../pages/admin/Login';
+import AdminPanel from '../pages/admin/AdminPanel';
+
 // import AdminPanel from './../pages/admin/AdminPanel';
 
 /**
@@ -10,11 +13,12 @@ import NoMatchPage from '../pages/NoMatchPage';
 const AdminRouter: React.FC = () => {
   return (
     <Routes>
-      {/* <Route path={AdminRoutes.Panel} element={<AdminPanel />} />
-      <Route path={AdminRoutes.Login} element={<AdminPanel />} />
-      <Route path={AdminRoutes.Users} element={<AdminPanel />} />
-      <Route path={AdminRoutes.Assets} element={<AdminPanel />} /> */}
+      <Route path={ADMIN_ROUTES.Login} element={<Login />} />
+      {/*
+      <Route path={ADMIN_ROUTES.Users} element={<AdminPanel />} />
+      <Route path={ADMIN_ROUTES.Assets} element={<AdminPanel />} /> */}
       <Route path="*" element={<NoMatchPage />} />
+      <Route path={ADMIN_ROUTES.Panel} element={<AdminPanel />} />
     </Routes>
   );
 };

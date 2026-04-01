@@ -8,14 +8,14 @@ export const ROOT_ROUTES = {
   About: '/about',
   ModelDetail: '/models/',
   ModelManage: '/manage/',
-  AdminRoot: '/admin/',
+  AdminRoot: '/admin',
 } as const;
 
 /**
  * A tuple of all the admin routes. 
  */
 export const ADMIN_ROUTES = {
-  Panel: '/',
+  Panel: '/panel/',
   Login: '/login/',
   Users: '/users/',
   Assets: '/assets/',

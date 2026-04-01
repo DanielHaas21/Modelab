@@ -93,6 +93,14 @@
       "without_downloads": "Bez stahování"
     }
   },
+  "admin": {
+    "login": {
+      "title": "Modelab - Administrace",
+      "not_authorized": "Nedostatečné oprávnění",
+      "admin_only": "Tato stránka je přístupná pouze pro administrátory. Přihlaste se prosím s účtem, který má požadované oprávnění.",
+      "sign_in": "Přihlásit se"
+    }
+  },
   "ui": {
     "footer": {
       "about": "O nás",

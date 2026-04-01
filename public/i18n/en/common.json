@@ -93,6 +93,14 @@
       "without_downloads": "Without downloads"
     }
   },
+  "admin": {
+    "login": {
+      "title": "Modelab - Administration",
+      "not_authorized": "Unsufficient clearance",
+      "admin_only": "This page is only accessible for admins. Please log in with an account that has the required clearance.",
+      "sign_in": "Sign in"
+    }
+  },
   "ui": {
     "footer": {
       "about": "About",
