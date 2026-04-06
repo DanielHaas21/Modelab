@@ -1,10 +1,27 @@
 import { BaseResponse } from '../axiosService';
-import { FileMetaModel, SupportedFileTypesModel } from '../models/file';
+import { FileGroup, FileMetaModel, SupportedFileExtensionsModel } from '../models/file';
 
-// Select Supported File Types
+// Select Supported File Extensions
 
-export interface FileSupportedFileTypesResponse extends BaseResponse {
-  supportedFileTypes: SupportedFileTypesModel;
+export interface FileSupportedFileExtensionsResponse extends BaseResponse {
+  supportedFileExtensions: SupportedFileExtensionsModel;
+}
+
+// Check If File Is Supported
+
+export interface CheckIfFileIsSupportedQuery {
+  fileName: string;
+  fileSizeBytes: number;
+}
+
+export interface CheckIfFileIsSupportedData {
+  fileName: string;
+  fileSizeBytes: number;
+}
+
+export interface CheckIfFileIsSupportedResponse extends BaseResponse {
+  isSupported: boolean;
+  group: FileGroup;
 }
 
 // Select File Meta

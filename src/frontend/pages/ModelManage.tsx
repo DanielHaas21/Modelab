@@ -205,7 +205,7 @@ const ModelManage: React.FC<ModelManageProps> = ({ context, refresh }) => {
         description: assetDescriptionInput.trim(),
         category: categoriesInput.find((category) => category.isSelected)!,
         tags: tagsInput.filter((tag) => tag.isSelected),
-        files: filesInput.filter((file) => file.type === 'local'),
+        files: filesInput.filter((file) => file.type === 'local').filter((file) => !file.isRemoved),
       });
       // refresh();
 

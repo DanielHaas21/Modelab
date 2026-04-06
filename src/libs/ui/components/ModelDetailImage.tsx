@@ -11,7 +11,7 @@ import { faArrowsSpin, faCameraRotate, faPalette, faWrench } from '@fortawesome/
 import { Label } from './Label';
 import { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useTranslation } from '../../hooks';
-import { AssetFile, AssetFile3D, AssetFileAudio, AssetFileImage, AssetFilePreview } from '../../../middleware/types/actions';
+import { AssetFile, AssetFile3D, AssetFileAudio, AssetFileImage, AssetFileOther, AssetFilePreview } from '../../../middleware/types/actions';
 
 
 // This file is renders a model using THREE
@@ -31,7 +31,7 @@ const ModelPreview = React.forwardRef<HTMLDivElement, ModelPreviewProps>(
           ref={ref as React.RefObject<HTMLImageElement>}
           className={cn('object-contain')}
           src={file.previewUrl}
-          alt="Preview"
+          alt={`${file.name} preview`}
         />
       </div>
     );
@@ -52,7 +52,7 @@ const ModelImage = React.forwardRef<HTMLDivElement, ModelImageProps>(
           ref={ref as React.RefObject<HTMLImageElement>}
           className="object-contain w-full h-full"
           src={file.imageUrl}
-          alt="Image"
+          alt={file.name}
         />
       </div>
     );
@@ -337,7 +337,29 @@ const ModelAudio = React.forwardRef<HTMLDivElement, ModelAudioProps>(
   }
 );
 
-export default ModelAudio;
+// Other file viewer component, it shows its preview or the default placeholder 
+
+interface ModelOtherProps {
+  file: AssetFileOther;
+}
+
+const ModelOther = React.forwardRef<HTMLDivElement, ModelOtherProps>(
+  ({ file }, ref) => {
+    const previewUrl = file.previewUrl.length === 0
+      ? placeholder
+      : file.previewUrl;
+    return (
+      <div className="h-full grow flex justify-center items-center">
+        <img
+          ref={ref as React.RefObject<HTMLImageElement>}
+          className="object-contain w-full h-full"
+          src={previewUrl}
+          alt={file.name}
+        />
+      </div>
+    );
+  }
+);
 
 // Top level component that decides which type of model viewer to render based on the file type, it also handles unsupported file types by rendering a placeholder image.
 
@@ -363,15 +385,8 @@ export const ModelDetailImage = React.forwardRef<HTMLDivElement, ModelDetailImag
         return <Model3D file={file} ref={ref} canvasKey={canvasKey} onContextLoss={handleContextLoss} />
       case 'audio':
         return <ModelAudio file={file} ref={ref} />
-      default:
-        return (
-          <img
-            ref={ref as React.RefObject<HTMLImageElement>}
-            className={'w-full h-full'}
-            src={placeholder}
-            alt="Unsupported format"
-          />
-        );
+      case 'other':
+        return <ModelOther file={file} ref={ref} />
     }
   }
 );

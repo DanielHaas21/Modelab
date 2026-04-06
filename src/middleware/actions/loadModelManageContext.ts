@@ -1,6 +1,5 @@
 import { AssetFile, ManageCreateAssetParams, ManageCreateAssetResponse, ManageDeleteAssetParams, ManageDeleteAssetResponse, ManageEditAssetParams, ManageEditAssetResponse, ManageFile, ModelManageContext } from '../types/actions';
 import { ASSET, CATEGORY, FILE, TAG } from '../services';
-import { getFileGroup } from '../../libs/utils';
 import { load3DModel } from './loadModel';
 import { AssetUpdateFile, FetchedAssetUpdateFile, LocalAssetUpdateFile } from '../types/services';
 
@@ -82,7 +81,6 @@ const deleteAsset = async (params: ManageDeleteAssetParams): Promise<ManageDelet
 export const loadModelManageContext = async (id: number | null): Promise<ModelManageContext> => {
   const categories = (await CATEGORY.getAll()).categories;
   const tags = (await TAG.getAll()).tags;
-  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
   const contextBase: Omit<ModelManageContext, 'asset'> = {
     create: createAsset,
@@ -115,8 +113,7 @@ export const loadModelManageContext = async (id: number | null): Promise<ModelMa
       previewUrl: FILE.getPreviewUrl({ id: fileMeta.id }),
     };
 
-    const group = getFileGroup(fileMeta.fileType, supportedFileTypes);
-    switch (group) {
+    switch (fileMeta.group) {
       case 'image': {
         try {
           const imageBlob = await FILE.get({ id: fileMeta.id });
@@ -167,9 +164,6 @@ export const loadModelManageContext = async (id: number | null): Promise<ModelMa
         };
         break;
       }
-      default:
-        console.error('Unsuported file: ' + fileMeta.name + '.  Ignoring.');
-        break;
     }
 
     if (assetFile === null) continue;

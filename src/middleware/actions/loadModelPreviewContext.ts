@@ -1,37 +1,32 @@
-import { isFile } from '../../libs/utils';
 import { CLEARANCE, Clearance } from '../../store/types';
 import { ASSET, FILE } from '../services';
 import { ModelPreviewContext } from '../types/actions';
 
 export const loadModelPreviewContext = async (id: number, userClearance: Clearance): Promise<ModelPreviewContext> => {
   const fileMetas = (await ASSET.getFiles({ id: id })).files;
-  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
   const userCanDownload = userClearance >= CLEARANCE.USER;
 
-  const previewImageModel = fileMetas
-    ?.filter((fileMeta) => {
-      return isFile(fileMeta.fileType, 'image', supportedFileTypes);
-    })
-    .sort((a, b) => {
-      if (a.isPreview === b.isPreview) return 0;
-      return a.isPreview ? -1 : 1;
+  const previewFile = fileMetas
+    ?.filter(file => file.isPreview)
+    ?.sort((a, b) => {
+      return b.order - a.order;
     })[0];
 
-  if (previewImageModel === undefined) {
+  if (previewFile === undefined) {
     return {
       previewUrl: null,
     };
   }
 
-  if (userCanDownload) {
-    const blob = await FILE.get({ id: previewImageModel.id });
+  if (userCanDownload && previewFile.group === 'image') {
+    const blob = await FILE.get({ id: previewFile.id });
     return {
       previewUrl: URL.createObjectURL(blob),
     };
   }
 
   return {
-    previewUrl: FILE.getPreviewUrl({ id: previewImageModel.id }),
+    previewUrl: FILE.getPreviewUrl({ id: previewFile.id }),
   }
 };

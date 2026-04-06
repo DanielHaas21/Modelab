@@ -40,7 +40,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         localFile: file,
         name: file.name,
         fileType: fileType,
-        isMain: false,
+        order: 0,
         isHidden: false,
         isPreview: false,
         isRemoved: false,
@@ -78,17 +78,20 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
             return updatedFiles;
           });
         }}
-        onChange={(isMain, isPreview, isHidden) => {
+        onChange={(order, isPreview, isHidden) => {
           setFiles((prev) => {
             const updatedFiles = [...prev];
             for (let i = 0; i < updatedFiles.length; i++) {
               const updatedFile = updatedFiles[i];
               if (i === index) {
-                updatedFile.isMain = isMain;
+                updatedFile.order = order;
                 updatedFile.isPreview = isPreview;
                 updatedFile.isHidden = isHidden;
               } else {
-                updatedFile.isPreview = false;
+                if (isPreview) {
+                  // clear others
+                  updatedFile.isPreview = false;
+                }
               }
               updatedFiles[i] = updatedFile;
             }
@@ -97,8 +100,7 @@ export const FileSelect: React.FC<FileSelectProps> = ({ files, setFiles }) => {
         }}
       />
     </div>
-  )
-  )
+  ));
 
   return (
     <div className="w-full">

@@ -7,13 +7,13 @@ export type ModelType = typeof allModelTypes[number];
 export const ALL_MODEL_TYPES = allModelTypes as unknown as ModelType[];
 
 export const LOADABLE_MODEL_EXTENSIONS: Record<ModelType, string> = {
-  'fbx': '.fbx',
-  'obj': '.obj',
+  'fbx': 'fbx',
+  'obj': 'obj',
 };
 
 const getExtension = (fileName: string): string => {
   const lastDot = fileName.lastIndexOf('.');
-  return lastDot !== -1 ? fileName.slice(lastDot).toLowerCase() : '';
+  return lastDot !== -1 ? fileName.slice(lastDot + 1).toLowerCase() : '';
 }
 
 export const getModelTypeFromName = (fileName: string): ModelType | null => {

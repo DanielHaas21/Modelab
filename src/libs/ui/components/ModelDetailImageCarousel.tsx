@@ -13,17 +13,7 @@ interface ModelDetailImageCarouselProps {
  */
 export const ModelDetailImageCarousel = React.forwardRef<HTMLDivElement, ModelDetailImageCarouselProps>(
   ({ files }, ref) => {
-    const showableFiles = files.filter((file) => {
-      switch (file.type) {
-        case '3d':
-          return file.model !== null;
-        case 'preview':
-        case 'image':
-        case 'audio':
-          return true;
-      }
-      return false;
-    });
+    const showableFiles = files.filter((file) => !file.isHidden);
 
     const [selectedItem, setSelectedItem] = useState<number>(0);
 

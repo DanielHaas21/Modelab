@@ -1,21 +1,11 @@
 import { CLEARANCE, Clearance } from '../../store/types'
 import { AssetFile, ModelDetailContext } from '../types/actions';
 import { ASSET, FILE } from '../services';
-import { FileGroup, getFileGroup } from '../../libs/utils';
 import { load3DModel } from './loadModel';
-import { getModelTypeFromName } from '../utils/modelLoader';
-import { AssetFileMetaModel } from '../types/models';
-
-const canShowPreview = (fileInfo: AssetFileMetaModel, group: FileGroup) => {
-  if (group === 'model' && getModelTypeFromName(fileInfo.name) !== null)
-    return false;
-  return true;
-};
 
 export const loadModelDetailContext = async (id: number, userClearance: Clearance): Promise<ModelDetailContext> => {
   const asset = (await ASSET.get({ id: id })).asset;
   const fileMetas = (await ASSET.getFiles({ id: id })).files;
-  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
 
   const userCanDownload = userClearance >= CLEARANCE.USER;
 
@@ -29,9 +19,8 @@ export const loadModelDetailContext = async (id: number, userClearance: Clearanc
       previewUrl: FILE.getPreviewUrl({ id: fileMeta.id }),
     };
 
-    const group = getFileGroup(fileMeta.fileType, supportedFileTypes);
     if (userCanDownload) {
-      switch (group) {
+      switch (fileMeta.group) {
         case 'image': {
           try {
             const imageBlob = await FILE.get({ id: fileMeta.id });
@@ -82,11 +71,8 @@ export const loadModelDetailContext = async (id: number, userClearance: Clearanc
           };
           break;
         }
-        default:
-          console.error('Unsuported file: ' + fileMeta.name + '.  Ignoring.');
-          break;
       }
-    } else if (group !== null && canShowPreview(fileMeta, group)) {
+    } else if (fileMeta.isHidden === false) {
       file = {
         ...fileBase,
         type: 'preview',

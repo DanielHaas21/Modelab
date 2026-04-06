@@ -11,7 +11,7 @@ interface UploadedFileProps {
   isRemoved: boolean;
   onClose: () => void;
   onRestore: () => void;
-  onChange: (isMain: boolean, isPreview: boolean, isHidden: boolean) => void;
+  onChange: (order: number, isPreview: boolean, isHidden: boolean) => void;
 }
 
 const formatName = (file: ManageFile) => {
@@ -58,7 +58,10 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onRes
       </p>
       <div className="w-full">
         <div className="flex w-full border border-ui-border rounded-md overflow-hidden divide-x divide-ui-border" role="group">
-          <div className="flex-1">
+          {/**
+           * TODO: Add a way to change the file.order
+           */}
+          {/* <div className="flex-1">
             <input
               type="checkbox"
               className="peer hidden"
@@ -71,7 +74,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onRes
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}a`}>
               {t('main')}
             </label>
-          </div>
+          </div> */}
 
           <div className="flex-1">
             <input
@@ -81,7 +84,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onRes
               id={`${index}b`}
               disabled={file.isHidden}
               checked={file.isPreview}
-              onChange={() => onChange(file.isMain, !file.isPreview, file.isHidden)}
+              onChange={() => onChange(file.order, !file.isPreview, file.isHidden)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-primary-500 peer-checked:text-white hover:bg-primary-500/10 hover:text-primary-500 peer-checked:hover:bg-primary-600 peer-checked:hover:text-white peer-disabled:opacity-20 peer-disabled:cursor-not-allowed" htmlFor={`${index}b`}>
               {t('preview')}
@@ -95,7 +98,7 @@ export const UploadedFile: React.FC<UploadedFileProps> = ({ file, onClose, onRes
               autoComplete="off"
               id={`${index}c`}
               checked={file.isHidden}
-              onChange={() => onChange(file.isMain, file.isPreview, !file.isHidden)}
+              onChange={() => onChange(file.order, false, !file.isHidden)}
             />
             <label className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider font-bold cursor-pointer transition-all peer-checked:bg-accent-500 peer-checked:text-white hover:bg-accent-500/10 hover:text-accent-500 peer-checked:hover:bg-accent-600 peer-checked:hover:text-white" htmlFor={`${index}c`}>
               {t('hidden')}

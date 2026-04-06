@@ -80,9 +80,9 @@ interface BaseManageFile {
   name: string;
   fileType: string;
   isHidden: boolean;
-  isMain: boolean;
   isPreview: boolean;
   isRemoved: boolean;
+  order: number;
 }
 
 export interface ManageFileFetched extends BaseManageFile {

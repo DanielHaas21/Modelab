@@ -87,8 +87,8 @@ export class AssetService extends AxiosService {
     let uploadIndex = 0;
     query.files.forEach((fileInfo, index) => {
       formData.append(`filesMeta[${index}][isHidden]`, fileInfo.isHidden ? '1' : '0');
-      formData.append(`filesMeta[${index}][isMain]`, fileInfo.isMain ? '1' : '0');
       formData.append(`filesMeta[${index}][isPreview]`, fileInfo.isPreview ? '1' : '0');
+      formData.append(`filesMeta[${index}][order]`, fileInfo.order);
       formData.append(`files[${uploadIndex}]`, fileInfo.file);
       uploadIndex++;
     });
@@ -114,9 +114,9 @@ export class AssetService extends AxiosService {
     let uploadIndex = 0;
     query.files.forEach((fileInfo, index) => {
       formData.append(`filesMeta[${index}][isHidden]`, fileInfo.isHidden ? '1' : '0');
-      formData.append(`filesMeta[${index}][isMain]`, fileInfo.isMain ? '1' : '0');
       formData.append(`filesMeta[${index}][isPreview]`, fileInfo.isPreview ? '1' : '0');
       formData.append(`filesMeta[${index}][isRemoved]`, fileInfo.isRemoved ? '1' : '0');
+      formData.append(`filesMeta[${index}][order]`, fileInfo.order);
 
       if (fileInfo.type === 'local') {
         formData.append(`files[${uploadIndex}]`, fileInfo.file);

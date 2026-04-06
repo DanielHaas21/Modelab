@@ -1,10 +1,8 @@
-import { getFileGroup } from '../../libs/utils';
 import { FILE } from '../services';
 import { AssetFile, ManageFile, ManageFileLocal } from '../types/actions';
-import { SupportedFileTypesModel } from '../types/models';
 import { getModelTypeFromName, loadModelFromFile } from '../utils/modelLoader';
 
-const loadAssetFileFromLocalFile = async (localManageFile: ManageFileLocal, supportedFileTypes: SupportedFileTypesModel): Promise<AssetFile | null> => {
+const loadAssetFileFromLocalFile = async (localManageFile: ManageFileLocal): Promise<AssetFile | null> => {
   const fileBase = {
     ...localManageFile,
     id: 0,
@@ -12,7 +10,16 @@ const loadAssetFileFromLocalFile = async (localManageFile: ManageFileLocal, supp
     previewUrl: '',
   };
 
-  const group = getFileGroup(localManageFile.fileType, supportedFileTypes);
+  const { isSupported, group } = await FILE.checkIfFileIsSupported({
+    fileName: localManageFile.name,
+    fileSizeBytes: localManageFile.localFile.size
+  });
+
+  if (!isSupported) {
+    console.error('Unsuported file: ' + localManageFile.name + '.  Ignoring.');
+    return null;
+  }
+
   switch (group) {
     case 'image': {
       const imageUrl = URL.createObjectURL(localManageFile.localFile);
@@ -53,16 +60,10 @@ const loadAssetFileFromLocalFile = async (localManageFile: ManageFileLocal, supp
         type: 'other',
       };
     }
-    default:
-      console.error('Unsuported file: ' + localManageFile.name + '.  Ignoring.');
-      break;
   }
-  return null;
 };
 
 export const loadAssetFiles = async (manageFiles: ManageFile[]) => {
-  const supportedFileTypes = (await FILE.getSupportedFileTypes()).supportedFileTypes;
-
   const files: AssetFile[] = [];
 
   for (const manageFile of manageFiles) {
@@ -74,7 +75,7 @@ export const loadAssetFiles = async (manageFiles: ManageFile[]) => {
         break;
       }
       case 'local': {
-        file = await loadAssetFileFromLocalFile(manageFile, supportedFileTypes);
+        file = await loadAssetFileFromLocalFile(manageFile);
         break;
       }
     }

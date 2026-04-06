@@ -5,6 +5,7 @@ interface AssetBaseFile {
   name: string;
   fileType: string;
   previewUrl: string;
+  isHidden: boolean;
   download: (() => Promise<Blob>) | null;
 }
 

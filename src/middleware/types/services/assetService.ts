@@ -1,5 +1,5 @@
 import { BaseResponse } from '../axiosService';
-import { AssetFileMetaModel } from '../models';
+import { FileMetaModel } from '../models';
 import { AssetModel, AssetQueries, AssetRaw } from '../models/asset';
 import { PaginationInfo, PaginationQuery } from '../models/pagination';
 
@@ -70,14 +70,14 @@ export interface AssetFilesQuery {
 }
 
 export interface AssetFilesResponse extends BaseResponse {
-  files: AssetFileMetaModel[];
+  files: FileMetaModel[];
 }
 
 // Create
 
 export interface AssetCreateFile {
   isHidden: boolean;
-  isMain: boolean;
+  order: number;
   isPreview: boolean;
   file: File | Blob;
 }
@@ -100,7 +100,7 @@ export interface AssetCreateResponse extends BaseResponse {
 
 interface AssetUpdateFileBase {
   isHidden: boolean;
-  isMain: boolean;
+  order: number;
   isPreview: boolean;
   isRemoved?: boolean;
 }
