@@ -1,22 +1,21 @@
 import * as React from 'react';
-import { useAuth, useResponsive, useTitle, useToast, useTranslation } from '../../../libs/hooks';
-import grid from '../../../libs/ui/assets/grid_light.svg';
+import { useAuth, useTitle, useToast, useTranslation } from '../../../libs/hooks';
+import { cn } from '../../../libs/utils';
 import { useCheckClearance } from '../../../libs/auth';
 import { Button, Label } from '../../../libs/ui/components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { CLEARANCE } from '../../../store/types';
-import { cn } from '../../../libs/utils';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ADMIN_ROUTES, ROOT_ROUTES } from '../../../global/routes';
 import { faUsersGear } from '@fortawesome/free-solid-svg-icons';
+import grid from '../../../libs/ui/assets/grid_light.svg';
 
 const Login: React.FC = () => {
   const t = useTranslation("admin.login");
   useTitle({ type: 'empty' });
 
   const navigate = useNavigate();
-  const { isDesktop } = useResponsive();
   const { googleLogin } = useAuth();
   const { hasClearance } = useCheckClearance();
 
